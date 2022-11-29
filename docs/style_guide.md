@@ -1,6 +1,12 @@
+# Style guide
+
+Writing style should be CamelCase like java default
+Interfaces are named like a normal class without linting.
+example: Loggable for a logging interface instead of ILoggable
+
 # Comment Template
 
-This file contains the comments that are required for the whole project
+Comments that are required for the whole project
 
 ## Header comment
 ``` java
