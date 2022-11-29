@@ -1,7 +1,9 @@
 # Style guide
 
-Writing style should be CamelCase like java default
+Writing style should be CamelCase like java default.
+
 Interfaces are named like a normal class without linting.
+
 example: Loggable for a logging interface instead of ILoggable
 
 # Comment Template
