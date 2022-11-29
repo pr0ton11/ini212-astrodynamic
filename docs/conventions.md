@@ -7,7 +7,7 @@
 
 ## Feature branches
 
-feature/<topic>
+feature/\<topic\>
 
 ex: feature/logging
   
