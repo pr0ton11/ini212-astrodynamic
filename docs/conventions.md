@@ -9,7 +9,9 @@
 
 feature/\<topic\>
 
-ex: feature/logging
+Delimiter for the topic is the minus sign.
+
+example: feature/logging-extras
   
 ### Pull request
 
