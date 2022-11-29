@@ -47,4 +47,4 @@ Optional
 - [] Split ship into components
 - [] Calculation performance
     - [] Threading
-    - [] Oct-Tree
+    - [] Octree
