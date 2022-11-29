@@ -1,3 +1,7 @@
+# Work distribution plan
+
+While implementing a specific feature the corresponding unit tests and technical documentation will be written alongside.
+
 ## Required
 
 ### Marc
