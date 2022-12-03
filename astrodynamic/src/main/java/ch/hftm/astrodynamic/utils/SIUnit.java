@@ -14,5 +14,8 @@ public enum SIUnit {
     CURRENT, // Ampere (A)
     TEMPERATURE, // Kelvin (K)
     MOLECULES, // Mol (mol)
-    LUNINOSITY // Candela (cd)
+    LUNINOSITY, // Candela (cd)
+    // Extensions (Implicit)
+    VOLUME,  // m³
+    AREA // m²
 }
