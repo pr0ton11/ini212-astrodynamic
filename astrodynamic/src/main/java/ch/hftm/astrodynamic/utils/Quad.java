@@ -170,5 +170,58 @@ public class Quad implements Serializable, Comparable, Cloneable {
     public static Quad valueOf(double x) { 
         return new Quad(x); 
     }
-    
+
+    // Compare functions
+
+    // Compares the quad to 0
+    public boolean isZero() {
+		return hi == 0.0 && lo == 0.0;
+	}
+    // Flag if the value is negative
+    public boolean isNegative() {
+		return hi < 0.0 || (hi == 0.0 && lo < 0.0);
+	}
+    // Flag if the value is positive
+    public boolean isPositive() {
+		return hi > 0.0 || (hi == 0.0 && lo > 0.0);
+	}
+    // Flag if the value is not a number
+    public boolean isNaN() { 
+        return Double.isNaN(hi); 
+    }
+    // Flag if the value equals another quad
+    public boolean equals(Quad y) {
+		return hi == y.hi && lo == y.lo;
+	}
+    // Flag if value is greater than
+    public boolean gt(Quad y) {
+		return (hi > y.hi) || (hi == y.hi && lo > y.lo);
+	}
+    // Flag if value is greater or equal than
+    public boolean ge(Quad y) {
+		return (hi > y.hi) || (hi == y.hi && lo >= y.lo);
+	}
+    // Flag if value is less than
+    public boolean lt(Quad y) {
+		return (hi < y.hi) || (hi == y.hi && lo < y.lo);
+	}
+    // Flag if value is less or equal than
+    public boolean le(Quad y) {
+		return (hi < y.hi) || (hi == y.hi && lo <= y.lo);
+	}
+    // Compares the quad to another object that gets cast to quad
+    // Returns a number representation of the comparison of both quads
+    // 0: Could not compare
+    // -1: Smaller than
+    // +1: Greater than
+    public int compareTo(Object o) {
+        Quad other = (Quad) o;
+
+        if (hi < other.hi) return -1;
+        if (hi > other.hi) return 1;
+        if (lo < other.lo) return -1;
+        if (lo > other.lo) return 1;
+        return 0;
+    }
+
 }
