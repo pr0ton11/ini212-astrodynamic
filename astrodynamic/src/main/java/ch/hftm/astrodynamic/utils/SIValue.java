@@ -14,7 +14,7 @@ public class SIValue {
 
     // Constructor for doubles
     public SIValue(Quad num, SIUnit unit) {
-        this.num = num;
+        this.num = new Quad(num);
         this.unit = unit;
     }
 
@@ -33,8 +33,8 @@ public class SIValue {
     // Getter for number stored in this object
     public Quad get() { return this.num; }
     public void set(Quad num) { this.num = num; }
-    public int getInt() { return this.get().toInt(); }
-    public double getDouble() { return this.get().toDouble(); }
+    public int getInt() { return this.get().intValue(); }
+    public double getDouble() { return this.get().doubleValue(); }
 
     // Getter for SI unit
     public SIUnit getUnit() { return this.unit; }
