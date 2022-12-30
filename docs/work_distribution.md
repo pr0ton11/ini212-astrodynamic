@@ -8,7 +8,7 @@ While implementing a specific feature the corresponding unit tests and technical
 
 - [X] Project structure
 - [X] Reference comment file
-- [ ] SI units Enum and Conversion in Utils
+- [X] SI units Enum and Conversion in Utils
 - [ ] Exceptions
 - [ ] Log file
 - [ ] Serialization
