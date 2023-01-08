@@ -15,7 +15,7 @@ While implementing a specific feature the corresponding unit tests and technical
 
 ### Rafael
 
-- [ ] Physics Interfaces
+- [X] Physics Interfaces
 - [ ] Physics Classes
 - [ ] Object classes
 - [ ] JavaFX windows
