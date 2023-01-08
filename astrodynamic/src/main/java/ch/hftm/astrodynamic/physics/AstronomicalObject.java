@@ -21,4 +21,13 @@ public interface AstronomicalObject {
     void setVelocity(Vector3d velocity);
     void setRotation(Vector3d rotation);
     void setRotationVelocity(Vector3d rotationVelocity); 
+
+    // returns the zero elevation height in meters
+    double getZeroElevation();
+
+    // returns true if offset point from center is filled with the collision shape
+    boolean isColliding(Vector3d offset);
+
+    // returns collision obj with all collision data
+    Collision calculateCollision(AstronomicalObject partnerShape);
 }

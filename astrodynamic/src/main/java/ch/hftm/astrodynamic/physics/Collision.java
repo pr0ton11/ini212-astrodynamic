@@ -10,9 +10,9 @@ import ch.hftm.astrodynamic.utils.Vector3d;
 
 // holds all necessary data from a collison between two collision shapes
 public class Collision {
-    CollisionShape shapeA;
-    CollisionShape shapeB;
-    double impactEnergy; // in Newton
-    Vector3d impactPointFromA;
-    Vector3d impactPointFromB;
+    public AstronomicalObject shapeA;
+    public AstronomicalObject shapeB;
+    public double impactEnergy; // in Newton
+    public Vector3d impactPointFromA;
+    public Vector3d impactPointFromB;
 }
