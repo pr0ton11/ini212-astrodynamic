@@ -22,6 +22,10 @@ public class Vector3d {
         return false;
     }
 
+    public Vector3d clone() {
+        return new Vector3d(getX(), getY(), getZ());
+    }
+
     public double getX() {
         return this.x;
     }
@@ -42,21 +46,21 @@ public class Vector3d {
         this.length = Math.sqrt((getX() * getX()) + (getY() * getY()) + (getZ() * getZ()));
     }
 
-    Vector3d() {
+    public Vector3d() {
         this.x = 0;
         this.y = 0;
         this.z = 0;
         calculateLength();
     }
 
-    Vector3d(double x, double y, double z) {
+    public Vector3d(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
         calculateLength();
     }
 
-    Vector3d(Vector3d vector) {
+    public Vector3d(Vector3d vector) {
         this.x = vector.getX();
         this.y = vector.getY();
         this.z = vector.getZ();
