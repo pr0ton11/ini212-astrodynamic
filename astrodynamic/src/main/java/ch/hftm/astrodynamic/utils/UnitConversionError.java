@@ -7,11 +7,11 @@ package ch.hftm.astrodynamic.utils;
  */
 
 // Exception for conversion errors in SI units
-public class SIConversionError extends Exception {
+public class UnitConversionError extends Exception {
     
     // Constructor
-    public SIConversionError(String msg) {
-        super(String.format("SIConversionError: %s", msg));
+    public UnitConversionError(String msg) {
+        super(String.format("UnitConversionError: %s", msg));
     }
 
 }
