@@ -28,7 +28,7 @@ public class UnitTest {
         Scalar svR = new BaseScalar(0, Unit.MASS);
 
         try {
-            svR = sv1.addition(sv2);
+            svR = sv1.add(sv2);
         } catch (UnitConversionError e) {
             Assert.assertTrue(String.format("Scalar to Unit casting exception: %s", e.toString()), false);
         }
@@ -37,14 +37,14 @@ public class UnitTest {
         Assert.assertTrue("Is dimensionless", svR.getUnit() == Unit.UNITLESS);
 
         try {
-            svR = sv1.addition(sv2U);
+            svR = sv1.add(sv2U);
             Assert.assertTrue("Scalar to Unit casting exception expected but not thrown", false);
         } catch (UnitConversionError e) {
             
         }
 
         try {
-            svR = sv1U.addition(sv2U);
+            svR = sv1U.add(sv2U);
         } catch (UnitConversionError e) {
             Assert.assertTrue(String.format("Scalar to Unit casting exception: %s", e.toString()), false);
         }
@@ -53,7 +53,7 @@ public class UnitTest {
         Assert.assertTrue("Is length unit", svR.getUnit() == Unit.LENGTH);
 
         try {
-            svR = sv1U.addition(sv2);
+            svR = sv1U.add(sv2);
             Assert.assertTrue("Scalar to Unit casting exception expected but not thrown", false);
         } catch (UnitConversionError e) {
             
@@ -72,7 +72,7 @@ public class UnitTest {
         Scalar svR = new BaseScalar(0, Unit.MASS);
 
         try {
-            svR = sv1.multiplication(sv2);
+            svR = sv1.multiply(sv2);
         } catch (UnitConversionError e) {
             Assert.assertTrue(String.format("Scalar to Unit casting exception: %s", e.toString()), false);
         }
@@ -81,7 +81,7 @@ public class UnitTest {
         Assert.assertTrue("Is dimensionless", svR.getUnit() == Unit.UNITLESS);
 
         try {
-            svR = sv1.multiplication(sv2U);
+            svR = sv1.multiply(sv2U);
         } catch (UnitConversionError e) {
             Assert.assertTrue(String.format("Scalar to Unit casting exception: %s", e.toString()), false);
         }
@@ -90,7 +90,7 @@ public class UnitTest {
         Assert.assertTrue("Is length unit", svR.getUnit() == Unit.LENGTH);
 
         try {
-            svR = sv1U.multiplication(sv2);
+            svR = sv1U.multiply(sv2);
         } catch (UnitConversionError e) {
             Assert.assertTrue(String.format("Scalar to Unit casting exception: %s", e.toString()), false);
         }
@@ -99,7 +99,7 @@ public class UnitTest {
         Assert.assertTrue("Is length unit", svR.getUnit() == Unit.LENGTH);
 
         try {
-            svR = sv1U.multiplication(sv2U);
+            svR = sv1U.multiply(sv2U);
         } catch (UnitConversionError e) {
             Assert.assertTrue(String.format("Scalar to Unit casting exception: %s", e.toString()), false);
         }
@@ -119,7 +119,7 @@ public class UnitTest {
         Scalar svR = new BaseScalar(0, Unit.MASS);
 
         try {
-            svR = sv1.subtraction(sv2);
+            svR = sv1.subtract(sv2);
         } catch (UnitConversionError e) {
             Assert.assertTrue(String.format("Scalar to Unit casting exception: %s", e.toString()), false);
         }
@@ -128,14 +128,14 @@ public class UnitTest {
         Assert.assertTrue("Is dimensionless", svR.getUnit() == Unit.UNITLESS);
 
         try {
-            svR = sv1.subtraction(sv2U);
+            svR = sv1.subtract(sv2U);
             Assert.assertTrue("Scalar to Unit casting exception expected but not thrown", false);
         } catch (UnitConversionError e) {
             
         }
 
         try {
-            svR = sv1U.subtraction(sv2U);
+            svR = sv1U.subtract(sv2U);
         } catch (UnitConversionError e) {
             Assert.assertTrue(String.format("Scalar to Unit casting exception: %s", e.toString()), false);
         }
@@ -144,7 +144,7 @@ public class UnitTest {
         Assert.assertTrue("Is length unit", svR.getUnit() == Unit.LENGTH);
 
         try {
-            svR = sv1U.subtraction(sv2);
+            svR = sv1U.subtract(sv2);
             Assert.assertTrue("Scalar to Unit casting exception expected but not thrown", false);
         } catch (UnitConversionError e) {
             
@@ -163,7 +163,7 @@ public class UnitTest {
         Scalar svR = new BaseScalar(0, Unit.MASS);
 
         try {
-            svR = sv1.division(sv2);
+            svR = sv1.divide(sv2);
         } catch (UnitConversionError e) {
             Assert.assertTrue(String.format("Scalar to Unit casting exception: %s", e.toString()), false);
         }
@@ -172,7 +172,7 @@ public class UnitTest {
         Assert.assertTrue("Is dimensionless", svR.getUnit() == Unit.UNITLESS);
 
         try {
-            svR = sv1.division(sv2U);
+            svR = sv1.divide(sv2U);
         } catch (UnitConversionError e) {
             Assert.assertTrue(String.format("Scalar to Unit casting exception: %s", e.toString()), false);
         }
@@ -181,7 +181,7 @@ public class UnitTest {
         Assert.assertTrue("Is length unit", svR.getUnit() == Unit.LENGTH);
 
         try {
-            svR = sv1U.division(sv2);
+            svR = sv1U.divide(sv2);
         } catch (UnitConversionError e) {
             Assert.assertTrue(String.format("Scalar to Unit casting exception: %s", e.toString()), false);
         }
@@ -190,7 +190,7 @@ public class UnitTest {
         Assert.assertTrue("Is length unit", svR.getUnit() == Unit.LENGTH);
 
         try {
-            svR = sv1U.division(sv2U);
+            svR = sv1U.divide(sv2U);
         } catch (UnitConversionError e) {
             Assert.assertTrue(String.format("Scalar to Unit casting exception: %s", e.toString()), false);
         }

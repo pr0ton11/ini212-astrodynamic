@@ -18,6 +18,9 @@ public enum Unit {
     // Extensions (Implicit)
     VOLUME,  // m³
     AREA, // m²
+    FORCE, // N
+    ACCELERATION, // m/s²
+    VELOCITY, // m/s
     // Unitless for scalars without unit
     UNITLESS
 }

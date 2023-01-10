@@ -6,37 +6,29 @@
 
 package ch.hftm.astrodynamic.physics;
 
-import ch.hftm.astrodynamic.utils.Vector3d;
+import ch.hftm.astrodynamic.utils.*;
 
 // Can be a planet, moon or asteroid, shape is a sphere
 public class Planetoid implements AstronomicalObject, Atmosphere {
 
-    private double zeroPointHeight;
-    private double mass;
+    private Scalar zeroPointHeight;
+    private Scalar mass;
     private Vector3d position;
     private Vector3d rotation;
     private Vector3d velocity;
     private Vector3d rotationalVelocity;
 
     public Planetoid(double zeroPointHeight, double mass, Vector3d position, Vector3d rotation, Vector3d velocity, Vector3d rotationalVelocity) {
-        this.zeroPointHeight = zeroPointHeight;
-        this.mass = mass;
+        this.zeroPointHeight = new BaseScalar(zeroPointHeight, Unit.LENGTH);
+        this.mass = new BaseScalar(mass, Unit.MASS);
         this.position = position.clone();
         this.rotation = rotation.clone();
         this.velocity = velocity.clone();
         this.rotationalVelocity = rotationalVelocity.clone();
     }
 
-    public Collision calculateCollision(AstronomicalObject partnerShape) {
-        /*try {
-            if (Planetoid.class.isAssignableFrom(partnerShape.getClass())) {
-                Planetoid partner = (Planetoid)partnerShape;
-            }
-        } catch (NullPointerException e) {
-            System.out.println(e);
-        }*/
-
-        Vector3d midpoint = getPosition().add(partnerShape.getPosition()).divide(2);
+    public Collision calculateCollision(AstronomicalObject partnerShape) throws UnitConversionError {
+        Vector3d midpoint = getPosition().add(partnerShape.getPosition()).divide(new BaseScalar(2.0));
 
         if ((this.isColliding(midpoint)) && (partnerShape.isColliding(midpoint))){
             Collision collision = new Collision();
@@ -52,28 +44,27 @@ public class Planetoid implements AstronomicalObject, Atmosphere {
     }
 
     // E = 1/2 m v²
-    public double calculateImpactEnergy(Vector3d velocityA, Vector3d velocityB, double massA, double massB) {
-        double totalVelocity = velocityA.subtract(velocityB).getLength();
-        return 0.5 * (massA + massB) * (totalVelocity * totalVelocity);
+    public Scalar calculateImpactEnergy(Vector3d velocityA, Vector3d velocityB, Scalar massA, Scalar massB) throws UnitConversionError {
+        return new BaseScalar(massA.add(massB).multiply(velocityA.subtract(velocityB).getLength().pow(2)).divide(new BaseScalar(2)), Unit.FORCE);
     }
 
-    public double getZeroElevation() {
+    public Scalar getZeroElevation() {
         return zeroPointHeight;
     }
 
-    public double getDensity(Vector3d position) {
-        return 0;
+    public Scalar getDensity(Vector3d position) {
+        return new BaseScalar(0);
     }
 
-    public double getDensity(double height) {
-        return 0;
+    public Scalar getDensity(Scalar height) {
+        return new BaseScalar(0);
     }
 
-    public double getOxygenPercentage() {
-        return 0;
+    public Scalar getOxygenPercentage() {
+        return new BaseScalar(0);
     }
 
-    public double getMass() {
+    public Scalar getMass() {
         return mass;
     }
 
@@ -93,7 +84,7 @@ public class Planetoid implements AstronomicalObject, Atmosphere {
         return rotationalVelocity.clone();
     }
 
-    public void setMass(double mass) {
+    public void setMass(Scalar mass) {
         this.mass = mass;
     }
 
@@ -115,7 +106,7 @@ public class Planetoid implements AstronomicalObject, Atmosphere {
 
     // Planetoid is an idealized sphere
     public boolean isColliding(Vector3d offset) {
-        return offset.getLength() <= getZeroElevation();
+        return offset.getLength().getValue().le(getZeroElevation().getValue());
     }
     
 }

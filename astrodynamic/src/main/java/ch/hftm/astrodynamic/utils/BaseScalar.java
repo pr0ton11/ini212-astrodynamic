@@ -12,10 +12,22 @@ public class BaseScalar implements Scalar {
     private Quad value;  // Number to be stored in this object
     private Unit unit; // Unit to be stored in this object
 
-    // Constructor for doubles
+    // Constructor for scalar
+    public BaseScalar(Scalar scalar, Unit unit) {
+        this.value = scalar.getValue();
+        this.unit = unit;
+    }
+
+    // Constructor for quad
     public BaseScalar(Quad value, Unit unit) {
         this.value = new Quad(value);
         this.unit = unit;
+    }
+
+    // constructor for unitless quad
+    public BaseScalar(Quad value) {
+        this.value = new Quad(value);
+        this.unit = Unit.UNITLESS;
     }
 
     // Constructor for int
@@ -24,10 +36,22 @@ public class BaseScalar implements Scalar {
         this.unit = unit;
     }
 
+    // constructor for unitless int
+    public BaseScalar(int value) {
+        this.value = new Quad(value);
+        this.unit = Unit.UNITLESS;
+    }
+
     // Constructor for double
     public BaseScalar(double value, Unit unit) {
         this.value = new Quad(value);
         this.unit = unit;
+    }
+
+    // Constructor for unitless doubles
+    public BaseScalar(double value) {
+        this.value = new Quad(value);
+        this.unit = Unit.UNITLESS;
     }
 
     // Getter for SI unit
@@ -37,7 +61,7 @@ public class BaseScalar implements Scalar {
         return value;
     }
 
-    public Scalar addition(Scalar scalar) throws UnitConversionError {
+    public Scalar add(Scalar scalar) throws UnitConversionError {
         // unitless: default own unit
         Unit targetUnit = getUnit();
 
@@ -48,7 +72,7 @@ public class BaseScalar implements Scalar {
         return new BaseScalar(getValue().add(scalar.getValue()), targetUnit);
     }
 
-    public Scalar subtraction(Scalar scalar) throws UnitConversionError {
+    public Scalar subtract(Scalar scalar) throws UnitConversionError {
         // unitless: default own unit
         Unit targetUnit = getUnit();
 
@@ -59,7 +83,7 @@ public class BaseScalar implements Scalar {
         return new BaseScalar(getValue().subtract(scalar.getValue()), targetUnit);
     }
 
-    public Scalar multiplication(Scalar scalar) throws UnitConversionError  {
+    public Scalar multiply(Scalar scalar) throws UnitConversionError  {
         // unitless: default own unit
         Unit targetUnit = getUnit();
         if (targetUnit == Unit.UNITLESS) {
@@ -73,7 +97,7 @@ public class BaseScalar implements Scalar {
         return new BaseScalar(getValue().multiply(scalar.getValue()), targetUnit);
     }
 
-    public Scalar division(Scalar scalar) throws UnitConversionError  {
+    public Scalar divide(Scalar scalar) throws UnitConversionError  {
         // unitless: default own unit
         Unit targetUnit = getUnit();
         if (targetUnit == Unit.UNITLESS) {
@@ -87,4 +111,11 @@ public class BaseScalar implements Scalar {
         return new BaseScalar(getValue().divide(scalar.getValue()), targetUnit);
     }
 
+    public Scalar negate() {
+        return new BaseScalar(value.negate(), this.getUnit());
+    }
+
+    public Scalar pow(int exp) {
+        return new BaseScalar(value.pow(exp), this.getUnit());
+    }
 }
