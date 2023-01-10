@@ -9,7 +9,7 @@
   - [ ] Velocity
   - [ ] Acceleration
   - [ ] Distance
-  - [ ] Area
+  - [X] Area
   - [ ] Volume
   - [ ] Mass
 - [ ] Scalar calculations
