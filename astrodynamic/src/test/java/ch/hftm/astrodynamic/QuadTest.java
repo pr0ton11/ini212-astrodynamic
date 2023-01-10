@@ -1,6 +1,5 @@
 package ch.hftm.astrodynamic;
 
-import org.eclipse.yasson.internal.serializer.ObjectSerializer;
 import org.junit.Assert;
 import org.junit.Test;
 
