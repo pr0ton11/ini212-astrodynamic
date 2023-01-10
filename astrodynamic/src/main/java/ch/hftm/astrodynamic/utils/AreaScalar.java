@@ -48,7 +48,7 @@ public class AreaScalar extends BaseScalar {
 
     // Calculates the Area of a Triangle
     public static AreaScalar triangleArea(LengthScalar base, LengthScalar height) {
-        Quad result = base.getValue().multiply(height.getValue()).divide(new Quad(2));
+        Quad result = base.getValue().multiply(height.getValue()).half();
         return new AreaScalar(result);
     }
 
@@ -71,7 +71,7 @@ public class AreaScalar extends BaseScalar {
     // a and b are lenghts of the paralell sides
     // h is perpendicular height of the trapezium
     public static AreaScalar trapeziumArea(LengthScalar a, LengthScalar b, LengthScalar h) {
-        Quad result = a.getValue().add(b.getValue()).multiply(h.getValue()).divide(new Quad(2));
+        Quad result = a.getValue().add(b.getValue()).multiply(h.getValue()).half();
         return new AreaScalar(result);
     }
 

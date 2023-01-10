@@ -271,6 +271,11 @@ public class Quad implements Serializable, Comparable<Quad>, Cloneable {
         return new Quad(fhi, flo); 
 	}
 
+    // Halfs the quad
+    public Quad half() {
+        return this.divide(new Quad(2));
+    }
+
     // Returns an integer indicating the sign of this value
     public int signum() {
         if (isPositive()) return 1;
