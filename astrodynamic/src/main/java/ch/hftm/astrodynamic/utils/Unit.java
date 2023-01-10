@@ -6,8 +6,8 @@ package ch.hftm.astrodynamic.utils;
  *  Rafael Stauffer, Marc Singer
  */
 
-// Contains all SI units as enum
-public enum SIUnit {
+// Contains all physical units as enum
+public enum Unit {
     TIME, // Seconds (s)
     LENGTH, // Meters (m)
     MASS, // Kilogram (kg)

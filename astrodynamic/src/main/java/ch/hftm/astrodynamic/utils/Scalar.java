@@ -1,11 +1,11 @@
 package ch.hftm.astrodynamic.utils;
 
 public interface Scalar {
-    SIUnit getUnit();
+    Unit getUnit();
     Quad getValue();
 
-    Scalar addition(Scalar scalar) throws SIConversionError;
-    Scalar subtraction(Scalar scalar) throws SIConversionError;
-    Scalar multiplication(Scalar scalar) throws SIConversionError;
-    Scalar division(Scalar scalar) throws SIConversionError;
+    Scalar addition(Scalar scalar) throws UnitConversionError;
+    Scalar subtraction(Scalar scalar) throws UnitConversionError;
+    Scalar multiplication(Scalar scalar) throws UnitConversionError;
+    Scalar division(Scalar scalar) throws UnitConversionError;
 }
