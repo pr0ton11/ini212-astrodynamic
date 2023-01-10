@@ -57,65 +57,79 @@ public class BaseScalar implements Scalar {
     // Getter for SI unit
     public Unit getUnit() { return this.unit; }
 
+    // Getter for values
     public Quad getValue() {
         return value;
     }
 
+    // Addition helper for Scalars
     public Scalar add(Scalar scalar) throws UnitConversionError {
-        // unitless: default own unit
-        Unit targetUnit = getUnit();
-
-        // if we are unitless ignore
-        if ((scalar.getUnit() != getUnit())) {
-            throw new UnitConversionError(String.format("Addition between %s and %s not possible", getUnit().toString(), scalar.getUnit().toString()));
+        // Addition is only possible between matching units
+        if (unitMatches(scalar)) {
+            return new BaseScalar(getValue().add(scalar.getValue()), this.getUnit());
         }
-        return new BaseScalar(getValue().add(scalar.getValue()), targetUnit);
+        // All non matching units are not possible to substract
+        throw new UnitConversionError(String.format("Addition between %s and %s not possible", getUnit().toString(), scalar.getUnit().toString()));
     }
 
+    // Substraction helper for Scalars
     public Scalar subtract(Scalar scalar) throws UnitConversionError {
-        // unitless: default own unit
-        Unit targetUnit = getUnit();
-
-        // if we are unitless ignore
-        if ((scalar.getUnit() != getUnit())) {
-            throw new UnitConversionError(String.format("Subtraction between %s and %s not possible", getUnit().toString(), scalar.getUnit().toString()));
+        // Substraction is only possible between matching units
+        if (unitMatches(scalar)) {
+            return new BaseScalar(getValue().subtract(scalar.getValue()), this.getUnit());
         }
-        return new BaseScalar(getValue().subtract(scalar.getValue()), targetUnit);
+        // All non matching units are not possible to substract
+        throw new UnitConversionError(String.format("Subtraction between %s and %s not possible", getUnit().toString(), scalar.getUnit().toString()));
     }
 
+    // Multiplication helper for Scalars
     public Scalar multiply(Scalar scalar) throws UnitConversionError  {
-        // unitless: default own unit
-        Unit targetUnit = getUnit();
-        if (targetUnit == Unit.UNITLESS) {
-            targetUnit = scalar.getUnit();
+        if (unitMatches(scalar)) {
+            // If both units match in multiplication this can not be handled in the base scalar
+            // This is handled by the specialized child classes
+            if(this.isUnitless()) {
+                return new BaseScalar(getValue().multiply(scalar.getValue()), this.getUnit());
+            } else {
+                throw new UnitConversionError(String.format("Multiplication between two %s not possible in generic class", getUnit().toString()));
+            }
         }
-
-        // if we are unitless ignore
-        if ((scalar.getUnit() != Unit.UNITLESS) && (getUnit() != Unit.UNITLESS) && (scalar.getUnit() != getUnit())) {
-            throw new UnitConversionError(String.format("Multiplication between %s and %s not possible", getUnit().toString(), scalar.getUnit().toString()));
-        }
-        return new BaseScalar(getValue().multiply(scalar.getValue()), targetUnit);
+        // All non matching units are special cases and can not be handled by generic class
+        throw new UnitConversionError(String.format("Multiplication between %s and %s not possible in generic class", getUnit().toString(), scalar.getUnit().toString()));
     }
 
+    // Division helper function for Scalars
     public Scalar divide(Scalar scalar) throws UnitConversionError  {
-        // unitless: default own unit
-        Unit targetUnit = getUnit();
-        if (targetUnit == Unit.UNITLESS) {
-            targetUnit = scalar.getUnit();
+        // If both units match in division, return a unitless value
+        if (unitMatches(scalar)) {
+            return new BaseScalar(getValue().divide(scalar.getValue()), Unit.UNITLESS);
+        // Divide only if divisor is unitless
+        // Dividing a unitless value by a unit value is not possible is the base scalar
+        // This is handled by the specialized child classes
+        } else if (scalar.isUnitless()) {
+            return new BaseScalar(getValue().divide(scalar.getValue()), this.getUnit());
         }
-
-        // if we are unitless ignore
-        if ((scalar.getUnit() != Unit.UNITLESS) && (getUnit() != Unit.UNITLESS) && (scalar.getUnit() != getUnit())) {
-            throw new UnitConversionError(String.format("Division between %s and %s not possible", getUnit().toString(), scalar.getUnit().toString()));
-        }
-        return new BaseScalar(getValue().divide(scalar.getValue()), targetUnit);
+        // For any division that does not match the two former cases a UnitConversionError must be thrown
+        throw new UnitConversionError(String.format("Division between %s and %s not possible", getUnit().toString(), scalar.getUnit().toString()));
     }
 
+    // Function returns true if unit matches between two scalars
+    private boolean unitMatches(Scalar compareTo) {
+        return this.getUnit() == compareTo.getUnit();
+    }
+
+    // Function to detemine if this object is unitless
+    public boolean isUnitless() {
+        return this.getUnit() == Unit.UNITLESS;
+    }
+
+    // Negates the current scalar
     public Scalar negate() {
         return new BaseScalar(value.negate(), this.getUnit());
     }
 
+    // Pows the current scalar
     public Scalar pow(int exp) {
         return new BaseScalar(value.pow(exp), this.getUnit());
     }
+
 }
