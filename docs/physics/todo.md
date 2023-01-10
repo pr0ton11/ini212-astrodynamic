@@ -1,11 +1,11 @@
 # Todo
 
 - [X] New Unit
-  - [X] Force
+  - [x] Force
   - [X] Acceleration
   - [X] Velocity
 - [ ] Specialized scalars (With unit specific calculations)
-  - [ ] Energy (Newton)
+  - [ ] Force
   - [ ] Velocity
   - [ ] Acceleration
   - [ ] Distance
@@ -14,3 +14,8 @@
   - [ ] Mass
 - [ ] Scalar calculations
   - [ ] Mass * Velocity = Energy
+- [ ] Specialized vectors (With unit specific calculations)
+  - [ ] Force
+  - [ ] Velocity
+  - [ ] Acceleration
+  - [ ] Position (Length)
