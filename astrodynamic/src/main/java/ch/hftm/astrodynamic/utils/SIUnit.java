@@ -17,5 +17,7 @@ public enum SIUnit {
     LUNINOSITY, // Candela (cd)
     // Extensions (Implicit)
     VOLUME,  // m³
-    AREA // m²
+    AREA, // m²
+    // Unitless for scalars without unit
+    UNITLESS
 }
