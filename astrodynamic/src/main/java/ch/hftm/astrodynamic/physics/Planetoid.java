@@ -13,12 +13,12 @@ public class Planetoid implements AstronomicalObject, Atmosphere {
 
     private Scalar zeroPointHeight;
     private Scalar mass;
-    private Vector3d position;
-    private Vector3d rotation;
-    private Vector3d velocity;
-    private Vector3d rotationalVelocity;
+    private BaseVector position;
+    private BaseVector rotation;
+    private BaseVector velocity;
+    private BaseVector rotationalVelocity;
 
-    public Planetoid(double zeroPointHeight, double mass, Vector3d position, Vector3d rotation, Vector3d velocity, Vector3d rotationalVelocity) {
+    public Planetoid(double zeroPointHeight, double mass, BaseVector position, BaseVector rotation, BaseVector velocity, BaseVector rotationalVelocity) {
         this.zeroPointHeight = new BaseScalar(zeroPointHeight, Unit.LENGTH);
         this.mass = new MassScalar(mass);
         this.position = position.clone();
@@ -28,7 +28,7 @@ public class Planetoid implements AstronomicalObject, Atmosphere {
     }
 
     public Collision calculateCollision(AstronomicalObject partnerShape) throws UnitConversionError {
-        Vector3d midpoint = getPosition().add(partnerShape.getPosition()).divide(new BaseScalar(2.0));
+        Vector midpoint = getPosition().add(partnerShape.getPosition()).divide(new BaseScalar(2.0));
 
         if ((this.isColliding(midpoint)) && (partnerShape.isColliding(midpoint))){
             Collision collision = new Collision();
@@ -44,7 +44,7 @@ public class Planetoid implements AstronomicalObject, Atmosphere {
     }
 
     // E = 1/2 m v²
-    public Scalar calculateImpactEnergy(Vector3d velocityA, Vector3d velocityB, Scalar massA, Scalar massB) throws UnitConversionError {
+    public Scalar calculateImpactEnergy(Vector velocityA, Vector velocityB, Scalar massA, Scalar massB) throws UnitConversionError {
         return new ForceScalar(massA.add(massB).multiply(velocityA.subtract(velocityB).getLength().pow(2)).divide(new BaseScalar(2)));
     }
 
@@ -52,7 +52,7 @@ public class Planetoid implements AstronomicalObject, Atmosphere {
         return zeroPointHeight;
     }
 
-    public Scalar getDensity(Vector3d position) {
+    public Scalar getDensity(Vector position) {
         return new BaseScalar(0);
     }
 
@@ -68,19 +68,19 @@ public class Planetoid implements AstronomicalObject, Atmosphere {
         return mass;
     }
 
-    public Vector3d getPosition() {
+    public Vector getPosition() {
         return position.clone();
     }
 
-    public Vector3d getVelocity() {
+    public Vector getVelocity() {
         return velocity.clone();
     }
 
-    public Vector3d getRotation() {
+    public Vector getRotation() {
         return rotation.clone();
     }
 
-    public Vector3d getRotationVelocity() {
+    public Vector getRotationVelocity() {
         return rotationalVelocity.clone();
     }
 
@@ -88,24 +88,24 @@ public class Planetoid implements AstronomicalObject, Atmosphere {
         this.mass = mass;
     }
 
-    public void setPosition(Vector3d position) {
-        this.position = position.clone();
+    public void setPosition(Vector position) {
+        this.position = new BaseVector(position);
     }
 
-    public void setVelocity(Vector3d velocity) {
-        this.velocity = velocity.clone();
+    public void setVelocity(Vector velocity) {
+        this.velocity = new BaseVector(velocity);
     }
 
-    public void setRotation(Vector3d rotation) {
-        this.rotation = rotation.clone();
+    public void setRotation(Vector rotation) {
+        this.rotation = new BaseVector(rotation);
     }
 
-    public void setRotationVelocity(Vector3d rotationVelocity) {
-        this.rotationalVelocity = rotationVelocity.clone();
+    public void setRotationVelocity(Vector rotationVelocity) {
+        this.rotationalVelocity = new BaseVector(rotationVelocity);
     }
 
     // Planetoid is an idealized sphere
-    public boolean isColliding(Vector3d offset) {
+    public boolean isColliding(Vector offset) {
         return offset.getLength().getValue().le(getZeroElevation().getValue());
     }
     

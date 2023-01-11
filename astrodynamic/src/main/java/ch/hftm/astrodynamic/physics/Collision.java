@@ -13,6 +13,6 @@ public class Collision {
     public AstronomicalObject shapeA;
     public AstronomicalObject shapeB;
     public Scalar impactEnergy; // in Newton
-    public Vector3d impactPointFromA;
-    public Vector3d impactPointFromB;
+    public Vector impactPointFromA;
+    public Vector impactPointFromB;
 }

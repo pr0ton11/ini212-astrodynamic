@@ -11,7 +11,7 @@ import ch.hftm.astrodynamic.utils.*;
 // calculates density and oxygen content of atmosphere
 public interface Atmosphere {
     // density in kg/m^3, absolute position
-    Scalar getDensity(Vector3d position);
+    Scalar getDensity(Vector position);
 
     // density in kg/m^3, height in m over zero-height mark of celestial body
     Scalar getDensity(Scalar height);

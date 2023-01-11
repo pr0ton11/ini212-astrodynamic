@@ -14,13 +14,13 @@ import ch.hftm.astrodynamic.physics.Planetoid;
 import ch.hftm.astrodynamic.physics.Collision;
 import ch.hftm.astrodynamic.utils.Unit;
 import ch.hftm.astrodynamic.utils.UnitConversionError;
-import ch.hftm.astrodynamic.utils.Vector3d;
+import ch.hftm.astrodynamic.utils.BaseVector;
 
 public class PlanetoidTest {
     @Test
     public void TestImpactEnergyResting() {
-        Planetoid p1 = new Planetoid(1, 1, new Vector3d(0, 0, 0, Unit.LENGTH), new Vector3d(), new Vector3d(), new Vector3d());
-        Planetoid p2 = new Planetoid(1, 1, new Vector3d(1, 0, 0, Unit.LENGTH), new Vector3d(), new Vector3d(), new Vector3d());
+        Planetoid p1 = new Planetoid(1, 1, new BaseVector(0, 0, 0, Unit.LENGTH), new BaseVector(), new BaseVector(), new BaseVector());
+        Planetoid p2 = new Planetoid(1, 1, new BaseVector(1, 0, 0, Unit.LENGTH), new BaseVector(), new BaseVector(), new BaseVector());
 
         try {
             Collision c1 = p1.calculateCollision(p2);
@@ -32,8 +32,8 @@ public class PlanetoidTest {
 
     @Test
     public void TestImpactEnergyImpact() {
-        Planetoid p1 = new Planetoid(1, 1, new Vector3d(0, 0, 0, Unit.LENGTH), new Vector3d(), new Vector3d(0, 0, 0, Unit.LENGTH), new Vector3d());
-        Planetoid p2 = new Planetoid(1, 1, new Vector3d(1, 0, 0, Unit.LENGTH), new Vector3d(), new Vector3d(-1, 0, 0, Unit.LENGTH), new Vector3d());
+        Planetoid p1 = new Planetoid(1, 1, new BaseVector(0, 0, 0, Unit.LENGTH), new BaseVector(), new BaseVector(0, 0, 0, Unit.LENGTH), new BaseVector());
+        Planetoid p2 = new Planetoid(1, 1, new BaseVector(1, 0, 0, Unit.LENGTH), new BaseVector(), new BaseVector(-1, 0, 0, Unit.LENGTH), new BaseVector());
 
         try {
             Collision c1 = p1.calculateCollision(p2);
@@ -46,8 +46,8 @@ public class PlanetoidTest {
 
     @Test
     public void TestImpactEnergyVelocity() {
-        Planetoid p1 = new Planetoid(1, 1, new Vector3d(0, 0, 0, Unit.LENGTH), new Vector3d(), new Vector3d(-5, 0, 0, Unit.LENGTH), new Vector3d());
-        Planetoid p2 = new Planetoid(1, 1, new Vector3d(1, 0, 0, Unit.LENGTH), new Vector3d(), new Vector3d(-10, 0, 0, Unit.LENGTH), new Vector3d());
+        Planetoid p1 = new Planetoid(1, 1, new BaseVector(0, 0, 0, Unit.LENGTH), new BaseVector(), new BaseVector(-5, 0, 0, Unit.LENGTH), new BaseVector());
+        Planetoid p2 = new Planetoid(1, 1, new BaseVector(1, 0, 0, Unit.LENGTH), new BaseVector(), new BaseVector(-10, 0, 0, Unit.LENGTH), new BaseVector());
 
         try {
             Collision c1 = p1.calculateCollision(p2);
@@ -60,8 +60,8 @@ public class PlanetoidTest {
 
     @Test
     public void TestImpactPointAngled() {
-        Planetoid p1 = new Planetoid(1, 1, new Vector3d(0, 0, 0, Unit.LENGTH), new Vector3d(), new Vector3d(1, 1, 1, Unit.LENGTH), new Vector3d());
-        Planetoid p2 = new Planetoid(1, 1, new Vector3d(1, 1, 1, Unit.LENGTH), new Vector3d(), new Vector3d(-1, -1, -1, Unit.LENGTH), new Vector3d());
+        Planetoid p1 = new Planetoid(1, 1, new BaseVector(0, 0, 0, Unit.LENGTH), new BaseVector(), new BaseVector(1, 1, 1, Unit.LENGTH), new BaseVector());
+        Planetoid p2 = new Planetoid(1, 1, new BaseVector(1, 1, 1, Unit.LENGTH), new BaseVector(), new BaseVector(-1, -1, -1, Unit.LENGTH), new BaseVector());
 
         try {
             Collision c1 = p1.calculateCollision(p2);
