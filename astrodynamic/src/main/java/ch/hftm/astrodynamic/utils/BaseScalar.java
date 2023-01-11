@@ -113,7 +113,7 @@ public class BaseScalar implements Scalar {
     }
 
     // Function returns true if unit matches between two scalars
-    private boolean unitMatches(Scalar compareTo) {
+    protected boolean unitMatches(Scalar compareTo) {
         return this.getUnit() == compareTo.getUnit();
     }
 
