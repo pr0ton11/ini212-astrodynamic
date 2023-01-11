@@ -21,6 +21,7 @@ public enum Unit {
     FORCE, // N
     ACCELERATION, // m/s²
     VELOCITY, // m/s
+    ANGLE, // radian
     // Unitless for scalars without unit
     UNITLESS
 }
