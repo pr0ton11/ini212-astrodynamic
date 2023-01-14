@@ -66,7 +66,7 @@ public class BaseScalar implements Scalar {
     public Scalar add(Scalar scalar) throws UnitConversionError {
         // Addition is only possible between matching units
         if (unitMatches(scalar)) {
-            return new BaseScalar(getValue().add(scalar.getValue()), this.getUnit());
+            return ScalarFactory.create(getValue().add(scalar.getValue()), this.getUnit());
         }
         // All non matching units are not possible to substract
         throw new UnitConversionError(String.format("Addition between %s and %s not possible", getUnit().toString(), scalar.getUnit().toString()));
@@ -76,7 +76,7 @@ public class BaseScalar implements Scalar {
     public Scalar subtract(Scalar scalar) throws UnitConversionError {
         // Substraction is only possible between matching units
         if (unitMatches(scalar)) {
-            return new BaseScalar(getValue().subtract(scalar.getValue()), this.getUnit());
+            return ScalarFactory.create(getValue().subtract(scalar.getValue()), this.getUnit());
         }
         // All non matching units are not possible to substract
         throw new UnitConversionError(String.format("Subtraction between %s and %s not possible", getUnit().toString(), scalar.getUnit().toString()));
@@ -132,4 +132,7 @@ public class BaseScalar implements Scalar {
         return new BaseScalar(value.pow(exp), this.getUnit());
     }
 
+    public String toString() {
+        return String.format("<Scalar %s (%f, %s)>", this.getClass().getSimpleName(), getValue().doubleValue(), getUnit().toString());
+    }
 }
