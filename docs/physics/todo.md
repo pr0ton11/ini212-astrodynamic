@@ -12,6 +12,7 @@
   - [X] Area
   - [ ] Volume
   - [ ] Mass
+  - [ ] Rotations- per Minutes, -Velocity
 - [ ] Scalar calculations
   - [ ] Mass * Velocity = Energy
 - [ ] Specialized vectors (With unit specific calculations)
