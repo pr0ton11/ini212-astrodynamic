@@ -24,4 +24,15 @@ public class MassScalar extends BaseScalar {
         super(value, Unit.MASS);
     }
     
+    @Override
+    public Scalar multiply(Scalar scalar) throws UnitConversionError  {
+        switch (scalar.getUnit()) {
+            case ACCELERATION:
+                return new ForceScalar(getValue().multiply(scalar.getValue()));
+            case UNITLESS:
+                return new MassScalar(getValue().multiply(scalar.getValue()));
+            default:
+                throw new UnitConversionError(String.format("Multiplication between %s and %s not possible in %s", getUnit().toString(), scalar.getUnit().toString(), this.getClass().getSimpleName()));
+        }
+    }
 }

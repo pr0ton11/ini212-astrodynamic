@@ -24,4 +24,15 @@ public class AccelerationScalar extends BaseScalar {
         super(value, Unit.ACCELERATION);
     }
     
+    @Override
+    public Scalar multiply(Scalar scalar) throws UnitConversionError  {
+        switch (scalar.getUnit()) {
+            case MASS:
+                return new ForceScalar(getValue().multiply(scalar.getValue()));
+            case UNITLESS:
+                return new AccelerationScalar(getValue().multiply(scalar.getValue()));
+            default:
+                throw new UnitConversionError(String.format("Multiplication between %s and %s not possible in %s", getUnit().toString(), scalar.getUnit().toString(), this.getClass().getSimpleName()));
+        }
+    }
 }

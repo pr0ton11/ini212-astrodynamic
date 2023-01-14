@@ -19,7 +19,7 @@ public class Planetoid implements AstronomicalObject, Atmosphere {
     private BaseVector rotationalVelocity;
 
     public Planetoid(double zeroPointHeight, double mass, BaseVector position, BaseVector rotation, BaseVector velocity, BaseVector rotationalVelocity) {
-        this.zeroPointHeight = new BaseScalar(zeroPointHeight, Unit.LENGTH);
+        this.zeroPointHeight = new LengthScalar(zeroPointHeight);
         this.mass = new MassScalar(mass);
         this.position = position.clone();
         this.rotation = rotation.clone();
@@ -45,7 +45,7 @@ public class Planetoid implements AstronomicalObject, Atmosphere {
 
     // E = 1/2 m v²
     public Scalar calculateImpactEnergy(Vector velocityA, Vector velocityB, Scalar massA, Scalar massB) throws UnitConversionError {
-        return new ForceScalar(massA.add(massB).multiply(velocityA.subtract(velocityB).getLength().pow(2)).divide(new BaseScalar(2)));
+        return new ForceScalar(massA.add(massB).multiply(velocityA.subtract(velocityB).getLength().pow(2)).divide(new UnitlessScalar(2)));
     }
 
     public Scalar getZeroElevation() {
