@@ -13,7 +13,7 @@ public class ScalarFactory {
     public static Scalar create(Quad value, Unit unit) throws UnitConversionError {
         switch (unit) {
             case UNITLESS:
-                return new BaseScalar(value);
+                return new UnitlessScalar(value);
             case LENGTH:
                 return new LengthScalar(value);
             case AREA:
