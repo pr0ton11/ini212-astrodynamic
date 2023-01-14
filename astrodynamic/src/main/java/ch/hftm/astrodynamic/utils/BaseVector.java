@@ -205,6 +205,6 @@ public class BaseVector implements Vector, Cloneable {
     }
 
     public String toString() {
-        return String.format("Vec3 (%f, %f, %f, %s)", getX().getValue().doubleValue(), getY().getValue().doubleValue(), getZ().getValue().doubleValue(), getUnit().toString());
+        return String.format("<Vector %s (%f, %f, %f, %s)>", this.getClass().getSimpleName(), getX().getValue().doubleValue(), getY().getValue().doubleValue(), getZ().getValue().doubleValue(), getUnit().toString());
     }
 }
