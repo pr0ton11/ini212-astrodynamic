@@ -6,29 +6,31 @@ package ch.hftm.astrodynamic.utils;
  *  Rafael Stauffer, Marc Singer
  */
 
-public class AccelerationScalar extends BaseScalar {
+public class FL2Mn2Scalar extends BaseScalar {
 
-    public AccelerationScalar(Scalar scalar) {
-        super(scalar, Unit.ACCELERATION);
+    public FL2Mn2Scalar(Scalar scalar) {
+        super(scalar, Unit.F_L2_Mn2);
     }
 
-    public AccelerationScalar(Quad value) {
-        super(value, Unit.ACCELERATION);
+    public FL2Mn2Scalar(Quad value) {
+        super(value, Unit.F_L2_Mn2);
     }
 
-    public AccelerationScalar(int value) {
-        super(value, Unit.ACCELERATION);
+    public FL2Mn2Scalar(int value) {
+        super(value, Unit.F_L2_Mn2);
     }
 
-    public AccelerationScalar(double value) {
-        super(value, Unit.ACCELERATION);
+    public FL2Mn2Scalar(double value) {
+        super(value, Unit.F_L2_Mn2);
     }
     
     @Override
     public Scalar multiply(Scalar scalar) throws UnitConversionError  {
         switch (scalar.getUnit()) {
             case UNITLESS:
-                return new AccelerationScalar(getValue().multiply(scalar.getValue()));
+                return new FL2Mn2Scalar(getValue().multiply(scalar.getValue()));
+            case M2_DIV_L2:
+                return new ForceScalar(getValue().multiply(scalar.getValue()));
             default:
                 throw new UnitConversionError(String.format("Multiplication between %s and %s not possible in %s", getUnit().toString(), scalar.getUnit().toString(), this.getClass().getSimpleName()));
         }

@@ -138,6 +138,14 @@ public class BaseVector implements Vector, Cloneable {
         calculateLength();
     }
 
+    public BaseVector(Vector vector, Unit unit) {
+        this.x = vector.getX().getValue();
+        this.y = vector.getY().getValue();
+        this.z = vector.getZ().getValue();
+        this.unit = unit;
+        calculateLength();
+    }
+
     public Unit getUnit() {
         return unit;
     }

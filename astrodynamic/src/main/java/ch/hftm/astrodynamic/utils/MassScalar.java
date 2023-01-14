@@ -26,11 +26,14 @@ public class MassScalar extends BaseScalar {
     
     @Override
     public Scalar multiply(Scalar scalar) throws UnitConversionError  {
+        Quad multiplicationResult = getValue().multiply(scalar.getValue());
         switch (scalar.getUnit()) {
-            case ACCELERATION:
-                return new ForceScalar(getValue().multiply(scalar.getValue()));
+            case VELOCITY:
+                return new ForceScalar(multiplicationResult);
+            case MASS:
+                return new CubicMassScalar(multiplicationResult);
             case UNITLESS:
-                return new MassScalar(getValue().multiply(scalar.getValue()));
+                return new MassScalar(multiplicationResult);
             default:
                 throw new UnitConversionError(String.format("Multiplication between %s and %s not possible in %s", getUnit().toString(), scalar.getUnit().toString(), this.getClass().getSimpleName()));
         }

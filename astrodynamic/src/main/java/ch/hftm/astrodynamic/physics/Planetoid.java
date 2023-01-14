@@ -13,30 +13,39 @@ public class Planetoid implements AstronomicalObject, Atmosphere {
 
     private Scalar zeroPointHeight;
     private Scalar mass;
-    private BaseVector position;
-    private BaseVector rotation;
-    private BaseVector velocity;
-    private BaseVector rotationalVelocity;
+    private Vector position;
+    private Vector rotation;
+    private Vector velocity;
+    private Vector rotationalVelocity;
 
-    public Planetoid(double zeroPointHeight, double mass, BaseVector position, BaseVector rotation, BaseVector velocity, BaseVector rotationalVelocity) {
+    public Planetoid(double zeroPointHeight, double mass, Vector position, Vector rotation, Vector velocity, Vector rotationalVelocity) {
         this.zeroPointHeight = new LengthScalar(zeroPointHeight);
         this.mass = new MassScalar(mass);
-        this.position = position.clone();
-        this.rotation = rotation.clone();
-        this.velocity = velocity.clone();
-        this.rotationalVelocity = rotationalVelocity.clone();
+        this.position = new BaseVector(position, Unit.LENGTH);
+        this.rotation = new BaseVector(rotation);
+        this.velocity = new BaseVector(velocity);
+        this.rotationalVelocity = new BaseVector(rotationalVelocity);
     }
 
-    public Collision calculateCollision(AstronomicalObject partnerShape) throws UnitConversionError {
-        Vector midpoint = getPosition().add(partnerShape.getPosition()).divide(new BaseScalar(2.0));
+    public Planetoid(Scalar zeroPointHeight, Scalar mass, Vector position, Vector rotation, Vector velocity, Vector rotationalVelocity) {
+        this.zeroPointHeight = new LengthScalar(zeroPointHeight);
+        this.mass = new MassScalar(mass);
+        this.position = new BaseVector(position, Unit.LENGTH);
+        this.rotation = new BaseVector(rotation);
+        this.velocity = new BaseVector(velocity);
+        this.rotationalVelocity = new BaseVector(rotationalVelocity);
+    }
 
-        if ((this.isColliding(midpoint)) && (partnerShape.isColliding(midpoint))){
+    public Collision calculateCollision(AstronomicalObject partner) throws UnitConversionError {
+        Vector midpoint = getPosition().add(partner.getPosition()).divide(new BaseScalar(2.0));
+
+        if ((this.isColliding(midpoint)) && (partner.isColliding(midpoint))){
             Collision collision = new Collision();
             collision.shapeA = this;
-            collision.shapeB = partnerShape;
+            collision.shapeB = partner;
             collision.impactPointFromA = midpoint.subtract(getPosition());
-            collision.impactPointFromB = midpoint.subtract(partnerShape.getPosition());
-            collision.impactEnergy = calculateImpactEnergy(getVelocity(), partnerShape.getVelocity(), getMass(), partnerShape.getMass());
+            collision.impactPointFromB = midpoint.subtract(partner.getPosition());
+            collision.impactEnergy = calculateImpactEnergy(getVelocity(), partner.getVelocity(), getMass(), partner.getMass());
             return collision;
         }
 
@@ -69,19 +78,19 @@ public class Planetoid implements AstronomicalObject, Atmosphere {
     }
 
     public Vector getPosition() {
-        return position.clone();
+        return position;
     }
 
     public Vector getVelocity() {
-        return velocity.clone();
+        return velocity;
     }
 
     public Vector getRotation() {
-        return rotation.clone();
+        return rotation;
     }
 
     public Vector getRotationVelocity() {
-        return rotationalVelocity.clone();
+        return rotationalVelocity;
     }
 
     public void setMass(Scalar mass) {
@@ -107,6 +116,25 @@ public class Planetoid implements AstronomicalObject, Atmosphere {
     // Planetoid is an idealized sphere
     public boolean isColliding(Vector offset) {
         return offset.getLength().getValue().le(getZeroElevation().getValue());
+    }
+
+    /* Calculates the force in Newton from the gravity between two astronomical objects
+     * To keep the scalar unit dimension calculations intact intermediate helper units are used
+     * kg² / m² * N * m² * kg⁻² = N
+     */
+    public Vector calculateGravitationalForce(AstronomicalObject partner) throws UnitConversionError {
+        
+        Vector direction = getPosition().subtract(partner.getPosition());
+        Scalar cubic_distance = direction.getLength().multiply(direction.getLength()); // cubic distance = area
+
+        // here we use the intermediate helper units: cubic_mass, M2_div_L2 (kg² / m²), and the gravitational constant unit F_L2_Mn2 (N * m² * kg⁻²)
+        Scalar force = getMass().multiply(partner.getMass()).divide(cubic_distance).multiply(ScalarFactory.gravitationalConstant());
+
+        direction = direction.normalize();
+
+        Vector forceVector = new BaseVector(force.multiply(direction.getX()), force.multiply(direction.getY()), force.multiply(direction.getZ()));
+
+        return forceVector;
     }
     
 }

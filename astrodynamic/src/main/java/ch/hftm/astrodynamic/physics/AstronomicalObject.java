@@ -29,5 +29,8 @@ public interface AstronomicalObject {
     boolean isColliding(Vector offset);
 
     // returns collision obj with all collision data
-    Collision calculateCollision(AstronomicalObject partnerShape) throws UnitConversionError;
+    Collision calculateCollision(AstronomicalObject partner) throws UnitConversionError;
+
+    // returns Force vector of gravitational interaction
+    Vector calculateGravitationalForce(AstronomicalObject partner) throws UnitConversionError;
 }

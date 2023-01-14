@@ -24,4 +24,14 @@ public class ForceScalar extends BaseScalar {
         super(value, Unit.FORCE);
     }
     
+    @Override
+    public Scalar multiply(Scalar scalar) throws UnitConversionError {
+        Quad product = getValue().multiply(scalar.getValue());
+        switch (scalar.getUnit()) {
+            case UNITLESS:
+                return new ForceScalar(product);
+            default:
+                throw new UnitConversionError(String.format("Multiplication between %s and %s not possible in %s", getUnit().toString(), scalar.getUnit().toString(), getClass().getSimpleName()));
+        }
+    }
 }

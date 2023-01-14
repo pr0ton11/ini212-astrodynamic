@@ -32,6 +32,12 @@ public class ScalarFactory {
                 return new VelocityScalar(value);
             case ACCELERATION:
                 return new AccelerationScalar(value);
+            case CUBIC_MASS:
+                return new CubicMassScalar(value);
+            case M2_DIV_L2:
+                return new M2divL2Scalar(value);
+            case F_L2_Mn2:
+                return new FL2Mn2Scalar(value);
             default:
                 throw new UnitConversionError(String.format("Unit %s not supported", unit.toString()));
         }
@@ -50,5 +56,11 @@ public class ScalarFactory {
     // wrapper to create from other scalar value
     public static Scalar create(Scalar scalar, Unit unit) throws UnitConversionError {
         return ScalarFactory.create(new Quad(scalar.getValue()), unit);
+    }
+
+    // returns a gravitational constant scalar
+    public static Scalar gravitationalConstant() throws UnitConversionError {
+        // According to NIST Reference https://physics.nist.gov/cgi-bin/cuu/Value?bg
+        return ScalarFactory.create(new Quad(6.67430).multiply(new Quad(10).pow(-11)), Unit.F_L2_Mn2);
     }
 }

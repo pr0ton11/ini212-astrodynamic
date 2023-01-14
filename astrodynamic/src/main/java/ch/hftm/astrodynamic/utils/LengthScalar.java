@@ -8,6 +8,10 @@ package ch.hftm.astrodynamic.utils;
 
 public class LengthScalar extends BaseScalar {
 
+    public LengthScalar() {
+        super(0, Unit.LENGTH);
+    }
+
     public LengthScalar(Scalar scalar) {
         super(scalar, Unit.LENGTH);
     }
