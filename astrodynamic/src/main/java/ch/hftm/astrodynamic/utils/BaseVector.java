@@ -28,19 +28,35 @@ public class BaseVector implements Vector, Cloneable {
     }
 
     public Scalar getX() {
-        return new BaseScalar(x, unit);
+        try {
+            return ScalarFactory.create(x, unit);
+        } catch (UnitConversionError e) {
+            return new BaseScalar(x, unit);
+        }
     }
 
     public Scalar getY() {
-        return new BaseScalar(y, unit);
+        try {
+            return ScalarFactory.create(y, unit);
+        } catch (UnitConversionError e) {
+            return new BaseScalar(y, unit);
+        }
     }
 
     public Scalar getZ() {
-        return new BaseScalar(z, unit);
+        try {
+            return ScalarFactory.create(z, unit);
+        } catch (UnitConversionError e) {
+            return new BaseScalar(z, unit);
+        }
     }
 
     public Scalar getLength() {
-        return new BaseScalar(length, unit);
+        try {
+            return ScalarFactory.create(length, unit);
+        } catch (UnitConversionError e) {
+            return new BaseScalar(length, unit);
+        }
     }
 
     private void calculateLength() {
@@ -51,11 +67,21 @@ public class BaseVector implements Vector, Cloneable {
         this.length = qX.add(qY).add(qZ).sqrt();
     }
 
+    // unitless zero vector
     public BaseVector() {
         this.x = new Quad();
         this.y = new Quad();
         this.z = new Quad();
         this.unit = Unit.UNITLESS;
+        calculateLength();
+    }
+
+    // unit zero vector
+    public BaseVector(Unit unit) {
+        this.x = new Quad();
+        this.y = new Quad();
+        this.z = new Quad();
+        this.unit = unit;
         calculateLength();
     }
 
