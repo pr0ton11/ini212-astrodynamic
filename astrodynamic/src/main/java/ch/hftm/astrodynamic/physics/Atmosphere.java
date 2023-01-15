@@ -18,4 +18,7 @@ public interface Atmosphere {
 
     // percentage constant with altitude, multiply with density to get availability
     Scalar getOxygenPercentage();
+
+    // wind speed in m/s, absolute position 
+    Vector getAtmosphereSpeed(Vector position);
 }

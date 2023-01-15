@@ -1,7 +1,6 @@
 package ch.hftm.astrodynamic.physics;
 
-import ch.hftm.astrodynamic.utils.Scalar;
-import ch.hftm.astrodynamic.utils.Vector;
+import ch.hftm.astrodynamic.utils.*;
 
 /*
  *  Project Astrodynamic
@@ -16,5 +15,8 @@ public interface Drag {
     Scalar getDragCoefficient(Vector directionThroughMedium);
 
     // returns force vector from drag from planetoid atmosphere
-    Vector getDragForce(Planetoid partner);
+    Vector getDragForce(Planetoid partner) throws UnitConversionError;
+
+    // returns frontal area in m² according to the direction vector
+    Scalar getFrontArea(Vector directionThroughMedium);
 }

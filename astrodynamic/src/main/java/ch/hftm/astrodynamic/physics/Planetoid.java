@@ -36,4 +36,9 @@ public class Planetoid extends BaseAstronomicalObject implements Atmosphere {
     public boolean isColliding(Vector offset) {
         return offset.getLength().getValue().le(getZeroElevation().getValue());
     }
+
+    // wind speed in m/s, absolute position 
+    public Vector getAtmosphereSpeed(Vector position) {
+        return getRotationVelocity();
+    }
 }
