@@ -96,8 +96,13 @@ public class Quad implements Serializable, Comparable<Quad>, Cloneable {
         return Double.isNaN(hi); 
     }
     // Flag if the value equals another quad
-    public boolean equals(Quad y) {
-		return hi == y.hi && lo == y.lo;
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Quad) {
+            Quad oq = (Quad)o;
+		    return hi == oq.hi && lo == oq.lo;
+        }
+        return false;
 	}
     // Flag if value is greater than
     public boolean gt(Quad y) {

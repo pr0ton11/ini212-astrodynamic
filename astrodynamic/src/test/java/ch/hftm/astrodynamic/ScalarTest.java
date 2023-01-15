@@ -31,4 +31,15 @@ public class ScalarTest {
         Assert.assertTrue(rs.getUnit() == Unit.LENGTH);
         Assert.assertEquals(60.0, rs.getValue().doubleValue(), 0.0);
     }
+
+    @Test
+    public void TestDivision() throws UnitConversionError {
+        Scalar s1 = new UnitlessScalar(-10);
+        Scalar s2 = new UnitlessScalar(-2);
+        Scalar sExpected1 = new UnitlessScalar(5);
+        Scalar sExpected2 = new UnitlessScalar(0.2);
+
+        Assert.assertEquals(sExpected1, s1.divide(s2));
+        Assert.assertEquals(sExpected2, s2.divide(s1));
+    }
 }

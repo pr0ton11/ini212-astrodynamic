@@ -124,4 +124,15 @@ public class QuadTest {
         // 3/10 = 0.3
         Assert.assertEquals(0.3, q2.divide(q1).doubleValue(), 0.0);
     }
+
+    // special case division where 2 / 10 should be 0.2
+    @Test
+    public void TestDivisionTwoTen() {
+        Quad qTen = new Quad(10);
+        Quad qTwo = new Quad(2);
+        Quad qExpected = new Quad(0.2);
+        Quad qResult = qTwo.divide(qTen);
+
+        Assert.assertEquals(qExpected, qResult);
+    }
 }
