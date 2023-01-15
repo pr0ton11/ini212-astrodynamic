@@ -12,6 +12,15 @@ public class BaseScalar implements Scalar {
     private Quad value;  // Number to be stored in this object
     private Unit unit; // Unit to be stored in this object
 
+    @Override
+    public boolean equals(Object arg0) {
+        if (arg0 instanceof Scalar) {
+            Scalar os = (Scalar)arg0;
+            return ((getUnit() == os.getUnit()) && (getValue().equals(os.getValue())));
+        }
+        return false;
+    }
+
     // Constructor for scalar
     public BaseScalar(Scalar scalar, Unit unit) {
         this.value = scalar.getValue();

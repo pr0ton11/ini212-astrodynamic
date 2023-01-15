@@ -1,5 +1,11 @@
 package ch.hftm.astrodynamic.utils;
 
+/*
+ *  Project Astrodynamic
+ *  HFTM BBIN21.2a
+ *  Rafael Stauffer, Marc Singer
+ */
+
 public interface Scalar {
     Unit getUnit();
     Quad getValue();

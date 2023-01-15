@@ -15,10 +15,11 @@ public class BaseVector implements Vector, Cloneable {
     private Quad length;
     private Unit unit;
 
-    public boolean equals(Object o) {
-        if (o instanceof Vector) {
-            Vector ov = (Vector)o;
-            return ((ov.getX() == this.getX()) && (ov.getY() == this.getY()) && (ov.getZ() == this.getZ()) && (ov.getUnit() == this.getUnit()));
+    @Override
+    public boolean equals(Object arg0) {
+        if (arg0 instanceof Vector) {
+            Vector ov = (Vector)arg0;
+            return ((ov.getX().equals(this.getX())) && (ov.getY().equals(this.getY())) && (ov.getZ().equals(this.getZ())) && (ov.getUnit() == this.getUnit()));
         }
         return false;
     }

@@ -1,5 +1,11 @@
 package ch.hftm.astrodynamic.utils;
 
+/*
+ *  Project Astrodynamic
+ *  HFTM BBIN21.2a
+ *  Rafael Stauffer, Marc Singer
+ */
+
 public interface Vector {
 
     Scalar getX();
@@ -54,5 +60,10 @@ public interface Vector {
     // divide with double convert to unitless scalar
     default Vector divide(double value) throws UnitConversionError {
         return this.divide(new BaseScalar(value));
+    }
+
+    // inversion of the vector
+    default Vector invert() throws UnitConversionError {
+        return this.multiply(-1.0);
     }
 }
