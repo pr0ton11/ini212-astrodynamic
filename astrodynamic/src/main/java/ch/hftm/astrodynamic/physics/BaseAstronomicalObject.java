@@ -115,14 +115,14 @@ public class BaseAstronomicalObject implements AstronomicalObject {
      */
     public Vector calculateGravitationalForce(AstronomicalObject partner) throws UnitConversionError {
         
-        Vector direction = getPosition().subtract(partner.getPosition());
+        // direction is calculated from partner to get direction to partner as difference (if we calculate this.pos - partner.pos we get the direction from the partner to us)
+        Vector direction = partner.getPosition().subtract(getPosition());
         Scalar cubic_distance = direction.getLength().multiply(direction.getLength()); // cubic distance = area
 
         // here we use the intermediate helper units: cubic_mass, M2_div_L2 (kg² / m²), and the gravitational constant unit F_L2_Mn2 (N * m² * kg⁻²)
         Scalar force = getMass().multiply(partner.getMass()).divide(cubic_distance).multiply(ScalarFactory.gravitationalConstant());
 
-        direction = direction.normalize();
-
+        direction = direction.normalize(); // make it unitless percentages for multiplication with force to get a force vector
         Vector forceVector = new BaseVector(force.multiply(direction.getX()), force.multiply(direction.getY()), force.multiply(direction.getZ()));
 
         return forceVector;

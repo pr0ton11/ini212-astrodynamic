@@ -73,4 +73,29 @@ public class PlanetoidTest {
 
         Assert.assertEquals(referenceForce.doubleValue(), gravitationalForce.getLength().getValue().doubleValue(), delta.doubleValue());
     }
+
+    @Test
+    public void TestGravityDirection() throws UnitConversionError {
+        Planetoid p1 = new Planetoid(0, 1000, new BaseVector(Unit.LENGTH), new BaseVector(Unit.ANGLE), new BaseVector(Unit.VELOCITY), new BaseVector(Unit.ANGULAR_VELOCITY));
+        Planetoid p2 = new Planetoid(0, 1000, new BaseVector(1000, 0, 0, Unit.LENGTH), new BaseVector(Unit.ANGLE), new BaseVector(Unit.VELOCITY), new BaseVector(Unit.ANGULAR_VELOCITY));
+
+        Vector vExpectedDirection = new BaseVector(1, 0, 0, Unit.UNITLESS);
+
+        Vector gravitationalForce = p1.calculateGravitationalForce(p2);
+
+        Assert.assertEquals(vExpectedDirection, gravitationalForce.normalize());
+    }
+
+    @Test
+    public void TestGravityAcceleration() throws UnitConversionError {
+        Planetoid earth = new Planetoid(new LengthScalar(new Quad(6.3781).multiply(new Quad(10).pow(6))), new MassScalar(new Quad(5.9722).multiply(new Quad(10).pow(24))), new BaseVector(Unit.LENGTH), new BaseVector(Unit.ANGLE), new BaseVector(Unit.VELOCITY), new BaseVector(Unit.VELOCITY));
+        Planetoid person = new Planetoid(0, 80, new BaseVector(new Quad(6.3781).multiply(new Quad(10).pow(6)), new Quad(), new Quad(), Unit.LENGTH), new BaseVector(Unit.ANGLE), new BaseVector(Unit.VELOCITY), new BaseVector(Unit.ANGULAR_VELOCITY));
+
+        Vector vExpectedDirection = new BaseVector(-9.81, 0, 0, Unit.ACCELERATION);
+
+        Vector gravitationalForce = person.calculateGravitationalForce(earth);
+        Vector gravitationalAcceleration = person.calculateAccelerationFromForce(gravitationalForce);
+
+        Assert.assertEquals(vExpectedDirection, gravitationalAcceleration);
+    }
 }

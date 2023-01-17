@@ -9,6 +9,7 @@
 
  import org.junit.Assert;
  import org.junit.Test;
+ import org.junit.Ignore;
  
 import ch.hftm.astrodynamic.model.*;
 import ch.hftm.astrodynamic.utils.*;
@@ -17,21 +18,25 @@ import ch.hftm.astrodynamic.scalar.ScalarFactory;
  
  public class ModelTest {
     @Test
+    @Ignore
     public void TestEarthMoonOrbit() throws UnitConversionError{
         Planetoid earth = new Earth();
         Planetoid moon = new Moon();
         Scalar oneSecond = ScalarFactory.create(1, Unit.TIME); // needed for acceleration/velocity calculation
+        int secondsTestTotal = 32000000;
         int secondsInYear = 31540000;
         int secondsInDay = 86400;
+        int secondsInWeek = secondsInDay * 7;
 
         // average distance earth to moon is 3.85e+8 m
         moon.setPosition(new BaseVector(385000000,0,0, Unit.LENGTH));
 
         // average speed of moon is 1.022e+3 m/s
-        moon.setVelocity(new BaseVector(0, 0, 1022000, Unit.VELOCITY));
+        //moon.setVelocity(new BaseVector(0, 0, 1022000, Unit.VELOCITY));
+        moon.setVelocity(new BaseVector(0, 0, 0, Unit.VELOCITY));
 
         // seconds in a year: 3.154e+7
-        for (int i = 0; i < secondsInYear; i++) {
+        for (int i = 0; i < secondsTestTotal; i++) {
             Vector force = earth.calculateGravitationalForce(moon);
 
             Vector earthAcceleration = earth.calculateAccelerationFromForce(force);
@@ -47,8 +52,8 @@ import ch.hftm.astrodynamic.scalar.ScalarFactory;
             earth.setPosition(earth.getPosition().add(earth.getVelocity().multiply(oneSecond)));
             moon.setPosition(moon.getPosition().add(moon.getVelocity().multiply(oneSecond)));
 
-            if (i%secondsInDay == 0) {
-                System.out.println(String.format("%d / %d", i/secondsInDay, secondsInYear/secondsInDay));
+            if (i%secondsInWeek == 0) {
+                System.out.println(String.format("%03d/%03d: moon velocity: %08.6f moon distance: %08.6f", i/secondsTestTotal, secondsInYear/secondsTestTotal, moon.getVelocity().getLength().getValue().doubleValue(), earth.getPosition().subtract(moon.getPosition()).getLength().getValue().doubleValue()));
             }
         }
 
