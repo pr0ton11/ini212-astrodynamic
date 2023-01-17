@@ -6,6 +6,11 @@
 
 package ch.hftm.astrodynamic.physics;
 
+import ch.hftm.astrodynamic.scalar.ForceScalar;
+import ch.hftm.astrodynamic.scalar.LengthScalar;
+import ch.hftm.astrodynamic.scalar.MassScalar;
+import ch.hftm.astrodynamic.scalar.ScalarFactory;
+import ch.hftm.astrodynamic.scalar.UnitlessScalar;
 import ch.hftm.astrodynamic.utils.*;
 
 public class BaseAstronomicalObject implements AstronomicalObject {
@@ -121,5 +126,10 @@ public class BaseAstronomicalObject implements AstronomicalObject {
         Vector forceVector = new BaseVector(force.multiply(direction.getX()), force.multiply(direction.getY()), force.multiply(direction.getZ()));
 
         return forceVector;
+    }
+
+    // a = F / m
+    public Vector calculateAccelerationFromForce(Vector force) throws UnitConversionError {
+        return force.divide(getMass());
     }
 }

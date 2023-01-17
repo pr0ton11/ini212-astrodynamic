@@ -8,6 +8,9 @@ package ch.hftm.astrodynamic.utils;
 
 import java.lang.Math;
 
+import ch.hftm.astrodynamic.scalar.AngleScalar;
+import ch.hftm.astrodynamic.scalar.ScalarFactory;
+
 public class BaseVector implements Vector, Cloneable {
     private Quad x;
     private Quad y;

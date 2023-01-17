@@ -9,6 +9,9 @@ package ch.hftm.astrodynamic;
 import org.junit.Assert;
 import org.junit.Test;
 
+import ch.hftm.astrodynamic.scalar.AreaScalar;
+import ch.hftm.astrodynamic.scalar.LengthScalar;
+import ch.hftm.astrodynamic.scalar.UnitlessScalar;
 import ch.hftm.astrodynamic.utils.*;
 
 public class ScalarTest {

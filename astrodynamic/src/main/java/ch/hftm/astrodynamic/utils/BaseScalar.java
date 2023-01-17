@@ -1,5 +1,7 @@
 package ch.hftm.astrodynamic.utils;
 
+import ch.hftm.astrodynamic.scalar.ScalarFactory;
+
 /*
  *  Project Astrodynamic
  *  HFTM BBIN21.2a

@@ -11,6 +11,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import ch.hftm.astrodynamic.physics.*;
+import ch.hftm.astrodynamic.scalar.LengthScalar;
+import ch.hftm.astrodynamic.scalar.MassScalar;
 import ch.hftm.astrodynamic.utils.*;
 
 public class PlanetoidTest {

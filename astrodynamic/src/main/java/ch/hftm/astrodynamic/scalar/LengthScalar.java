@@ -1,4 +1,10 @@
-package ch.hftm.astrodynamic.utils;
+package ch.hftm.astrodynamic.scalar;
+
+import ch.hftm.astrodynamic.utils.BaseScalar;
+import ch.hftm.astrodynamic.utils.Quad;
+import ch.hftm.astrodynamic.utils.Scalar;
+import ch.hftm.astrodynamic.utils.Unit;
+import ch.hftm.astrodynamic.utils.UnitConversionError;
 
 /*
  *  Project Astrodynamic

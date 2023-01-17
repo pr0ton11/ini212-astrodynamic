@@ -1,4 +1,10 @@
-package ch.hftm.astrodynamic.utils;
+package ch.hftm.astrodynamic.scalar;
+
+import ch.hftm.astrodynamic.utils.BaseScalar;
+import ch.hftm.astrodynamic.utils.Quad;
+import ch.hftm.astrodynamic.utils.Scalar;
+import ch.hftm.astrodynamic.utils.Unit;
+import ch.hftm.astrodynamic.utils.UnitConversionError;
 
 /*
  *  Project Astrodynamic
@@ -26,11 +32,14 @@ public class VelocityScalar extends BaseScalar {
     
     @Override
     public Scalar multiply(Scalar scalar) throws UnitConversionError  {
+        Quad value = getValue().multiply(scalar.getValue());
         switch (scalar.getUnit()) {
             case MASS:
-                return new ForceScalar(getValue().multiply(scalar.getValue()));
+                return new ForceScalar(value);
             case UNITLESS:
-                return new VelocityScalar(getValue().multiply(scalar.getValue()));
+                return new VelocityScalar(value);
+            case TIME:
+                return new LengthScalar(value);
             default:
                 throw new UnitConversionError(String.format("Multiplication between %s and %s not possible in %s", getUnit().toString(), scalar.getUnit().toString(), this.getClass().getSimpleName()));
         }

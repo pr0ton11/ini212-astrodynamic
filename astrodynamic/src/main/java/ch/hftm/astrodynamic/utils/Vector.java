@@ -1,5 +1,7 @@
 package ch.hftm.astrodynamic.utils;
 
+import ch.hftm.astrodynamic.scalar.AngleScalar;
+
 /*
  *  Project Astrodynamic
  *  HFTM BBIN21.2a

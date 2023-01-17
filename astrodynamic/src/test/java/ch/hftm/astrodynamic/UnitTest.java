@@ -5,9 +5,9 @@ import org.junit.Test;
 
 import ch.hftm.astrodynamic.utils.UnitConversionError;
 import ch.hftm.astrodynamic.utils.Unit;
+import ch.hftm.astrodynamic.scalar.ScalarFactory;
 import ch.hftm.astrodynamic.utils.BaseScalar;
 import ch.hftm.astrodynamic.utils.Scalar;
-import ch.hftm.astrodynamic.utils.ScalarFactory;
 
 
 /*
