@@ -18,6 +18,11 @@
         <name>Maven Java Net Snapshots and Releases</name>
         <url>https://maven.java.net/content/groups/public/</url>
     </repository>
+    <repository>
+      <id>maven.apache-org-Public</id>
+      <name>Maven Apache Org Snapshots and Releases</name>
+      <url>https://repo.maven.apache.org/maven2/</url>
+  </repository>
   </repositories>
   <dependencies>
     <dependency>
@@ -56,6 +61,16 @@
       <artifactId>javax.json</artifactId>
       <version>1.1</version>
   </dependency>
+  <dependency>
+	    <groupId>com.epam.deltix</groupId>
+	    <artifactId>dfp</artifactId>
+	    <version>0.12.8</version>
+	</dependency>
+  <dependency>
+    <groupId>com.epam.deltix</groupId>
+    <artifactId>dfp-math</artifactId>
+    <version>0.12.8</version>
+</dependency>
   </dependencies>
   <build>
     <plugins>
