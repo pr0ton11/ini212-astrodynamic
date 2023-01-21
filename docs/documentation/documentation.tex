@@ -1,50 +1,22 @@
 \documentclass[a4paper, 11pt]{report}
 
-\usepackage[german]{babel} % translation of standard elements
-\usepackage{blindtext}
+\input{packages}
 
-\usepackage[backend=bibtex,style=verbose-trad2]{biblatex}
+\input{format}
 
-\usepackage{multicol} % allow arbitrary number of columns
-
-\usepackage{xspace} % context sensitive space after command
-\usepackage[dvipsnames]{xcolor}
-\usepackage{hyperref}
-\hypersetup{
-	hidelinks=true
-}
-
-\usepackage{fancyhdr}
-\usepackage{lastpage}
-
-\usepackage[left=2cm, right=2cm, top=2cm, bottom=3cm]{geometry}
-
-\pagestyle{fancy}
-\fancyhf{}
-\lhead{\nouppercase{\leftmark}}
-\rhead{\nouppercase{\rightmark}}
-\rfoot{Seite \thepage \hspace{1pt} von \pageref{LastPage}}
-
-\fancypagestyle{plain}{ % this is used to redefine 'plain' pages like table of contents
-	\fancyhf{}
-	\lhead{\nouppercase{\leftmark}}
-	\rhead{\nouppercase{\rightmark}}
-	\rfoot{Seite \thepage \hspace{1pt} von \pageref{LastPage}}
-}
-
-\newcommand{\skill}[1]{{\color{Fuchsia}\hyperlink{#1}{#1 skill}\xspace}}
-\newcommand{\advantage}[1]{{\color{RoyalBlue}\hyperlink{#1}{#1 advantage}\xspace}}
-\newcommand{\disadv}[1]{{\color{RawSienna}\hyperlink{#1}{#1 disadvantage}\xspace}}
-\newcommand{\attribute}[1]{{\color{BrickRed}\hyperlink{#1}{#1}\xspace}}
-
-\title{Astrodynamics}
+\docname{Astrodynamics} % document name for footer
+\title{Astrodynamics\\
+	\large{Anleitung und Dokumentation}\\
+	\small{Version \vhCurrentVersion}}
 \author{Marc Singer, Rafael Stauffer}
-\date{\today}
+\date{\vhCurrentDate}
 \bibliography{citations}
 
 \begin{document}
 	\maketitle
+	\include{version_history}
 	\tableofcontents
 	\include{parts/user_manual}
 	\printbibliography
+	\addcontentsline{toc}{chapter}{Literatur} % add Bibliography as chapter in table of contents
 \end{document}
