@@ -13,7 +13,8 @@ import ch.hftm.astrodynamic.scalar.ScalarFactory;
 import ch.hftm.astrodynamic.scalar.UnitlessScalar;
 import ch.hftm.astrodynamic.utils.*;
 
-public class BaseAstronomicalObject implements AstronomicalObject {
+// Base to fill computational methods, abstract to force use of specific child classes
+public abstract class BaseAstronomicalObject implements AstronomicalObject {
     private Scalar zeroPointHeight;
     private Scalar mass;
     private Vector position;
