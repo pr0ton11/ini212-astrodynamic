@@ -4,36 +4,71 @@ While implementing a specific feature the corresponding unit tests and technical
 
 ## Required
 
+**Blocking marked in bold**
+
 ### Marc
 
 - [X] Project structure
 - [X] Reference comment file
-- [X] SI units Enum and Conversion in Utils
+- [ ] **SI units Enum and Conversion in Utils**
 - [ ] Exceptions
 - [ ] Log file
+  - [ ] logger class
+- [ ] argument handling
 - [ ] Serialization
+  - [ ] JSON
+- [ ] Maven build / docker file
+- [ ] Documentation
+  - [ ] Code / UML
+  - [ ] Solution description own points
 
 ### Rafael
 
-- [ ] Physics Interfaces
+- [x] Physics Interfaces
 - [ ] Physics Classes
+  - [ ] Define bases as abstract
+    - [ ] BaseScalar
+    - [ ] BasePlanetoid
 - [ ] Object classes
-- [ ] JavaFX windows
+  - [ ] **SimulationState Object**
+  - [ ] Used Planets
+  - [ ] Used Spaceships
+- [ ] **JavaFX launcher**
+- [ ] JavaFX edit windows (min 2)
+  - [ ] Missions
+  - [ ] Spaceship
+  - [ ] Planets
+- [ ] JavaFX simulation window
+- [ ] Exceptions
+  - [ ] Mission parameter validation
 - [ ] Collections
 - [ ] Sorting
+  - [ ] Mission parameters
 - [ ] Update routines
+- [ ] Documentation
+  - [ ] **Basic latex document**
+  - [ ] User manual
+    - [ ] Build / start
+    - [ ] Edit Missions
+    - [ ] Simulate
+  - [ ] Solution description own points
 
 ## Optional
 
 ### Marc
 
-- [ ] Predefined objects
+- [ ] Serialization
+  - [ ] Binary / Object
 - [ ] Performance
-- [ ] Sockets
+- [ ] ~~Sockets~~
 
 ### Rafael
 
+- [ ] Scripting
+  - [ ] Lua
+  - [ ] Forth
 - [ ] Lift
 - [ ] Fuel
 - [ ] Engines
-- [ ] Ship Components
+- [ ] ~~Ship Components~~
+- [ ] GPL3 License
