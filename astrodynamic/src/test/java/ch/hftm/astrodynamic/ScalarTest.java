@@ -29,7 +29,7 @@ public class ScalarTest {
         Assert.assertTrue(rs.getUnit() == Unit.VOLUME);
         Assert.assertEquals(45.0, rs.getValue().doubleValue(), 0.0);
 
-        rs = ls.multiply(new BaseScalar(4));
+        rs = ls.multiply(new UnitlessScalar(4));
 
         Assert.assertTrue(rs.getUnit() == Unit.LENGTH);
         Assert.assertEquals(60.0, rs.getValue().doubleValue(), 0.0);

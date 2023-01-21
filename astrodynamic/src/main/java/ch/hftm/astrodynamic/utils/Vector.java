@@ -1,6 +1,7 @@
 package ch.hftm.astrodynamic.utils;
 
 import ch.hftm.astrodynamic.scalar.AngleScalar;
+import ch.hftm.astrodynamic.scalar.UnitlessScalar;
 
 /*
  *  Project Astrodynamic
@@ -56,12 +57,12 @@ public interface Vector {
 
     // multiply with double convert to unitless scalar
     default Vector multiply(double value) throws UnitConversionError {
-        return this.multiply(new BaseScalar(value));
+        return this.multiply(new UnitlessScalar(value));
     }
 
     // divide with double convert to unitless scalar
     default Vector divide(double value) throws UnitConversionError {
-        return this.divide(new BaseScalar(value));
+        return this.divide(new UnitlessScalar(value));
     }
 
     // inversion of the vector

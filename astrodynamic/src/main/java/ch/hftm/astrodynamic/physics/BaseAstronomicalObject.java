@@ -40,7 +40,7 @@ public class BaseAstronomicalObject implements AstronomicalObject {
     }
 
     public Collision calculateCollision(AstronomicalObject partner) throws UnitConversionError {
-        Vector midpoint = getPosition().add(partner.getPosition()).divide(new BaseScalar(2.0));
+        Vector midpoint = getPosition().add(partner.getPosition()).divide(new UnitlessScalar(2.0));
 
         if ((this.isColliding(midpoint)) && (partner.isColliding(midpoint))){
             Collision collision = new Collision();
