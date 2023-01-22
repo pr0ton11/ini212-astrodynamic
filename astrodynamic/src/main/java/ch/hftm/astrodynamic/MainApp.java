@@ -30,7 +30,7 @@ public class MainApp extends Application {
     public void showTestView() {
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("view/TestView.fxml"));
+            loader.setLocation(MainApp.class.getResource("view/MissionView.fxml"));
 
             // Show the scene containing the root layout.
             Scene scene = new Scene(loader.load());
