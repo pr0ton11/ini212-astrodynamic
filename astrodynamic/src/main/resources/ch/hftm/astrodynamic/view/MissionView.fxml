@@ -8,13 +8,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.web.WebView?>
 
-
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.hftm.astrodynamic.controller.MissionController">
    <children>
       <HBox prefHeight="36.0" prefWidth="600.0">
          <children>
             <Label alignment="CENTER" text="Search: " />
             <TextField fx:id="searchField" onKeyTyped="#searchTyping" />
+            <Button fx:id="clearSearchButton" mnemonicParsing="false" onAction="#clearSearch" text="Clear" />
          </children>
       </HBox>
       <HBox prefHeight="412.0" prefWidth="600.0">

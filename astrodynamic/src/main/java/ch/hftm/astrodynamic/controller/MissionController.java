@@ -11,6 +11,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 
@@ -33,9 +34,13 @@ public class MissionController extends BaseController{
     Button missionSimulateButton;
 
     @FXML
+    Button clearSearchButton;
+
+    @FXML
     VBox missionData;
 
     ObservableList<Mission> missions;
+    FilteredList<Mission> filteredMissions;
 
     public MissionController() {
         super();
@@ -71,13 +76,26 @@ public class MissionController extends BaseController{
         missions.add(new Mission("Driving Miss Daisy", "<h1>Driving Miss Daisy</h1><br>A bunch of scientists want to travel to the ISS.<br>You'll be the driver.<br><img src=\"https://www.nasa.gov/sites/default/files/styles/full_width/public/thumbnails/image/progress_1_29_tianzhou_4_depating_from_tiangong.jpg?itok=sqE2bAY_\" width=300px height=200px>"));
         missions.add(new Mission("New Dawn", "<h1>New Dawn</h1><br>We picked a suitable landingspot on Ganymede.<br>Bring a flag.<br><img src=\"https://www.nasa.gov/sites/default/files/thumbnails/image/e1_-_pia24682_-_juno_ganymede_sru_-_darkside.png\" alt=\"Ganymede landing spot\" width=200px height=200px>"));
         missions.add(new Mission("In the Well", "<h1>In the Well</h1><br>The jovian ammonia harvesting station lost its engines.<br>Evacuate the personel before it drifts into Jupiter.<br><img src=\"https://www.nasa.gov/sites/default/files/thumbnails/image/hotspot_cover_1280.jpg\" width=400px height=200px>"));
-        missionList.setItems(missions);
+        
+        filteredMissions = new FilteredList<>(missions);
+
+        missionList.setItems(filteredMissions);
     }
 
     // user searches mission in top search bar
     @FXML
     void searchTyping(KeyEvent e) {
-        System.out.println("Searching: " + searchField.getText());
+        String searchText = searchField.getText().toLowerCase();
+        //System.out.println("Searching: " + searchText);
+        missionList.setItems(filteredMissions.filtered((t) -> {
+            return (t.getName().toLowerCase().contains(searchText)) || (t.getDescription().toLowerCase().contains(searchText));
+        }));
+    }
+
+    @FXML
+    void clearSearch(ActionEvent e) {
+        searchField.setText("");
+        missionList.setItems(filteredMissions);
     }
 
     // 
