@@ -28,6 +28,9 @@ hs_err_pid*
 # ignore target build artefacts
 target
 
+# ignore reduced pom generated at package process
+dependency-reduced-pom.xml
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
