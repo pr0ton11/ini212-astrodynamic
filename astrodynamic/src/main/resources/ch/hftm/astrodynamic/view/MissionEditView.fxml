@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.hftm.astrodynamic.controller.MissionEditController">
+   <children>
+      <HBox prefHeight="428.0" prefWidth="600.0">
+         <children>
+            <VBox prefHeight="400.0" prefWidth="218.0">
+               <children>
+                  <Label text="Overview" />
+                  <ListView prefHeight="200.0" prefWidth="200.0" />
+                  <Label text="Detail View" />
+               </children>
+            </VBox>
+            <VBox prefHeight="400.0" prefWidth="392.0">
+               <children>
+                  <Label text="Graphical Overview" />
+                  <Canvas fx:id="graphic" height="385.0" onMouseClicked="#clickGraphic" onMouseDragged="#dragGraphic" onScroll="#scrollGraphic" width="388.0" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</VBox>

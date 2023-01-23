@@ -15,6 +15,8 @@ import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 
+import java.io.File;
+
 import ch.hftm.astrodynamic.model.*;
 
 public class MissionController extends BaseController{
@@ -71,6 +73,7 @@ public class MissionController extends BaseController{
         initializeTestdata();
     }
 
+    // test data, missions would be stored on disk
     private void initializeTestdata() {
         missions = FXCollections.observableArrayList();
         missions.add(new Mission("Driving Miss Daisy", "<h1>Driving Miss Daisy</h1><br>A bunch of scientists want to travel to the ISS.<br>You'll be the driver.<br><img src=\"https://www.nasa.gov/sites/default/files/styles/full_width/public/thumbnails/image/progress_1_29_tianzhou_4_depating_from_tiangong.jpg?itok=sqE2bAY_\" width=300px height=200px>"));
@@ -111,7 +114,12 @@ public class MissionController extends BaseController{
     @FXML
     void startEditor(ActionEvent e) {
         Mission selectedMission = missionList.getSelectionModel().getSelectedItem();
-        showError("Error starting editor for mission " + selectedMission.getName() + ".\nNot implemented!");
+
+        File f = new File("view/MissionEditView.fxml");
+        System.out.println(f.exists());
+        System.out.println(f.getAbsolutePath());
+
+        showSceneOnNewStage("Mission Editor - " + selectedMission.getName(), true, "view/MissionEditView.fxml");
     }
 
     // user clicked simulate button

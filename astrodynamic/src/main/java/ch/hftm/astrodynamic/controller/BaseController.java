@@ -3,6 +3,7 @@ package ch.hftm.astrodynamic.controller;
 import java.io.IOException;
 import java.util.Optional;
 
+import ch.hftm.astrodynamic.MainApp;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -46,17 +47,22 @@ public abstract class BaseController {
     }
 
     // load in a scene on the stage
-    private void showSceneOnStage(Stage targetStage, String title, String sceneURI) {
+    protected void showSceneOnStage(Stage targetStage, String sceneURI) {
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(BaseController.class.getResource(sceneURI));
+            loader.setLocation(MainApp.class.getResource(sceneURI)); // load from MainApp to have correct depth for views directory
 
             Scene scene = new Scene(loader.load());
             targetStage.setScene(scene);
-            targetStage.setTitle(title);
             targetStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    // load in a scene on a new stage
+    protected void showSceneOnNewStage(String title, boolean canResize, String sceneURI) {
+        Stage substage = generateSubstage(title, canResize);
+        showSceneOnStage(substage, sceneURI);
     }
 }
