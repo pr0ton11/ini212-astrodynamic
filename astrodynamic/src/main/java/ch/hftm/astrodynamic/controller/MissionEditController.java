@@ -2,6 +2,7 @@ package ch.hftm.astrodynamic.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.stage.Stage;
@@ -9,6 +10,9 @@ import javafx.stage.Stage;
 public class MissionEditController extends BaseController{
     @FXML
     Canvas graphic;
+
+    @FXML
+    TextField missionName;
 
     public MissionEditController() {
         super();

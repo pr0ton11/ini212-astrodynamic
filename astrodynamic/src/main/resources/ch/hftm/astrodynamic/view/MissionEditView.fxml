@@ -3,25 +3,46 @@
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.hftm.astrodynamic.controller.MissionEditController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="799.0" prefWidth="1192.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.hftm.astrodynamic.controller.MissionEditController">
    <children>
-      <HBox prefHeight="428.0" prefWidth="600.0">
+      <HBox prefHeight="816.0" prefWidth="1192.0">
          <children>
-            <VBox prefHeight="400.0" prefWidth="218.0">
+            <VBox prefHeight="428.0" prefWidth="375.0">
                <children>
-                  <Label text="Overview" />
-                  <ListView prefHeight="200.0" prefWidth="200.0" />
-                  <Label text="Detail View" />
+                  <Label text="Global mission settings" />
+                  <GridPane>
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label text="Mission name" />
+                        <TextField fx:id="missionName" GridPane.columnIndex="1" />
+                        <Label text="Time limit" GridPane.rowIndex="1" />
+                     </children>
+                  </GridPane>
+                  <Label text="Subobjects" />
+                  <ListView prefHeight="396.0" prefWidth="365.0" />
                </children>
             </VBox>
-            <VBox prefHeight="400.0" prefWidth="392.0">
+            <VBox prefHeight="428.0" prefWidth="837.0">
                <children>
                   <Label text="Graphical Overview" />
-                  <Canvas fx:id="graphic" height="385.0" onMouseClicked="#clickGraphic" onMouseDragged="#dragGraphic" onScroll="#scrollGraphic" width="388.0" />
+                  <Canvas fx:id="graphic" height="548.0" onMouseClicked="#clickGraphic" onMouseDragged="#dragGraphic" onScroll="#scrollGraphic" width="827.0" />
+                  <Label text="Subobject details" />
                </children>
             </VBox>
          </children>
