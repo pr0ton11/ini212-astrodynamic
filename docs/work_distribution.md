@@ -24,7 +24,7 @@ While implementing a specific feature the corresponding unit tests and technical
 
 ### Rafael
 
-- [x] Physics Interfaces
+- [X] Physics Interfaces
 - [ ] Physics Classes
   - [ ] Define bases as abstract
     - [ ] BaseScalar
@@ -46,7 +46,7 @@ While implementing a specific feature the corresponding unit tests and technical
   - [ ] Mission parameters
 - [ ] Update routines
 - [ ] Documentation
-  - [ ] **Basic latex document**
+  - [X] Basic latex document
   - [ ] User manual
     - [ ] Build / start
     - [ ] Edit Missions
