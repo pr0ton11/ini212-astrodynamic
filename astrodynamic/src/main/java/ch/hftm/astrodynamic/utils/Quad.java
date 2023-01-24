@@ -165,6 +165,7 @@ public class Quad implements Comparable<Quad>, Serializable {
     public static Quad TEN = new Quad(Decimal64.TEN);
     public static Quad TWO = new Quad(Decimal64.TWO);
     public static Quad ONE = new Quad(Decimal64.ONE);
+    public static Quad ZERO = new Quad();
     public static Quad INFINITY = new Quad(Decimal64.POSITIVE_INFINITY);
     public static Quad NEGINFINITY = new Quad(Decimal64.NEGATIVE_INFINITY);
 

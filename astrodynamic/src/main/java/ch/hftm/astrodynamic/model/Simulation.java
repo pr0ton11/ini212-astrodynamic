@@ -11,8 +11,6 @@ import ch.hftm.astrodynamic.physics.*;
 import ch.hftm.astrodynamic.utils.*;
 
 public class Simulation {
-    private final Quad zeroQuad = new Quad(); // to check against
-
     List<Planetoid> planetoids;
     List<Spaceship> spaceships;
 
@@ -30,7 +28,7 @@ public class Simulation {
         }
 
         // prevent division by zero exceptions before they happen
-        if (deltaTime.getValue().le(zeroQuad)) {
+        if (deltaTime.getValue().le(Quad.ZERO)) {
             throw new SimulationRuntimeError("deltaTime must be greater than zero");
         }
 
