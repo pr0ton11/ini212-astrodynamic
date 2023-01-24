@@ -20,4 +20,10 @@ public interface Scalar {
 
     // Flags
     boolean isUnitless();
+
+    // Mathematical comperators
+    public boolean gt(Scalar comperator);
+    public boolean ge(Scalar comperator);
+    public boolean lt(Scalar comperator);
+    public boolean le(Scalar comperator);
 }
