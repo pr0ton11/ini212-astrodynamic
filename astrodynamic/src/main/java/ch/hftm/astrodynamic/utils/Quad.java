@@ -151,6 +151,10 @@ public class Quad implements Comparable<Quad>, Serializable {
         return num.isLessOrEqual(comperator.getAsDecimal64());
     }
 
+    public boolean equals(Quad comperator) {
+        return num.isEqual(comperator.getAsDecimal64());
+    }
+
     // Static common number assignments
     public static Quad PI = new Quad(Decimal64.parse("3.141592653589793238462643383279502884197169399375105820974944592307816406286"));
     public static Quad TEN = new Quad(Decimal64.TEN);
