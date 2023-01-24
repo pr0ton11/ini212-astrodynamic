@@ -6,6 +6,7 @@
 
 package ch.hftm.astrodynamic.physics;
 
+import ch.hftm.astrodynamic.scalar.UnitlessScalar;
 import ch.hftm.astrodynamic.utils.*;
 
 // Can be a planet, moon or asteroid, shape is a sphere
@@ -20,15 +21,15 @@ public class Planetoid extends BaseAstronomicalObject implements Atmosphere {
     }
 
     public Scalar getDensity(Vector position) {
-        return new BaseScalar(0);
+        return new UnitlessScalar(0);
     }
 
     public Scalar getDensity(Scalar height) {
-        return new BaseScalar(0);
+        return new UnitlessScalar(0);
     }
 
     public Scalar getOxygenPercentage() {
-        return new BaseScalar(0);
+        return new UnitlessScalar(0);
     }
 
     // Planetoid is an idealized sphere

@@ -1,4 +1,10 @@
-package ch.hftm.astrodynamic.utils;
+package ch.hftm.astrodynamic.scalar;
+
+import ch.hftm.astrodynamic.utils.BaseScalar;
+import ch.hftm.astrodynamic.utils.Quad;
+import ch.hftm.astrodynamic.utils.Scalar;
+import ch.hftm.astrodynamic.utils.Unit;
+import ch.hftm.astrodynamic.utils.UnitConversionError;
 
 /*
  *  Project Astrodynamic
@@ -48,7 +54,7 @@ public class LengthScalar extends BaseScalar {
             case UNITLESS:
                 return new LengthScalar(getValue().divide(scalar.getValue()));
             case LENGTH:
-                return new BaseScalar(getValue().divide(scalar.getValue()));
+                return new UnitlessScalar(getValue().divide(scalar.getValue()));
             default:
                 throw new UnitConversionError(String.format("Division between %s and %s not possible in length scalar", getUnit().toString(), scalar.getUnit().toString()));
         }

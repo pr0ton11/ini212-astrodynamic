@@ -33,4 +33,7 @@ public interface AstronomicalObject {
 
     // returns Force vector of gravitational interaction
     Vector calculateGravitationalForce(AstronomicalObject partner) throws UnitConversionError;
+
+    // returns acceleration from force
+    Vector calculateAccelerationFromForce(Vector force) throws UnitConversionError;
 }

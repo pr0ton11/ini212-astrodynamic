@@ -8,8 +8,9 @@
 
  import org.junit.Assert;
  import org.junit.Test;
- 
- import ch.hftm.astrodynamic.utils.*;
+
+import ch.hftm.astrodynamic.scalar.UnitlessScalar;
+import ch.hftm.astrodynamic.utils.*;
 
 public class VectorTest {
     @Test

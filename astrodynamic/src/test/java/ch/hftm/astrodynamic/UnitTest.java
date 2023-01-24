@@ -5,9 +5,9 @@ import org.junit.Test;
 
 import ch.hftm.astrodynamic.utils.UnitConversionError;
 import ch.hftm.astrodynamic.utils.Unit;
-import ch.hftm.astrodynamic.utils.BaseScalar;
+import ch.hftm.astrodynamic.scalar.ScalarFactory;
+import ch.hftm.astrodynamic.scalar.MassScalar;
 import ch.hftm.astrodynamic.utils.Scalar;
-import ch.hftm.astrodynamic.utils.ScalarFactory;
 
 
 /*
@@ -26,7 +26,7 @@ public class UnitTest {
         Scalar sv1U = ScalarFactory.create(15, Unit.LENGTH);
         Scalar sv2 = ScalarFactory.create(2, Unit.UNITLESS);
 
-        Scalar svR = new BaseScalar(0, Unit.MASS);
+        Scalar svR = new MassScalar(0);
 
         try {
             svR = sv1.add(sv2);

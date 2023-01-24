@@ -1,4 +1,9 @@
-package ch.hftm.astrodynamic.utils;
+package ch.hftm.astrodynamic.scalar;
+
+import ch.hftm.astrodynamic.utils.Quad;
+import ch.hftm.astrodynamic.utils.Scalar;
+import ch.hftm.astrodynamic.utils.Unit;
+import ch.hftm.astrodynamic.utils.UnitConversionError;
 
 /*
  *  Project Astrodynamic
@@ -38,6 +43,10 @@ public class ScalarFactory {
                 return new M2divL2Scalar(value);
             case F_L2_Mn2:
                 return new FL2Mn2Scalar(value);
+            case ANGULAR_ACCELERATION:
+                return new AngularAccelerationScalar(value);
+            case ANGULAR_VELOCITY:
+                return new AngularVelocityScalar(value);
             default:
                 throw new UnitConversionError(String.format("Unit %s not supported", unit.toString()));
         }

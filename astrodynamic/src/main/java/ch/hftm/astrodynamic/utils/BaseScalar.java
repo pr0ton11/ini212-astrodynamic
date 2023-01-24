@@ -1,13 +1,15 @@
 package ch.hftm.astrodynamic.utils;
 
+import ch.hftm.astrodynamic.scalar.ScalarFactory;
+
 /*
  *  Project Astrodynamic
  *  HFTM BBIN21.2a
  *  Rafael Stauffer, Marc Singer
  */
 
- // Converter for SI units
-public class BaseScalar implements Scalar {
+ // Converter for SI units, base is abstract to force use of specific implementations
+public abstract class BaseScalar implements Scalar {
 
     private Quad value;  // Number to be stored in this object
     private Unit unit; // Unit to be stored in this object
@@ -97,7 +99,7 @@ public class BaseScalar implements Scalar {
             // If both units match in multiplication this can not be handled in the base scalar
             // This is handled by the specialized child classes
             if(this.isUnitless()) {
-                return new BaseScalar(getValue().multiply(scalar.getValue()), this.getUnit());
+                return ScalarFactory.create(getValue().multiply(scalar.getValue()), this.getUnit());
             } else {
                 throw new UnitConversionError(String.format("Multiplication between two %s not possible in generic class", getUnit().toString()));
             }
@@ -110,12 +112,12 @@ public class BaseScalar implements Scalar {
     public Scalar divide(Scalar scalar) throws UnitConversionError  {
         // If both units match in division, return a unitless value
         if (unitMatches(scalar)) {
-            return new BaseScalar(getValue().divide(scalar.getValue()), Unit.UNITLESS);
+            return ScalarFactory.create(getValue().divide(scalar.getValue()), Unit.UNITLESS);
         // Divide only if divisor is unitless
         // Dividing a unitless value by a unit value is not possible is the base scalar
         // This is handled by the specialized child classes
         } else if (scalar.isUnitless()) {
-            return new BaseScalar(getValue().divide(scalar.getValue()), this.getUnit());
+            return ScalarFactory.create(getValue().divide(scalar.getValue()), this.getUnit());
         }
         // For any division that does not match the two former cases a UnitConversionError must be thrown
         throw new UnitConversionError(String.format("Division between %s and %s not possible", getUnit().toString(), scalar.getUnit().toString()));
@@ -133,12 +135,22 @@ public class BaseScalar implements Scalar {
 
     // Negates the current scalar
     public Scalar negate() {
-        return new BaseScalar(value.negate(), this.getUnit());
+        try {
+            return ScalarFactory.create(value.negate(), this.getUnit());
+        } catch (UnitConversionError e) {
+            assert 1 == 2; // Very serious error
+        }
+        return null;
     }
 
     // Pows the current scalar
     public Scalar pow(int exp) {
-        return new BaseScalar(value.pow(exp), this.getUnit());
+        try {
+            return ScalarFactory.create(value.pow(exp), this.getUnit());
+        } catch (UnitConversionError e) {
+            assert 1 == 2; // Very serious error
+        }
+        return null;
     }
 
     public String toString() {

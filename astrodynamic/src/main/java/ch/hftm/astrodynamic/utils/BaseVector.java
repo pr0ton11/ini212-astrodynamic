@@ -8,6 +8,9 @@ package ch.hftm.astrodynamic.utils;
 
 import java.lang.Math;
 
+import ch.hftm.astrodynamic.scalar.AngleScalar;
+import ch.hftm.astrodynamic.scalar.ScalarFactory;
+
 public class BaseVector implements Vector, Cloneable {
     private Quad x;
     private Quad y;
@@ -32,32 +35,36 @@ public class BaseVector implements Vector, Cloneable {
         try {
             return ScalarFactory.create(x, unit);
         } catch (UnitConversionError e) {
-            return new BaseScalar(x, unit);
+            assert 1 == 2; // very serious error
         }
+        return null;
     }
 
     public Scalar getY() {
         try {
             return ScalarFactory.create(y, unit);
         } catch (UnitConversionError e) {
-            return new BaseScalar(y, unit);
+            assert 1 == 2; // very serious error
         }
+        return null;
     }
 
     public Scalar getZ() {
         try {
             return ScalarFactory.create(z, unit);
         } catch (UnitConversionError e) {
-            return new BaseScalar(z, unit);
+            assert 1 == 2; // very serious error
         }
+        return null;
     }
 
     public Scalar getLength() {
         try {
             return ScalarFactory.create(length, unit);
         } catch (UnitConversionError e) {
-            return new BaseScalar(length, unit);
+            assert 1 == 2; // very serious error
         }
+        return null;
     }
 
     private void calculateLength() {
