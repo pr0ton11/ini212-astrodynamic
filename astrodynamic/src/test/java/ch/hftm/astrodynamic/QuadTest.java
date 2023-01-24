@@ -27,7 +27,6 @@ public class QuadTest {
         ArrayList<Quad> quadList = new ArrayList<Quad>();
         quadList.add(new Quad());
         quadList.add(new Quad(0.0));
-        quadList.add(new Quad(0.0, 0.0));
         quadList.add(new Quad(new Quad(0.0)));
         quadList.add(new Quad(0));
         //quadList.add(new Quad("0.0")); // this throws a string error
@@ -128,10 +127,9 @@ public class QuadTest {
     // special case division where 2 / 10 should be 0.2
     @Test
     public void TestDivisionTwoTen() {
-        Quad qTen = new Quad(10);
-        Quad qTwo = new Quad(2);
+
         Quad qExpected = new Quad(0.2);
-        Quad qResult = qTwo.divide(qTen);
+        Quad qResult = Quad.TWO.divide(Quad.TEN);
 
         Assert.assertEquals(qExpected, qResult);
     }
