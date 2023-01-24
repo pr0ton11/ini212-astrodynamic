@@ -1,0 +1,22 @@
+# Todo
+
+- [X] New Unit
+  - [x] Force
+  - [X] Acceleration
+  - [X] Velocity
+- [ ] Specialized scalars (With unit specific calculations)
+  - [ ] Force
+  - [ ] Velocity
+  - [ ] Acceleration
+  - [ ] Distance
+  - [X] Area
+  - [ ] Volume
+  - [ ] Mass
+  - [ ] Rotations- per Minutes, -Velocity
+- [ ] Scalar calculations
+  - [ ] Mass * Velocity = Energy
+- [ ] Specialized vectors (With unit specific calculations)
+  - [ ] Force
+  - [ ] Velocity
+  - [ ] Acceleration
+  - [ ] Position (Length)
