@@ -130,7 +130,7 @@ public class Quad implements Comparable<Quad>, Serializable {
 
     // Comparator functions
     public boolean isNaN() {
-        return num.isNaN();
+        return num.isNaN() || num.isInfinity();
     }
     public boolean isZero() {
         return num.isZero();
@@ -156,8 +156,12 @@ public class Quad implements Comparable<Quad>, Serializable {
         return num.isLessOrEqual(comperator.getAsDecimal64());
     }
 
-    public boolean equals(Quad comperator) {
-        return num.isEqual(comperator.getAsDecimal64());
+    public boolean equals(Object comperator) {
+        if (comperator instanceof Quad) {
+            Quad q = (Quad)comperator;
+            return num.isEqual(q.getAsDecimal64());
+        }
+        return false;
     }
 
     // Static common number assignments
