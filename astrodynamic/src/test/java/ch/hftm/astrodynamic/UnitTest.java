@@ -5,7 +5,8 @@ import org.junit.Test;
 
 import ch.hftm.astrodynamic.utils.UnitConversionError;
 import ch.hftm.astrodynamic.utils.Unit;
-import ch.hftm.astrodynamic.utils.BaseScalar;
+import ch.hftm.astrodynamic.scalar.ScalarFactory;
+import ch.hftm.astrodynamic.scalar.MassScalar;
 import ch.hftm.astrodynamic.utils.Scalar;
 
 
@@ -19,16 +20,16 @@ import ch.hftm.astrodynamic.utils.Scalar;
 public class UnitTest {
     // test addition
     @Test
-    public void TestAddition() {
-        BaseScalar sv1 = new BaseScalar(15, Unit.UNITLESS);
-        BaseScalar sv2U = new BaseScalar(2, Unit.LENGTH);
-        BaseScalar sv1U = new BaseScalar(15, Unit.LENGTH);
-        BaseScalar sv2 = new BaseScalar(2, Unit.UNITLESS);
+    public void TestAddition() throws UnitConversionError {
+        Scalar sv1 = ScalarFactory.create(15, Unit.UNITLESS);
+        Scalar sv2U = ScalarFactory.create(2, Unit.LENGTH);
+        Scalar sv1U = ScalarFactory.create(15, Unit.LENGTH);
+        Scalar sv2 = ScalarFactory.create(2, Unit.UNITLESS);
 
-        Scalar svR = new BaseScalar(0, Unit.MASS);
+        Scalar svR = new MassScalar(0);
 
         try {
-            svR = sv1.addition(sv2);
+            svR = sv1.add(sv2);
         } catch (UnitConversionError e) {
             Assert.assertTrue(String.format("Scalar to Unit casting exception: %s", e.toString()), false);
         }
@@ -37,14 +38,14 @@ public class UnitTest {
         Assert.assertTrue("Is dimensionless", svR.getUnit() == Unit.UNITLESS);
 
         try {
-            svR = sv1.addition(sv2U);
+            svR = sv1.add(sv2U);
             Assert.assertTrue("Scalar to Unit casting exception expected but not thrown", false);
         } catch (UnitConversionError e) {
             
         }
 
         try {
-            svR = sv1U.addition(sv2U);
+            svR = sv1U.add(sv2U);
         } catch (UnitConversionError e) {
             Assert.assertTrue(String.format("Scalar to Unit casting exception: %s", e.toString()), false);
         }
@@ -53,7 +54,7 @@ public class UnitTest {
         Assert.assertTrue("Is length unit", svR.getUnit() == Unit.LENGTH);
 
         try {
-            svR = sv1U.addition(sv2);
+            svR = sv1U.add(sv2);
             Assert.assertTrue("Scalar to Unit casting exception expected but not thrown", false);
         } catch (UnitConversionError e) {
             
@@ -62,64 +63,101 @@ public class UnitTest {
 
     // test multiplication
     @Test
-    public void TestMultiplication() {
-        // TODO: calculation between units should result into correct units (eg. m * m = m2, m * unitless = m)
-        BaseScalar sv1 = new BaseScalar(15, Unit.UNITLESS);
-        BaseScalar sv2U = new BaseScalar(2, Unit.LENGTH);
-        BaseScalar sv1U = new BaseScalar(15, Unit.LENGTH);
-        BaseScalar sv2 = new BaseScalar(2, Unit.UNITLESS);
+    public void TestMultiplicationUnitlessUnitless() throws UnitConversionError {
+        Scalar sv1 = ScalarFactory.create(15, Unit.UNITLESS);
+        Scalar sv2U = ScalarFactory.create(2, Unit.LENGTH);
+        Scalar sv1U = ScalarFactory.create(15, Unit.LENGTH);
+        Scalar sv2 = ScalarFactory.create(2, Unit.UNITLESS);
 
-        Scalar svR = new BaseScalar(0, Unit.MASS);
+        Scalar svR = ScalarFactory.create(0, Unit.MASS);
 
-        try {
-            svR = sv1.multiplication(sv2);
-        } catch (UnitConversionError e) {
-            Assert.assertTrue(String.format("Scalar to Unit casting exception: %s", e.toString()), false);
-        }
+        
+        svR = sv1.multiply(sv2);
 
         Assert.assertEquals(30.0, svR.getValue().doubleValue(), 0.0);
-        Assert.assertTrue("Is dimensionless", svR.getUnit() == Unit.UNITLESS);
+        Assert.assertEquals(Unit.UNITLESS, svR.getUnit());
 
-        try {
-            svR = sv1.multiplication(sv2U);
-        } catch (UnitConversionError e) {
-            Assert.assertTrue(String.format("Scalar to Unit casting exception: %s", e.toString()), false);
-        }
+        svR = sv1.multiply(sv2U);
 
         Assert.assertEquals(30.0, svR.getValue().doubleValue(), 0.0);
-        Assert.assertTrue("Is length unit", svR.getUnit() == Unit.LENGTH);
+        Assert.assertEquals(Unit.LENGTH, svR.getUnit());
 
-        try {
-            svR = sv1U.multiplication(sv2);
-        } catch (UnitConversionError e) {
-            Assert.assertTrue(String.format("Scalar to Unit casting exception: %s", e.toString()), false);
-        }
+        svR = sv1U.multiply(sv2);
 
         Assert.assertEquals(30.0, svR.getValue().doubleValue(), 0.0);
-        Assert.assertTrue("Is length unit", svR.getUnit() == Unit.LENGTH);
+        Assert.assertEquals(Unit.LENGTH, svR.getUnit());
 
-        try {
-            svR = sv1U.multiplication(sv2U);
-        } catch (UnitConversionError e) {
-            Assert.assertTrue(String.format("Scalar to Unit casting exception: %s", e.toString()), false);
-        }
+        svR = sv1U.multiply(sv2U);
 
         Assert.assertEquals(30.0, svR.getValue().doubleValue(), 0.0);
-        Assert.assertTrue("Is length unit", svR.getUnit() == Unit.LENGTH);
+        Assert.assertEquals(Unit.AREA, svR.getUnit());
+    }
+
+    // test multiplication, unitless * length = length
+    @Test
+    public void TestMultiplicationUnitlessUnit() throws UnitConversionError {
+        Scalar sv1 = ScalarFactory.create(15, Unit.UNITLESS);
+        Scalar sv2U = ScalarFactory.create(2, Unit.LENGTH);
+
+        Scalar svR = ScalarFactory.create(0, Unit.MASS);
+
+        svR = sv1.multiply(sv2U);
+
+        Assert.assertEquals(30.0, svR.getValue().doubleValue(), 0.0);
+        Assert.assertEquals(Unit.LENGTH, svR.getUnit());
+    }
+
+    // test multiplication, length * unitless = length
+    @Test
+    public void TestMultiplicationUnitUnitless() throws UnitConversionError {
+        Scalar sv1U = ScalarFactory.create(15, Unit.LENGTH);
+        Scalar sv2 = ScalarFactory.create(2, Unit.UNITLESS);
+
+        Scalar svR = ScalarFactory.create(0, Unit.MASS);
+
+        svR = sv1U.multiply(sv2);
+
+        Assert.assertEquals(30.0, svR.getValue().doubleValue(), 0.0);
+        Assert.assertEquals(Unit.LENGTH, svR.getUnit());
+    }
+
+    // test multiplication, m * m = m^2
+    @Test
+    public void TestMultiplicationUnitUnit() throws UnitConversionError {
+        Scalar sv2U = ScalarFactory.create(2, Unit.LENGTH);
+        Scalar sv1U = ScalarFactory.create(15, Unit.LENGTH);
+
+        Scalar svR = ScalarFactory.create(0, Unit.MASS);
+
+        svR = sv1U.multiply(sv2U);
+
+        Assert.assertEquals(30.0, svR.getValue().doubleValue(), 0.0);
+        Assert.assertEquals(Unit.AREA, svR.getUnit());
+    }
+
+    // test multiplication, time * time throws exception
+    @Test(expected = UnitConversionError.class)
+    public void TestMultiplicationInvalidUnitUnit() throws UnitConversionError {
+        Scalar sv2U = ScalarFactory.create(2, Unit.TIME);
+        Scalar sv1U = ScalarFactory.create(15, Unit.TIME);
+
+        Scalar svR = ScalarFactory.create(0, Unit.MASS);
+
+        svR = sv1U.multiply(sv2U);
     }
 
     // test subtraction
     @Test
-    public void TestSubtraction() {
-        BaseScalar sv1 = new BaseScalar(15, Unit.UNITLESS);
-        BaseScalar sv2U = new BaseScalar(2, Unit.LENGTH);
-        BaseScalar sv1U = new BaseScalar(15, Unit.LENGTH);
-        BaseScalar sv2 = new BaseScalar(2, Unit.UNITLESS);
+    public void TestSubtraction() throws UnitConversionError {
+        Scalar sv1 = ScalarFactory.create(15, Unit.UNITLESS);
+        Scalar sv2U = ScalarFactory.create(2, Unit.LENGTH);
+        Scalar sv1U = ScalarFactory.create(15, Unit.LENGTH);
+        Scalar sv2 = ScalarFactory.create(2, Unit.UNITLESS);
 
-        Scalar svR = new BaseScalar(0, Unit.MASS);
+        Scalar svR = ScalarFactory.create(0, Unit.MASS);
 
         try {
-            svR = sv1.subtraction(sv2);
+            svR = sv1.subtract(sv2);
         } catch (UnitConversionError e) {
             Assert.assertTrue(String.format("Scalar to Unit casting exception: %s", e.toString()), false);
         }
@@ -128,14 +166,14 @@ public class UnitTest {
         Assert.assertTrue("Is dimensionless", svR.getUnit() == Unit.UNITLESS);
 
         try {
-            svR = sv1.subtraction(sv2U);
+            svR = sv1.subtract(sv2U);
             Assert.assertTrue("Scalar to Unit casting exception expected but not thrown", false);
         } catch (UnitConversionError e) {
             
         }
 
         try {
-            svR = sv1U.subtraction(sv2U);
+            svR = sv1U.subtract(sv2U);
         } catch (UnitConversionError e) {
             Assert.assertTrue(String.format("Scalar to Unit casting exception: %s", e.toString()), false);
         }
@@ -144,58 +182,63 @@ public class UnitTest {
         Assert.assertTrue("Is length unit", svR.getUnit() == Unit.LENGTH);
 
         try {
-            svR = sv1U.subtraction(sv2);
+            svR = sv1U.subtract(sv2);
             Assert.assertTrue("Scalar to Unit casting exception expected but not thrown", false);
         } catch (UnitConversionError e) {
             
         }
     }
 
-    // test division
+    // test division, unitless / unitless = unitless
     @Test
-    public void TestDivision() {
-        // TODO: calculation between units should result into correct units (eg. m2 / unitless = m2, m2 / m = m)
-        BaseScalar sv1 = new BaseScalar(15, Unit.UNITLESS);
-        BaseScalar sv2U = new BaseScalar(2, Unit.LENGTH);
-        BaseScalar sv1U = new BaseScalar(15, Unit.LENGTH);
-        BaseScalar sv2 = new BaseScalar(2, Unit.UNITLESS);
+    public void TestDivisionUnitlessUnitless() throws UnitConversionError {
+        Scalar sv1 = ScalarFactory.create(15, Unit.UNITLESS);
+        Scalar sv2 = ScalarFactory.create(2, Unit.UNITLESS);
 
-        Scalar svR = new BaseScalar(0, Unit.MASS);
+        Scalar svR = ScalarFactory.create(0, Unit.MASS);
 
-        try {
-            svR = sv1.division(sv2);
-        } catch (UnitConversionError e) {
-            Assert.assertTrue(String.format("Scalar to Unit casting exception: %s", e.toString()), false);
-        }
+        svR = sv1.divide(sv2);
 
         Assert.assertEquals(7.5, svR.getValue().doubleValue(), 0.0);
-        Assert.assertTrue("Is dimensionless", svR.getUnit() == Unit.UNITLESS);
+        Assert.assertEquals(Unit.UNITLESS, svR.getUnit());
+    }
 
-        try {
-            svR = sv1.division(sv2U);
-        } catch (UnitConversionError e) {
-            Assert.assertTrue(String.format("Scalar to Unit casting exception: %s", e.toString()), false);
-        }
+    // test division, unitless / length throws exception
+    @Test(expected = UnitConversionError.class)
+    public void TestDivisionUnitlessUnit() throws UnitConversionError {
+        Scalar sv1 = ScalarFactory.create(15, Unit.UNITLESS);
+        Scalar sv2U = ScalarFactory.create(2, Unit.LENGTH);
 
-        Assert.assertEquals(7.5, svR.getValue().doubleValue(), 0.0);
-        Assert.assertTrue("Is length unit", svR.getUnit() == Unit.LENGTH);
+        Scalar svR = ScalarFactory.create(0, Unit.MASS);
 
-        try {
-            svR = sv1U.division(sv2);
-        } catch (UnitConversionError e) {
-            Assert.assertTrue(String.format("Scalar to Unit casting exception: %s", e.toString()), false);
-        }
+        svR = sv1.divide(sv2U);
+    }
 
-        Assert.assertEquals(7.5, svR.getValue().doubleValue(), 0.0);
-        Assert.assertTrue("Is length unit", svR.getUnit() == Unit.LENGTH);
+    // test division, length / unitless = length
+    @Test
+    public void TestDivisionUnitUnitless() throws UnitConversionError {
+        Scalar sv1U = ScalarFactory.create(15, Unit.LENGTH);
+        Scalar sv2 = ScalarFactory.create(2, Unit.UNITLESS);
 
-        try {
-            svR = sv1U.division(sv2U);
-        } catch (UnitConversionError e) {
-            Assert.assertTrue(String.format("Scalar to Unit casting exception: %s", e.toString()), false);
-        }
+        Scalar svR = ScalarFactory.create(0, Unit.MASS);
+
+        svR = sv1U.divide(sv2);
 
         Assert.assertEquals(7.5, svR.getValue().doubleValue(), 0.0);
-        Assert.assertTrue("Is length unit", svR.getUnit() == Unit.LENGTH);
+        Assert.assertEquals(Unit.LENGTH, svR.getUnit());
+    }
+
+    // test division, length / length = unitless
+    @Test
+    public void TestDivisionUnitUnit() throws UnitConversionError {
+        Scalar sv2U = ScalarFactory.create(2, Unit.LENGTH);
+        Scalar sv1U = ScalarFactory.create(15, Unit.LENGTH);
+
+        Scalar svR = ScalarFactory.create(0, Unit.MASS);
+
+        svR = sv1U.divide(sv2U);
+
+        Assert.assertEquals(7.5, svR.getValue().doubleValue(), 0.0);
+        Assert.assertEquals(Unit.UNITLESS, svR.getUnit());
     }
 }

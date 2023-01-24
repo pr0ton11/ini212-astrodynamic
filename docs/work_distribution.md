@@ -24,7 +24,7 @@ While implementing a specific feature the corresponding unit tests and technical
 
 ### Rafael
 
-- [x] Physics Interfaces
+- [X] Physics Interfaces
 - [ ] Physics Classes
   - [ ] Define bases as abstract
     - [ ] BaseScalar
