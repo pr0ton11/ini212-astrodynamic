@@ -22,6 +22,13 @@ While implementing a specific feature the corresponding unit tests and technical
 - [ ] Collections
 - [ ] Sorting
 - [ ] Update routines
+- [ ] Documentation
+  - [X] Basic latex document
+  - [ ] User manual
+    - [ ] Build / start
+    - [ ] Edit Missions
+    - [ ] Simulate
+  - [ ] Solution description own points
 
 ## Optional
 
