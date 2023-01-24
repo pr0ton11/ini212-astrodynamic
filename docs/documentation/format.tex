@@ -1,0 +1,21 @@
+\hypersetup{
+	hidelinks=true
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\nouppercase{\leftmark}}
+\rhead{\nouppercase{\rightmark}}
+\rfoot{Seite \thepage \hspace{1pt} von \pageref{LastPage}}
+\lfoot{\gdocname}
+
+\fancypagestyle{plain}{ % this is used to redefine 'plain' pages like table of contents
+	\fancyhf{}
+	\lhead{\nouppercase{\leftmark}}
+	\rhead{\nouppercase{\rightmark}}
+	\rfoot{Seite \thepage \hspace{1pt} von \pageref{LastPage}}
+	\lfoot{\gdocname}
+}
+
+\newcommand{\docname}[1]{\renewcommand{\gdocname}{#1}}
+\newcommand{\gdocname}{DOCNAME REQUIRED!}
