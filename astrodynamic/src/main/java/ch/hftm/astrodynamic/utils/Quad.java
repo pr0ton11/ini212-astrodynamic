@@ -49,13 +49,18 @@ public class Quad implements Comparable<Quad>, Serializable {
     }
 
     // Special constructor that accepts a mantisse and a position of point
-    public Quad(int mantisse, int point) {
-        this.num = Decimal64.fromFixedPoint(mantisse, point);
+    public Quad(int mantissa, int point) {
+        this.num = Decimal64.fromFixedPoint(mantissa, point);
     }
 
     // Special constructor that accepts a mantisse and a position of point
-    public Quad(long mantisse, int point) {
-        this.num = Decimal64.fromFixedPoint(mantisse, point);
+    public Quad(long mantissa, int point) {
+        this.num = Decimal64.fromFixedPoint(mantissa, point);
+    }
+
+    // Special constructor that accepts a scientific notation
+    public Quad(double mantissa, int powerOfTen) {
+        this.num = new Quad().multiply(TEN).pow(powerOfTen).getAsDecimal64();
     }
 
     // Special constructor that accepts Decimal64
