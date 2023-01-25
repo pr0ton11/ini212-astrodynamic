@@ -16,6 +16,11 @@ public abstract class BaseCondition implements Named, EndCondition, Setup {
     String name;
     String description;
     
+    BaseCondition() {
+        this.name = getClass().getSimpleName(); // easy naming for reflection
+        this.description = "";
+    }
+
     BaseCondition(String name, String description) {
         this.name = name;
         this.description = description;
@@ -29,9 +34,14 @@ public abstract class BaseCondition implements Named, EndCondition, Setup {
         return description;
     }
 
-    // should only be accessible for subclasses
+    // change description, should only be accessible for subclasses
     protected void setDescription(String description) {
         this.description = description;
+    }
+
+    // change name, should only be accessible for subclasses
+    protected void setName(String name) {
+        this.name = name;
     }
 
     // implemented here to avoid clutter in specific implementations

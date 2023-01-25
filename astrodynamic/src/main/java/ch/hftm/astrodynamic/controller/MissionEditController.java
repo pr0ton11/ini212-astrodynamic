@@ -1,18 +1,37 @@
 package ch.hftm.astrodynamic.controller;
 
+import java.lang.reflect.Parameter;
+
+import ch.hftm.astrodynamic.model.conditions.BaseCondition;
+import ch.hftm.astrodynamic.model.conditions.HoldoutTime;
+import ch.hftm.astrodynamic.model.conditions.MaximumTime;
+import ch.hftm.astrodynamic.scalar.TimeScalar;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.canvas.Canvas;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.web.HTMLEditor;
 import javafx.stage.Stage;
 
 public class MissionEditController extends BaseController{
     @FXML
-    Canvas graphic;
+    TextField missionName;
 
     @FXML
-    TextField missionName;
+    HTMLEditor missionDescription;
+
+    @FXML
+    ComboBox<Class> newCondition;
+
+    @FXML
+    TextField newConditionParameter;
+
+    ObservableList<Class> possibleConditions;
 
     public MissionEditController() {
         super();
@@ -26,32 +45,42 @@ public class MissionEditController extends BaseController{
     @Override
     public void initialize(){
 
+        newCondition.setCellFactory(param -> new ListCell<>() {
+            @Override
+            protected void updateItem(Class item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getSimpleName());
+                }
+            }
+        });
+
         initializeTestdata();
     }
 
     // test data, missions would be stored on disk
     private void initializeTestdata() {
-        
+        possibleConditions = FXCollections.observableArrayList();
+
+        possibleConditions.add(MaximumTime.class);
+        possibleConditions.add(HoldoutTime.class);
+
+        newCondition.setItems(possibleConditions);
     }
 
     // 
     @FXML
-    void clickGraphic(MouseEvent e) {
-        // x and y coords
-        System.out.println("click " + e.toString());
-    }
+    void newConditionChoice(ActionEvent e) {
+        System.out.println("new condition " + e.toString());
+        Class selConditionClass = newCondition.getSelectionModel().getSelectedItem();
+        Parameter firstParam = selConditionClass.getConstructors()[0].getParameters()[0];
+        System.out.println(firstParam.toString());
 
-    // 
-    @FXML
-    void dragGraphic(MouseEvent e) {
-        // we have no delta here
-        System.out.println("drag " + e.toString());
-    }
-
-    // 
-    @FXML
-    void scrollGraphic(ScrollEvent e) {
-        // deltaY moves to indicate vertical scroll
-        System.out.println("scroll " + e.toString());
+        if (firstParam.getType() == TimeScalar.class) {
+            System.out.println("xxx");
+        }
     }
 }
