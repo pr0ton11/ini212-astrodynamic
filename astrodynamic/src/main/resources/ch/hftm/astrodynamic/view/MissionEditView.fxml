@@ -23,10 +23,11 @@
          <children>
             <ComboBox fx:id="newCondition" onAction="#newConditionChoice" prefWidth="150.0" />
             <TextField fx:id="newConditionParameter" />
-            <Button mnemonicParsing="false" text="Add" />
+            <Label fx:id="unitLabel" text="Label" />
+            <Button mnemonicParsing="false" onAction="#addChoiceToList" text="Add" />
          </children>
       </HBox>
       <Label text="Conditions" />
-      <ListView prefHeight="200.0" prefWidth="200.0" />
+      <ListView fx:id="missionConditions" prefHeight="200.0" prefWidth="200.0" />
    </children>
 </VBox>
