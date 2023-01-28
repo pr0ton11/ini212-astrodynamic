@@ -35,6 +35,12 @@ public class ScalarFactory {
         lengthConversion.put("kilometer", new Quad(1000.0));
         lengthConversion.put("AU", new Quad(1.495978707).multiply(Quad.TEN.pow(11)));
         conversions.put(Unit.LENGTH, lengthConversion);
+
+        Map<String, Quad> velocityConversions = new HashMap<>();
+        velocityConversions.put("m/s", new Quad(1.0));
+        velocityConversions.put("km/s", new Quad(1000.0));
+        velocityConversions.put("km/h", new Quad(3.6));
+        conversions.put(Unit.VELOCITY, velocityConversions);
     }
 
     public static Quad convert(Unit unit, Quad oldValue, String oldUnitSize, String newUnitsize) throws UnitConversionError {
@@ -44,6 +50,38 @@ public class ScalarFactory {
 
     public static Quad convert(Scalar value, String unitsize) {
         return value.getValue().divide(getConversionFactor(value.getUnit(), unitsize));
+    }
+
+    // quad with unitsize string fitted for best display
+    public static class FittedValue {
+        public String unitsize;
+        public Quad value;
+        public Unit unit;
+
+        FittedValue(Quad value, Unit unit, String unitsize) {
+            this.unit = unit;
+            this.unitsize = unitsize;
+            this.value = value;
+        }
+    }
+
+    // returns best fitting unit size for scalar
+    public static FittedValue getFittingUnitsize(Scalar value) {
+        String bestFit = getBaseUnitSize(value.getUnit());
+        Quad displayValue = value.getValue();
+        int displayLength = displayValue.doubleValue().toString().length();
+
+        for (String convSize: getUnitSizes(value.getUnit())) {
+            Quad comparedValue = convert(value, convSize);
+            int comparedLength = comparedValue.doubleValue().toString().length();
+            if (comparedLength < displayLength) {
+                displayLength = comparedLength;
+                displayValue = comparedValue;
+                bestFit = convSize;
+            }
+        }
+
+        return new FittedValue(displayValue, value.getUnit(), bestFit);
     }
 
     // helper gets unit for a scalar class

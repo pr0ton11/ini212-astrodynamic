@@ -40,4 +40,6 @@ public interface AstronomicalObject {
     Vector getDirection(AstronomicalObject partner) throws UnitConversionError;
 
     Scalar getDistance(AstronomicalObject partner) throws UnitConversionError;
+
+    Vector calculateOrbitalSpeed(AstronomicalObject partner) throws UnitConversionError;
 }

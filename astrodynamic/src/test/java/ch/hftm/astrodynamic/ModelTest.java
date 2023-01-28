@@ -12,6 +12,8 @@
  import org.junit.Ignore;
  
 import ch.hftm.astrodynamic.model.*;
+import ch.hftm.astrodynamic.model.planetoids.Earth;
+import ch.hftm.astrodynamic.model.planetoids.Moon;
 import ch.hftm.astrodynamic.utils.*;
 import ch.hftm.astrodynamic.physics.*;
 import ch.hftm.astrodynamic.scalar.ScalarFactory;

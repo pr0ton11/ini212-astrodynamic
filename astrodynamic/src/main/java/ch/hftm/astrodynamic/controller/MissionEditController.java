@@ -2,14 +2,17 @@ package ch.hftm.astrodynamic.controller;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
+import java.util.ArrayList;
+import java.util.List;
 
 import ch.hftm.astrodynamic.model.Mission;
 import ch.hftm.astrodynamic.model.conditions.Approach;
 import ch.hftm.astrodynamic.model.conditions.Avoid;
-import ch.hftm.astrodynamic.model.conditions.BaseCondition;
+import ch.hftm.astrodynamic.model.conditions.Condition;
 import ch.hftm.astrodynamic.model.conditions.Depart;
 import ch.hftm.astrodynamic.model.conditions.HoldoutTime;
 import ch.hftm.astrodynamic.model.conditions.MaximumTime;
+import ch.hftm.astrodynamic.model.conditions.SetupHeavyLander;
 import ch.hftm.astrodynamic.scalar.ScalarFactory;
 import ch.hftm.astrodynamic.scalar.TimeScalar;
 import ch.hftm.astrodynamic.utils.BaseScalar;
@@ -47,7 +50,7 @@ public class MissionEditController extends BaseController{
     ComboBox<String> newUnitsize;
 
     @FXML
-    ListView<BaseCondition> missionConditions;
+    ListView<Condition> missionConditions;
 
     @FXML
     Label newConditionInRelationLabel;
@@ -57,7 +60,7 @@ public class MissionEditController extends BaseController{
 
     ObservableList<Class> possibleConditions;
 
-    ObservableList<BaseCondition> conditions;
+    ObservableList<Condition> conditions;
 
     ObservableList<String> possibleUnits;
     String lastSelectedUnitsize;
@@ -103,7 +106,7 @@ public class MissionEditController extends BaseController{
         // active conditions for the mission
         missionConditions.setCellFactory(param -> new ListCell<>() {
             @Override
-            protected void updateItem(BaseCondition item, boolean empty) {
+            protected void updateItem(Condition item, boolean empty) {
                 super.updateItem(item, empty);
 
                 if (empty || item == null) {
@@ -145,6 +148,7 @@ public class MissionEditController extends BaseController{
         possibleConditions.add(Approach.class);
         possibleConditions.add(Avoid.class);
         possibleConditions.add(Depart.class);
+        possibleConditions.add(SetupHeavyLander.class);
 
         possibleConditionRelationObjects.addAll(editedMission.getAllNamedAstronomicalObjects());
     }
@@ -230,21 +234,40 @@ public class MissionEditController extends BaseController{
         Class selConditionClass = newCondition.getSelectionModel().getSelectedItem();
         
         Parameter firstParam = getCurrentChoiceParameter(getCurrentChoiceConstructor(true), false, 0);
-        Object paramObject = new Object();
+
+        Parameter secondParam = getCurrentChoiceParameter(getCurrentChoiceConstructor(true), false, 1);
+
+        Scalar scalarParam = null;
+        Named referenceObject = null;
+
+        List<Object> instanceParams = new ArrayList<>();
 
         if (firstParam != null) {
             try {
-                Scalar scalarParam = ScalarFactory.create(Double.parseDouble(newConditionParameter.getText()), ScalarFactory.getUnitFromClass(firstParam.getType()), lastSelectedUnitsize);
-                conditions.add((BaseCondition)selConditionClass.getConstructors()[0].newInstance(scalarParam));
+                scalarParam = ScalarFactory.create(Double.parseDouble(newConditionParameter.getText()), ScalarFactory.getUnitFromClass(firstParam.getType()), lastSelectedUnitsize);
+                instanceParams.add(scalarParam);
             } catch (Exception ex) {
                 showError(ex.getMessage());
             }
-        } else {
+        }
+
+        if (secondParam != null) {
             try {
-                conditions.add((BaseCondition)selConditionClass.getConstructors()[0].newInstance());
+                if (secondParam.getType() == Named.class) {
+                    referenceObject = newConditionObject.getSelectionModel().getSelectedItem();
+                    instanceParams.add(referenceObject);
+                }
             } catch (Exception ex) {
                 showError(ex.getMessage());
             }
+        }
+
+        try {
+            Condition condition = (Condition)selConditionClass.getConstructors()[0].newInstance(instanceParams.toArray(new Object[0]));
+            conditions.add(condition);
+            editedMission.addCondition(condition);
+        } catch (Exception ex) {
+            showError(ex.getMessage());
         }
     }
 

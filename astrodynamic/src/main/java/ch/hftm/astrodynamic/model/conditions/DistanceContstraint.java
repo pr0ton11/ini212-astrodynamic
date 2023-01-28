@@ -22,7 +22,7 @@ import ch.hftm.astrodynamic.utils.UnitConversionError;
  */
 
 // can be a win or loss condition triggered by elapsed mission time
-public class DistanceContstraint extends BaseCondition {
+public class DistanceContstraint extends Condition {
     Scalar altitudeGate;
     boolean checkForGreater;
     EndType ending;
@@ -33,9 +33,8 @@ public class DistanceContstraint extends BaseCondition {
         // if we could set something before super we would not need this reimplementation of the description
         StringBuilder descriptionTextBuilder = new StringBuilder();
         descriptionTextBuilder.append(String.format(
-            "Altitude of %s %s over %s results in ",
-            altitudeGate.toString(),
-            ScalarFactory.getBaseUnitSize(Unit.LENGTH),
+            "Altitude of %s over %s results in ",
+            altitudeGate.toFittedString(),
             referenceObjectName
         ));
 

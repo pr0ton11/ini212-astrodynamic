@@ -1,4 +1,6 @@
-package ch.hftm.astrodynamic.model;
+package ch.hftm.astrodynamic.model.planetoids;
+
+import ch.hftm.astrodynamic.model.Simulation;
 
 /*
  *  Project Astrodynamic

@@ -1,4 +1,6 @@
-package ch.hftm.astrodynamic.model;
+package ch.hftm.astrodynamic.model.planetoids;
+
+import ch.hftm.astrodynamic.model.Simulation;
 
 /*
  *  Project Astrodynamic
@@ -42,7 +44,7 @@ public class Earth extends Planetoid {
         if (sun != null) {
             try {
                 earth.setPosition(sun.getPosition().add(new BaseVector(new Quad(149.6, 11), new Quad(), new Quad(), Unit.LENGTH)));
-                earth.setVelocity(new BaseVector(new Quad(), new Quad(2.978, 4), new Quad(), Unit.VELOCITY));
+                earth.setVelocity(new BaseVector(new Quad(), new Quad(2.978, 4), new Quad(), Unit.VELOCITY).add(sun.getVelocity()));
             } catch (UnitConversionError ex) {
                 System.out.println(ex);
             }

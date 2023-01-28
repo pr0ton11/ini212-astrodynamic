@@ -11,7 +11,7 @@ import ch.hftm.astrodynamic.utils.Scalar;
  */
 
 // can be a win or loss condition triggered by elapsed mission time
-public class TimeContstraint extends BaseCondition {
+public class TimeContstraint extends Condition {
     Scalar timeGate;
     EndType ending;
 
@@ -21,7 +21,7 @@ public class TimeContstraint extends BaseCondition {
         String endingText = "Maximum mission duration of ";
         if (ending == EndType.SUCCESS)
             endingText = "Mission won after a duration of ";
-        setDescription(endingText + timeGate.toString());
+        setDescription(endingText + timeGate.toFittedString());
 
         this.timeGate = timeGate;
         this.ending = ending; // Could be a fail or success depending on circumstances

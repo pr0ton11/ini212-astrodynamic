@@ -6,11 +6,13 @@
 
 package ch.hftm.astrodynamic.physics;
 
+import ch.hftm.astrodynamic.scalar.AngleScalar;
 import ch.hftm.astrodynamic.scalar.ForceScalar;
 import ch.hftm.astrodynamic.scalar.LengthScalar;
 import ch.hftm.astrodynamic.scalar.MassScalar;
 import ch.hftm.astrodynamic.scalar.ScalarFactory;
 import ch.hftm.astrodynamic.scalar.UnitlessScalar;
+import ch.hftm.astrodynamic.scalar.VelocityScalar;
 import ch.hftm.astrodynamic.utils.*;
 
 // Base to fill computational methods, abstract to force use of specific child classes
@@ -26,21 +28,16 @@ public abstract class BaseAstronomicalObject implements AstronomicalObject, Name
     private String description;
 
     public BaseAstronomicalObject(double zeroPointHeight, double mass, Vector position, Vector rotation, Vector velocity, Vector rotationalVelocity) {
-        this.zeroPointHeight = new LengthScalar(zeroPointHeight);
-        this.mass = new MassScalar(mass);
-        this.position = new BaseVector(position, Unit.LENGTH);
-        this.rotation = new BaseVector(rotation);
-        this.velocity = new BaseVector(velocity);
-        this.rotationalVelocity = new BaseVector(rotationalVelocity);
+        this(new LengthScalar(zeroPointHeight), new MassScalar(mass), position, rotation, velocity, rotationalVelocity);
     }
 
     public BaseAstronomicalObject(Scalar zeroPointHeight, Scalar mass, Vector position, Vector rotation, Vector velocity, Vector rotationalVelocity) {
         this.zeroPointHeight = new LengthScalar(zeroPointHeight);
         this.mass = new MassScalar(mass);
         this.position = new BaseVector(position, Unit.LENGTH);
-        this.rotation = new BaseVector(rotation);
-        this.velocity = new BaseVector(velocity);
-        this.rotationalVelocity = new BaseVector(rotationalVelocity);
+        this.rotation = new BaseVector(rotation, Unit.ANGLE);
+        this.velocity = new BaseVector(velocity, Unit.VELOCITY);
+        this.rotationalVelocity = new BaseVector(rotationalVelocity, Unit.ANGULAR_VELOCITY);
     }
 
     public Collision calculateCollision(AstronomicalObject partner) throws UnitConversionError {
@@ -164,5 +161,21 @@ public abstract class BaseAstronomicalObject implements AstronomicalObject, Name
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Vector calculateOrbitalSpeed(AstronomicalObject partner) throws UnitConversionError {
+        Scalar distance = getDistance(partner);
+        Vector direction = getDirection(partner).normalize();
+
+        // TODO: fix dimensional unit
+        Scalar velocity = new VelocityScalar(partner.getMass().getValue().multiply(distance.getValue()).multiply(ScalarFactory.gravitationalConstant().getValue()));
+
+        // here we turn the velocity vector by 90° to the partner direction to gain an orbit
+        // TODO: dot/cross product would be more stable/sane
+        Vector velocityVector = new BaseVector(
+            velocity.multiply(direction.getX()), 
+            velocity.multiply(direction.getY()), 
+            velocity.multiply(direction.getZ())).rotateZ(new AngleScalar(Quad.PI.divide(Quad.TWO)));
+        return velocityVector;
     }
 }
