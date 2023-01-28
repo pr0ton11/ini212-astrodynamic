@@ -1,4 +1,4 @@
-package ch.hftm.astrodynamic.model;
+package ch.hftm.astrodynamic.utils;
 
 /*
  *  Project Astrodynamic

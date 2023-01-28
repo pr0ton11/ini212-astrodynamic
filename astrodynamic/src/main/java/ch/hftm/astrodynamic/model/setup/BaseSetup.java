@@ -1,7 +1,7 @@
 package ch.hftm.astrodynamic.model.setup;
 
-import ch.hftm.astrodynamic.model.Named;
 import ch.hftm.astrodynamic.model.Setup;
+import ch.hftm.astrodynamic.utils.Named;
 
 /*
  *  Project Astrodynamic

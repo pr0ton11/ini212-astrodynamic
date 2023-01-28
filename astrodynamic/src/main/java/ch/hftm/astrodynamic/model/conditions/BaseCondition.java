@@ -1,9 +1,9 @@
 package ch.hftm.astrodynamic.model.conditions;
 
 import ch.hftm.astrodynamic.model.EndCondition;
-import ch.hftm.astrodynamic.model.Named;
 import ch.hftm.astrodynamic.model.Setup;
 import ch.hftm.astrodynamic.model.Simulation;
+import ch.hftm.astrodynamic.utils.Named;
 
 /*
  *  Project Astrodynamic

@@ -1,6 +1,7 @@
 package ch.hftm.astrodynamic.model;
 
 import ch.hftm.astrodynamic.physics.Spaceship;
+import ch.hftm.astrodynamic.utils.Named;
 
 public class Mission implements Named {
     String name;

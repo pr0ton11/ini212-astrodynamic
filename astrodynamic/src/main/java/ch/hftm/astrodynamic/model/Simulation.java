@@ -53,4 +53,24 @@ public class Simulation {
     public Scalar getTotalTime() {
         return totalTime;
     }
+
+    public Spaceship getPlayerControlledVessel() {
+        return playerControlledVessel;
+    }
+
+    public BaseAstronomicalObject getAstronomicalObjectByName(String name) {
+        for (Planetoid p: planetoids) {
+            if (p.getName().equals(name)) {
+                return p;
+            }
+        }
+
+        for (Spaceship s: spaceships) {
+            if (s.getName().equals(name)) {
+                return s;
+            }
+        }
+
+        return null;
+    }
 }

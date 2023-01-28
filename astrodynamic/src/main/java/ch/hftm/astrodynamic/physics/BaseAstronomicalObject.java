@@ -14,13 +14,16 @@ import ch.hftm.astrodynamic.scalar.UnitlessScalar;
 import ch.hftm.astrodynamic.utils.*;
 
 // Base to fill computational methods, abstract to force use of specific child classes
-public abstract class BaseAstronomicalObject implements AstronomicalObject {
+public abstract class BaseAstronomicalObject implements AstronomicalObject, Named {
     private Scalar zeroPointHeight;
     private Scalar mass;
     private Vector position;
     private Vector rotation;
     private Vector velocity;
     private Vector rotationalVelocity;
+
+    private String name;
+    private String description;
 
     public BaseAstronomicalObject(double zeroPointHeight, double mass, Vector position, Vector rotation, Vector velocity, Vector rotationalVelocity) {
         this.zeroPointHeight = new LengthScalar(zeroPointHeight);
@@ -110,6 +113,19 @@ public abstract class BaseAstronomicalObject implements AstronomicalObject {
         return offset.getLength().getValue().le(getZeroElevation().getValue());
     }
 
+    public Vector getDirection(AstronomicalObject partner) throws UnitConversionError {
+        return partner.getPosition().subtract(getPosition());
+    }
+
+    public Scalar getDistance(AstronomicalObject partner) throws UnitConversionError {
+        Scalar lenScalar = getDirection(partner).getLength();
+        if (lenScalar.getValue().doubleValue() < 0)
+        {
+            return lenScalar.negate();
+        }
+        return lenScalar;
+    }
+
     /* Calculates the force in Newton from the gravity between two astronomical objects
      * To keep the scalar unit dimension calculations intact intermediate helper units are used
      * kg² / m² * N * m² * kg⁻² = N
@@ -117,7 +133,7 @@ public abstract class BaseAstronomicalObject implements AstronomicalObject {
     public Vector calculateGravitationalForce(AstronomicalObject partner) throws UnitConversionError {
         
         // direction is calculated from partner to get direction to partner as difference (if we calculate this.pos - partner.pos we get the direction from the partner to us)
-        Vector direction = partner.getPosition().subtract(getPosition());
+        Vector direction = getDirection(partner);
         Scalar cubic_distance = direction.getLength().multiply(direction.getLength()); // cubic distance = area
 
         // here we use the intermediate helper units: cubic_mass, M2_div_L2 (kg² / m²), and the gravitational constant unit F_L2_Mn2 (N * m² * kg⁻²)
@@ -132,5 +148,21 @@ public abstract class BaseAstronomicalObject implements AstronomicalObject {
     // a = F / m
     public Vector calculateAccelerationFromForce(Vector force) throws UnitConversionError {
         return force.divide(getMass());
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

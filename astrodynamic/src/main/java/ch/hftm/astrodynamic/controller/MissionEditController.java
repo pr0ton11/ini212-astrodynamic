@@ -3,8 +3,10 @@ package ch.hftm.astrodynamic.controller;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
 
-import ch.hftm.astrodynamic.model.conditions.Altitude;
+import ch.hftm.astrodynamic.model.conditions.Approach;
+import ch.hftm.astrodynamic.model.conditions.Avoid;
 import ch.hftm.astrodynamic.model.conditions.BaseCondition;
+import ch.hftm.astrodynamic.model.conditions.Depart;
 import ch.hftm.astrodynamic.model.conditions.HoldoutTime;
 import ch.hftm.astrodynamic.model.conditions.MaximumTime;
 import ch.hftm.astrodynamic.scalar.ScalarFactory;
@@ -109,7 +111,9 @@ public class MissionEditController extends BaseController{
 
         possibleConditions.add(MaximumTime.class);
         possibleConditions.add(HoldoutTime.class);
-        possibleConditions.add(Altitude.class);
+        possibleConditions.add(Approach.class);
+        possibleConditions.add(Avoid.class);
+        possibleConditions.add(Depart.class);
 
         newCondition.setItems(possibleConditions);
     }
@@ -130,46 +134,33 @@ public class MissionEditController extends BaseController{
         lastSelectedUnitsize = newUnitsize.getSelectionModel().getSelectedItem();
     }
 
-    Parameter getCurrentChoiceParameter(boolean showErrorMsgConstructor, boolean showErrorMsgParameter) {
+    Constructor getCurrentChoiceConstructor(boolean showErrorMsg) {
         // check if we have a constructor else error
         Class selConditionClass = newCondition.getSelectionModel().getSelectedItem();
         Constructor[] constructors = selConditionClass.getConstructors();
         if (constructors.length < 1) {
-            if (showErrorMsgConstructor)
+            if (showErrorMsg)
                 showError("No public constructor found in class " + selConditionClass.getName());
             return null;
         }
+        return constructors[0];
+    }
 
-        // check if one of the constructors matches our parameter requirements else error
-        Constructor selectedConstructor = constructors[0];
-        boolean correctConstructorFound = false;
-        for (Constructor c: constructors) {
-            if (c.getParameterCount() == 1) {
-                selectedConstructor = c;
-                correctConstructorFound = true;
-                break;
-            }
-        }
-        if (!correctConstructorFound) {
-            if (showErrorMsgConstructor)
-                showError("No matching public constructor found in class " + selConditionClass.getName());
+    Parameter getCurrentChoiceParameter(Constructor constructor, boolean showErrorMsg, int paramPosition) {
+        Parameter[] parameters = constructor.getParameters();
+        if (parameters.length - 1 < paramPosition) {
+            if (showErrorMsg)
+                showError("No matching parameters found in" + constructor.getName());
             return null;
         }
 
-        Parameter[] parameters = selectedConstructor.getParameters();
-        if (parameters.length != 1) {
-            if (showErrorMsgParameter)
-                showError("No matching public constructor with one parameter found in class " + selConditionClass.getName());
-            return null;
-        }
-
-        return parameters[0];
+        return parameters[paramPosition];
     }
 
     // changed new condition dropdown choice, update parameter and unitsize
     @FXML
     void newConditionChoice(ActionEvent e) {
-        Parameter firstParam = getCurrentChoiceParameter(true, false);
+        Parameter firstParam = getCurrentChoiceParameter(getCurrentChoiceConstructor(true), false, 0);
 
         hideNewChoiceInput();
 
@@ -187,7 +178,7 @@ public class MissionEditController extends BaseController{
     void addChoiceToList(ActionEvent e) {
         Class selConditionClass = newCondition.getSelectionModel().getSelectedItem();
         
-        Parameter firstParam = getCurrentChoiceParameter(true, false);
+        Parameter firstParam = getCurrentChoiceParameter(getCurrentChoiceConstructor(true), false, 0);
         Object paramObject = new Object();
 
         if (firstParam != null) {
@@ -209,7 +200,7 @@ public class MissionEditController extends BaseController{
     // if the unitsize is switched we try to convert between old and new unitsize, if it fails we ignore it
     @FXML
     void newUnitsizeChanged(ActionEvent e) {
-        Parameter firstParam = getCurrentChoiceParameter(true, false);
+        Parameter firstParam = getCurrentChoiceParameter(getCurrentChoiceConstructor(true), false, 0);
 
         try {
             Quad oldValue = new Quad(Double.parseDouble(newConditionParameter.getText()));
