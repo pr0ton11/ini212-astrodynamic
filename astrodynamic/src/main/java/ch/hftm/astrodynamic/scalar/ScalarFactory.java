@@ -37,10 +37,17 @@ public class ScalarFactory {
         conversions.put(Unit.LENGTH, lengthConversion);
     }
 
+    public static Quad convert(Unit unit, Quad oldValue, String oldUnitSize, String newUnitsize) throws UnitConversionError {
+        Scalar old = create(oldValue, unit, oldUnitSize);
+        return convert(old, newUnitsize);
+    }
+
+    public static Quad convert(Scalar value, String unitsize) {
+        return value.getValue().divide(getConversionFactor(value.getUnit(), unitsize));
+    }
+
     // helper gets unit for a scalar class
     public static Unit getUnitFromClass(Class scalarClass) {
-        System.out.println(scalarClass.toString());
-
         if (scalarClass == TimeScalar.class) {
             return Unit.TIME;
         }
@@ -82,9 +89,13 @@ public class ScalarFactory {
         return keyStr;
     }
 
+    private static Quad getConversionFactor(Unit unit, String unitsize) {
+        return conversions.get(unit).get(unitsize);
+    }
+
     // converts between different units in dimension, returns in base unit
     public static Scalar create(Quad value, Unit unit, String unitSize) throws UnitConversionError {
-        Quad conversionFactor = conversions.get(unit).get(unitSize);
+        Quad conversionFactor = getConversionFactor(unit, unitSize);
 
         return create(value.multiply(conversionFactor), unit);
     }

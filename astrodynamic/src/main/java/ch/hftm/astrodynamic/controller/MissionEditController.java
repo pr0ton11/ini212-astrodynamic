@@ -10,6 +10,7 @@ import ch.hftm.astrodynamic.model.conditions.MaximumTime;
 import ch.hftm.astrodynamic.scalar.ScalarFactory;
 import ch.hftm.astrodynamic.scalar.TimeScalar;
 import ch.hftm.astrodynamic.utils.BaseScalar;
+import ch.hftm.astrodynamic.utils.Quad;
 import ch.hftm.astrodynamic.utils.Scalar;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -49,6 +50,7 @@ public class MissionEditController extends BaseController{
     ObservableList<BaseCondition> conditions;
 
     ObservableList<String> possibleUnits;
+    String lastSelectedUnitsize;
 
     public MissionEditController() {
         super();
@@ -118,27 +120,24 @@ public class MissionEditController extends BaseController{
     }
 
     private void showNewChoiceInput(String defaultUnitsize, String[] unitsizes) {
-        System.out.println(unitsizes);
-
         newUnitsize.setVisible(true);
         possibleUnits.clear();
         possibleUnits.addAll(unitsizes);
         newUnitsize.getSelectionModel().select(defaultUnitsize);
         newConditionParameter.setVisible(true);
         //newConditionParameter.setText(""); // to clear
+
+        lastSelectedUnitsize = newUnitsize.getSelectionModel().getSelectedItem();
     }
 
-    // 
-    @FXML
-    void newConditionChoice(ActionEvent e) {
-        System.out.println("new condition " + e.toString());
-
+    Parameter getCurrentChoiceParameter(boolean showErrorMsgConstructor, boolean showErrorMsgParameter) {
         // check if we have a constructor else error
         Class selConditionClass = newCondition.getSelectionModel().getSelectedItem();
         Constructor[] constructors = selConditionClass.getConstructors();
         if (constructors.length < 1) {
-            showError("No public constructor found in class " + selConditionClass.getName());
-            return;
+            if (showErrorMsgConstructor)
+                showError("No public constructor found in class " + selConditionClass.getName());
+            return null;
         }
 
         // check if one of the constructors matches our parameter requirements else error
@@ -152,17 +151,29 @@ public class MissionEditController extends BaseController{
             }
         }
         if (!correctConstructorFound) {
-            showError("No matching public constructor found in class " + selConditionClass.getName());
-            return;
+            if (showErrorMsgConstructor)
+                showError("No matching public constructor found in class " + selConditionClass.getName());
+            return null;
         }
+
+        Parameter[] parameters = selectedConstructor.getParameters();
+        if (parameters.length != 1) {
+            if (showErrorMsgParameter)
+                showError("No matching public constructor with one parameter found in class " + selConditionClass.getName());
+            return null;
+        }
+
+        return parameters[0];
+    }
+
+    // 
+    @FXML
+    void newConditionChoice(ActionEvent e) {
+        Parameter firstParam = getCurrentChoiceParameter(true, false);
 
         hideNewChoiceInput();
 
-        Parameter[] parameters = selectedConstructor.getParameters();
-        if (parameters.length > 0) {
-            Parameter firstParam = parameters[0];
-            System.out.println(firstParam.toString());
-
+        if (firstParam != null) {
             // if it is a scalar ask the factory to determine units
             //if (firstParam.getType().isInstance(Scalar.class)) {
             showNewChoiceInput(ScalarFactory.getBaseUnitSize(firstParam.getType()), ScalarFactory.getUnitSizes(firstParam.getType()));
@@ -173,22 +184,43 @@ public class MissionEditController extends BaseController{
     @FXML
     void addChoiceToList(ActionEvent e) {
         Class selConditionClass = newCondition.getSelectionModel().getSelectedItem();
-        Parameter firstParam = selConditionClass.getConstructors()[0].getParameters()[0];
+        
+        Parameter firstParam = getCurrentChoiceParameter(true, false);
         Object paramObject = new Object();
 
-        if (firstParam.getType() == TimeScalar.class) {
-            paramObject = (Object)new TimeScalar(Integer.parseInt(newConditionParameter.getText()));
-        }
-
-        try {
-            conditions.add((BaseCondition)selConditionClass.getConstructors()[0].newInstance(paramObject));
-        } catch (Exception ex) {
-            showError(e.toString());
+        if (firstParam != null) {
+            if (firstParam.getType() == TimeScalar.class) {
+                paramObject = (Object)new TimeScalar(Integer.parseInt(newConditionParameter.getText()));
+            }
+    
+            try {
+                conditions.add((BaseCondition)selConditionClass.getConstructors()[0].newInstance(paramObject));
+            } catch (Exception ex) {
+                showError(e.toString());
+            }
+        } else {
+            try {
+                conditions.add((BaseCondition)selConditionClass.getConstructors()[0].newInstance());
+            } catch (Exception ex) {
+                showError(e.toString());
+            }
         }
     }
 
+    // if the unitsize is switched we try to convert between old and new unitsize, if it fails we ignore it
     @FXML
     void newUnitsizeChanged(ActionEvent e) {
-        System.out.println(e.toString());
+        Parameter firstParam = getCurrentChoiceParameter(true, false);
+
+        try {
+            Quad oldValue = new Quad(Double.parseDouble(newConditionParameter.getText()));
+            Quad newValue = ScalarFactory.convert(ScalarFactory.getUnitFromClass(firstParam.getType()), oldValue, lastSelectedUnitsize, newUnitsize.getSelectionModel().getSelectedItem());
+            newConditionParameter.setText(newValue.doubleValue().toString());
+        } catch (Exception ex) {
+            // we ignore that to not inconvinience the user
+            //System.out.println(ex);
+        }
+
+        lastSelectedUnitsize = newUnitsize.getSelectionModel().getSelectedItem();
     }
 }
