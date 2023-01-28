@@ -1,0 +1,22 @@
+\documentclass[a4paper, 11pt]{report}
+
+\input{packages}
+
+\input{format}
+
+\docname{Astrodynamics} % document name for footer
+\title{Astrodynamics\\
+	\large{Anleitung und Dokumentation}\\
+	\small{Version \vhCurrentVersion}}
+\author{Marc Singer, Rafael Stauffer}
+\date{\vhCurrentDate}
+\bibliography{citations}
+
+\begin{document}
+	\maketitle
+	\include{version_history}
+	\tableofcontents
+	\include{parts/user_manual}
+	\printbibliography
+	\addcontentsline{toc}{chapter}{Literatur} % add Bibliography as chapter in table of contents
+\end{document}
