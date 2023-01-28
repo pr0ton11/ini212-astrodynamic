@@ -1,5 +1,9 @@
 package ch.hftm.astrodynamic.scalar;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import ch.hftm.astrodynamic.utils.Quad;
 import ch.hftm.astrodynamic.utils.Scalar;
 import ch.hftm.astrodynamic.utils.Unit;
@@ -13,6 +17,68 @@ import ch.hftm.astrodynamic.utils.UnitConversionError;
 
  // Factory to create specific scalars depending on Unit
 public class ScalarFactory {
+
+    static final Map<Unit, Map<String, Quad>> conversions;
+    static {
+        conversions = new HashMap<>();
+        Map<String, Quad> timeConversion = new HashMap<>();
+        timeConversion.put("seconds", new Quad(1.0));
+        timeConversion.put("minutes", new Quad(60.0));
+        timeConversion.put("hours", new Quad(60.0 * 60.0));
+        timeConversion.put("days", new Quad(24.0 * 60.0 * 60.0));
+        timeConversion.put("weeks", new Quad(7.0 * 24.0 * 60.0 * 60.0));
+        conversions.put(Unit.TIME, timeConversion);
+
+        Map<String, Quad> lengthConversion = new HashMap<>();
+        lengthConversion.put("meter", new Quad(1.0));
+        lengthConversion.put("kilometer", new Quad(1000.0));
+        lengthConversion.put("AU", new Quad(1.495978707).multiply(Quad.TEN.pow(11)));
+        conversions.put(Unit.LENGTH, lengthConversion);
+    }
+
+    // helper gets unit for a scalar class
+    public static Unit getUnitFromClass(Class scalarClass) {
+        if (scalarClass == TimeScalar.class) {
+            return Unit.TIME;
+        }
+        if (scalarClass == LengthScalar.class) {
+            return Unit.LENGTH;
+        }
+
+        return null;
+    }
+
+    // returns the baseunit string which is the key of the value 1.0 of the unit for the class
+    public static String getBaseUnitSize(Class scalarClass) {
+        return getBaseUnitSize(getUnitFromClass(scalarClass));
+    }
+
+    // returns the baseunit string which is the key of the value 1.0 of the unit
+    public static String getBaseUnitSize(Unit unit) {
+        for (Entry<String, Quad> ent: conversions.get(unit).entrySet()) {
+            if (ent.getValue().equals(Quad.ONE)) {
+                return ent.getKey();
+            }
+        }
+        return null;
+    }
+
+    // returns all possible unitsizes which can be converted for the unit
+    public String[] getUnitSizes(Class scalarClass) {
+        return getUnitSizes(getUnitFromClass(scalarClass));
+    }
+
+    // returns all possible unitsizes which can be converted for the unit
+    public String[] getUnitSizes(Unit unit) {
+        return (String[])conversions.get(unit).keySet().toArray();
+    }
+
+    // converts between different units in dimension, returns in base unit
+    public static Scalar create(Quad value, Unit unit, String unitSize) throws UnitConversionError {
+        Quad conversionFactor = conversions.get(unit).get(unitSize);
+
+        return create(value.multiply(conversionFactor), unit);
+    }
 
     // returns specific scalar class instance depending on unit
     public static Scalar create(Quad value, Unit unit) throws UnitConversionError {
@@ -65,6 +131,21 @@ public class ScalarFactory {
     // wrapper to create from other scalar value
     public static Scalar create(Scalar scalar, Unit unit) throws UnitConversionError {
         return ScalarFactory.create(new Quad(scalar.getValue()), unit);
+    }
+
+    // wrapper to create with int
+    public static Scalar create(int value, Unit unit, String unitSize) throws UnitConversionError {
+        return ScalarFactory.create(new Quad(value), unit, unitSize);
+    }
+
+    // wrapper to create with double
+    public static Scalar create(double value, Unit unit, String unitSize) throws UnitConversionError {
+        return ScalarFactory.create(new Quad(value), unit, unitSize);
+    }
+
+    // wrapper to create from other scalar value
+    public static Scalar create(Scalar scalar, Unit unit, String unitSize) throws UnitConversionError {
+        return ScalarFactory.create(new Quad(scalar.getValue()), unit, unitSize);
     }
 
     // returns a gravitational constant scalar

@@ -2,10 +2,14 @@ package ch.hftm.astrodynamic.controller;
 
 import java.lang.reflect.Parameter;
 
+import ch.hftm.astrodynamic.model.conditions.Altitude;
 import ch.hftm.astrodynamic.model.conditions.BaseCondition;
 import ch.hftm.astrodynamic.model.conditions.HoldoutTime;
 import ch.hftm.astrodynamic.model.conditions.MaximumTime;
+import ch.hftm.astrodynamic.scalar.ScalarFactory;
 import ch.hftm.astrodynamic.scalar.TimeScalar;
+import ch.hftm.astrodynamic.utils.BaseScalar;
+import ch.hftm.astrodynamic.utils.Scalar;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -97,6 +101,7 @@ public class MissionEditController extends BaseController{
 
         possibleConditions.add(MaximumTime.class);
         possibleConditions.add(HoldoutTime.class);
+        possibleConditions.add(Altitude.class);
 
         newCondition.setItems(possibleConditions);
     }
@@ -123,9 +128,10 @@ public class MissionEditController extends BaseController{
 
         hideNewChoiceInput();
 
-        if (firstParam.getType() == TimeScalar.class) {
-            showNewChoiceInput("seconds");
-        }
+        // if it is a scalar ask the factory to determine units
+        //if (firstParam.getType().isInstance(Scalar.class)) {
+        showNewChoiceInput(ScalarFactory.getBaseUnitSize(firstParam.getType()));
+        //}
     }
 
     @FXML
