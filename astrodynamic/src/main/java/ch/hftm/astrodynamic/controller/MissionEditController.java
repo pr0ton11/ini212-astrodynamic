@@ -166,7 +166,7 @@ public class MissionEditController extends BaseController{
         return parameters[0];
     }
 
-    // 
+    // changed new condition dropdown choice, update parameter and unitsize
     @FXML
     void newConditionChoice(ActionEvent e) {
         Parameter firstParam = getCurrentChoiceParameter(true, false);
@@ -179,6 +179,8 @@ public class MissionEditController extends BaseController{
             showNewChoiceInput(ScalarFactory.getBaseUnitSize(firstParam.getType()), ScalarFactory.getUnitSizes(firstParam.getType()));
             //}
         }
+
+        lastSelectedUnitsize = newUnitsize.getSelectionModel().getSelectedItem();
     }
 
     @FXML
@@ -189,20 +191,17 @@ public class MissionEditController extends BaseController{
         Object paramObject = new Object();
 
         if (firstParam != null) {
-            if (firstParam.getType() == TimeScalar.class) {
-                paramObject = (Object)new TimeScalar(Integer.parseInt(newConditionParameter.getText()));
-            }
-    
             try {
-                conditions.add((BaseCondition)selConditionClass.getConstructors()[0].newInstance(paramObject));
+                Scalar scalarParam = ScalarFactory.create(Double.parseDouble(newConditionParameter.getText()), ScalarFactory.getUnitFromClass(firstParam.getType()), lastSelectedUnitsize);
+                conditions.add((BaseCondition)selConditionClass.getConstructors()[0].newInstance(scalarParam));
             } catch (Exception ex) {
-                showError(e.toString());
+                showError(ex.getMessage());
             }
         } else {
             try {
                 conditions.add((BaseCondition)selConditionClass.getConstructors()[0].newInstance());
             } catch (Exception ex) {
-                showError(e.toString());
+                showError(ex.getMessage());
             }
         }
     }
