@@ -23,7 +23,7 @@
          <children>
             <ComboBox fx:id="newCondition" onAction="#newConditionChoice" prefWidth="150.0" />
             <TextField fx:id="newConditionParameter" />
-            <Label fx:id="unitLabel" text="Label" />
+            <ComboBox fx:id="newUnitsize" onAction="#newUnitsizeChanged" prefWidth="150.0" />
             <Button mnemonicParsing="false" onAction="#addChoiceToList" text="Add" />
          </children>
       </HBox>

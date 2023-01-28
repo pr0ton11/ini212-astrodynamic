@@ -39,7 +39,7 @@ public class MissionEditController extends BaseController{
     TextField newConditionParameter;
 
     @FXML
-    Label unitLabel;
+    ComboBox<String> newUnitsize;
 
     @FXML
     ListView<BaseCondition> missionConditions;
@@ -47,6 +47,8 @@ public class MissionEditController extends BaseController{
     ObservableList<Class> possibleConditions;
 
     ObservableList<BaseCondition> conditions;
+
+    ObservableList<String> possibleUnits;
 
     public MissionEditController() {
         super();
@@ -91,6 +93,9 @@ public class MissionEditController extends BaseController{
         });
         missionConditions.setItems(conditions);
 
+        possibleUnits = FXCollections.observableArrayList();
+        newUnitsize.setItems(possibleUnits);
+
         hideNewChoiceInput();
 
         initializeTestdata();
@@ -108,13 +113,17 @@ public class MissionEditController extends BaseController{
     }
 
     private void hideNewChoiceInput() {
-        unitLabel.setVisible(false);
+        newUnitsize.setVisible(false);
         newConditionParameter.setVisible(false);
     }
 
-    private void showNewChoiceInput(String unit) {
-        unitLabel.setVisible(true);
-        unitLabel.setText(unit);
+    private void showNewChoiceInput(String defaultUnitsize, String[] unitsizes) {
+        System.out.println(unitsizes);
+
+        newUnitsize.setVisible(true);
+        possibleUnits.clear();
+        possibleUnits.addAll(unitsizes);
+        newUnitsize.getSelectionModel().select(defaultUnitsize);
         newConditionParameter.setVisible(true);
         //newConditionParameter.setText(""); // to clear
     }
@@ -156,7 +165,7 @@ public class MissionEditController extends BaseController{
 
             // if it is a scalar ask the factory to determine units
             //if (firstParam.getType().isInstance(Scalar.class)) {
-            showNewChoiceInput(ScalarFactory.getBaseUnitSize(firstParam.getType()));
+            showNewChoiceInput(ScalarFactory.getBaseUnitSize(firstParam.getType()), ScalarFactory.getUnitSizes(firstParam.getType()));
             //}
         }
     }
@@ -176,5 +185,10 @@ public class MissionEditController extends BaseController{
         } catch (Exception ex) {
             showError(e.toString());
         }
+    }
+
+    @FXML
+    void newUnitsizeChanged(ActionEvent e) {
+        System.out.println(e.toString());
     }
 }

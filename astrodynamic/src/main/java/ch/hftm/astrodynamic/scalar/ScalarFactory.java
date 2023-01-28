@@ -2,6 +2,7 @@ package ch.hftm.astrodynamic.scalar;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import ch.hftm.astrodynamic.utils.Quad;
@@ -66,13 +67,19 @@ public class ScalarFactory {
     }
 
     // returns all possible unitsizes which can be converted for the unit
-    public String[] getUnitSizes(Class scalarClass) {
+    public static String[] getUnitSizes(Class scalarClass) {
         return getUnitSizes(getUnitFromClass(scalarClass));
     }
 
     // returns all possible unitsizes which can be converted for the unit
-    public String[] getUnitSizes(Unit unit) {
-        return (String[])conversions.get(unit).keySet().toArray();
+    public static String[] getUnitSizes(Unit unit) {
+        Set<String> keys = conversions.get(unit).keySet();
+        String[] keyStr = new String[keys.size()];
+        int i = 0;
+        for (String s: keys)
+            keyStr[i++] = s;
+
+        return keyStr;
     }
 
     // converts between different units in dimension, returns in base unit
