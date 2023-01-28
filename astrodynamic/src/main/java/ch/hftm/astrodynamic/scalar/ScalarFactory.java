@@ -38,6 +38,8 @@ public class ScalarFactory {
 
     // helper gets unit for a scalar class
     public static Unit getUnitFromClass(Class scalarClass) {
+        System.out.println(scalarClass.toString());
+
         if (scalarClass == TimeScalar.class) {
             return Unit.TIME;
         }

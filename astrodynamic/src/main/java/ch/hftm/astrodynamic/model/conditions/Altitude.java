@@ -9,7 +9,7 @@ import ch.hftm.astrodynamic.utils.Scalar;
 public class Altitude extends BaseCondition {
     Scalar minHeigth;
 
-    Altitude(LengthScalar minHeigth) {
+    public Altitude(LengthScalar minHeigth) {
         this.minHeigth = minHeigth;
     }
 
