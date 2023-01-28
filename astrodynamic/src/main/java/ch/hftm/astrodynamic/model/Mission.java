@@ -15,10 +15,14 @@ public class Mission extends Simulation implements Named {
         super();
         this.name = name;
         this.description = description;
+    }
 
-        // TODO: tidy up testdata
-        planetoids.add(new Earth());
-        planetoids.add(new Moon());
+    public void setupStandardSolarSystem() {
+        planetoids.clear();
+
+        Sun.addToSimulation(this);
+        Earth.addToSimulation(this);
+        Moon.addToSimulation(this);
     }
 
     public String getName() {

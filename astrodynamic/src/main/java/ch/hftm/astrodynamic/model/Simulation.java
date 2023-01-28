@@ -87,4 +87,14 @@ public class Simulation {
 
         return namedObjects;
     }
+
+    public boolean addPlanetoid(Planetoid planetoid) {
+        if (getAstronomicalObjectByName(planetoid.getName()) != null) {
+            return false; // we already have something named like this
+        }
+
+        planetoids.add(planetoid);
+
+        return true;
+    }
 }

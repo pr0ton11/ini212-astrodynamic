@@ -18,8 +18,37 @@ import ch.hftm.astrodynamic.utils.*;
 */
 public class Moon extends Planetoid {
     public Moon() {
-        super(new LengthScalar(new Quad(1.7374).multiply(new Quad(10).pow(6))), new MassScalar(new Quad(7.34767309).multiply(new Quad(10).pow(22))), new BaseVector(Unit.LENGTH), new BaseVector(Unit.ANGLE), new BaseVector(Unit.VELOCITY), new BaseVector(Unit.ANGULAR_VELOCITY));
+        super(
+            new LengthScalar(new Quad(1.7374, 6)), 
+            new MassScalar(new Quad(7.34767309, 22)), 
+            new BaseVector(Unit.LENGTH), 
+            new BaseVector(Unit.ANGLE), 
+            new BaseVector(Unit.VELOCITY), 
+            new BaseVector(Unit.ANGULAR_VELOCITY)
+        );
+
         setName("Moon");
         setDescription("Our faithfull companion");
+    }
+
+    // shorthand to add with correct parameters
+    public static void addToSimulation(Simulation sim) {
+        Moon moon = new Moon();
+        if (sim.getAstronomicalObjectByName(moon.getName()) != null) {
+            return; // we already have a moon in this simulation
+        }
+
+        // we try to position ourself relative to the earth
+        BaseAstronomicalObject earth = sim.getAstronomicalObjectByName("Earth");
+        if (earth != null) {
+            try {
+                moon.setPosition(earth.getPosition().add(new BaseVector(new Quad(3.85, 10), new Quad(), new Quad(), Unit.LENGTH)));
+                moon.setVelocity(new BaseVector(new Quad(), new Quad(1.022, 4), new Quad(), Unit.VELOCITY));
+            } catch (UnitConversionError ex) {
+                System.out.println(ex);
+            }
+        }
+
+        sim.addPlanetoid(moon);
     }
 }

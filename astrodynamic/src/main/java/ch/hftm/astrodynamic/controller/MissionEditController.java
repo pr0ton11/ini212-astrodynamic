@@ -138,6 +138,7 @@ public class MissionEditController extends BaseController{
     // test data, missions would be stored on disk
     private void initializeTestdata() {
         editedMission = new Mission();
+        editedMission.setupStandardSolarSystem();
 
         possibleConditions.add(MaximumTime.class);
         possibleConditions.add(HoldoutTime.class);

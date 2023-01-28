@@ -18,8 +18,36 @@ import ch.hftm.astrodynamic.utils.*;
 */
 public class Earth extends Planetoid {
     public Earth() {
-        super(new LengthScalar(new Quad(6.3781).multiply(new Quad(10).pow(6))), new MassScalar(new Quad(5.9722).multiply(new Quad(10).pow(24))), new BaseVector(Unit.LENGTH), new BaseVector(Unit.ANGLE), new BaseVector(Unit.VELOCITY), new BaseVector(Unit.ANGULAR_VELOCITY));
+        super(
+            new LengthScalar(new Quad(6.3781, 6)),
+            new MassScalar(new Quad(5.9722, 24)), 
+            new BaseVector(Unit.LENGTH), 
+            new BaseVector(Unit.ANGLE), 
+            new BaseVector(Unit.VELOCITY), 
+            new BaseVector(Unit.ANGULAR_VELOCITY)
+            );
         setName("Earth");
         setDescription("Our home");
+    }
+
+    // shorthand to add with correct parameters
+    public static void addToSimulation(Simulation sim) {
+        Earth earth = new Earth();
+        if (sim.getAstronomicalObjectByName(earth.getName()) != null) {
+            return; // we already have an earth in this simulation
+        }
+
+        // we try to position ourself relative to the sun
+        BaseAstronomicalObject sun = sim.getAstronomicalObjectByName("Sun");
+        if (sun != null) {
+            try {
+                earth.setPosition(sun.getPosition().add(new BaseVector(new Quad(149.6, 11), new Quad(), new Quad(), Unit.LENGTH)));
+                earth.setVelocity(new BaseVector(new Quad(), new Quad(2.978, 4), new Quad(), Unit.VELOCITY));
+            } catch (UnitConversionError ex) {
+                System.out.println(ex);
+            }
+        }
+
+        sim.addPlanetoid(earth);
     }
 }
