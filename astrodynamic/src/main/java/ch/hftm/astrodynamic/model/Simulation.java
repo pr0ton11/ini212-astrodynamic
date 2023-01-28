@@ -73,4 +73,18 @@ public class Simulation {
 
         return null;
     }
+
+    public List<Named> getAllNamedAstronomicalObjects() {
+        List<Named> namedObjects = new ArrayList<>();
+        
+        for (Planetoid p: planetoids) {
+            namedObjects.add(p);
+        }
+
+        for (Spaceship s: spaceships) {
+            namedObjects.add(s);
+        }
+
+        return namedObjects;
+    }
 }

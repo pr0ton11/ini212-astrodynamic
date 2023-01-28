@@ -3,6 +3,7 @@ package ch.hftm.astrodynamic.controller;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
 
+import ch.hftm.astrodynamic.model.Mission;
 import ch.hftm.astrodynamic.model.conditions.Approach;
 import ch.hftm.astrodynamic.model.conditions.Avoid;
 import ch.hftm.astrodynamic.model.conditions.BaseCondition;
@@ -12,6 +13,7 @@ import ch.hftm.astrodynamic.model.conditions.MaximumTime;
 import ch.hftm.astrodynamic.scalar.ScalarFactory;
 import ch.hftm.astrodynamic.scalar.TimeScalar;
 import ch.hftm.astrodynamic.utils.BaseScalar;
+import ch.hftm.astrodynamic.utils.Named;
 import ch.hftm.astrodynamic.utils.Quad;
 import ch.hftm.astrodynamic.utils.Scalar;
 import javafx.collections.FXCollections;
@@ -47,12 +49,22 @@ public class MissionEditController extends BaseController{
     @FXML
     ListView<BaseCondition> missionConditions;
 
+    @FXML
+    Label newConditionInRelationLabel;
+
+    @FXML
+    ComboBox<Named> newConditionObject;
+
     ObservableList<Class> possibleConditions;
 
     ObservableList<BaseCondition> conditions;
 
     ObservableList<String> possibleUnits;
     String lastSelectedUnitsize;
+
+    ObservableList<Named> possibleConditionRelationObjects;
+
+    Mission editedMission;
 
     public MissionEditController() {
         super();
@@ -67,6 +79,11 @@ public class MissionEditController extends BaseController{
     public void initialize(){
 
         conditions = FXCollections.observableArrayList();
+        possibleConditions = FXCollections.observableArrayList();
+        possibleUnits = FXCollections.observableArrayList();
+        possibleConditionRelationObjects = FXCollections.observableArrayList();
+
+        initializeTestdata();
 
         // dropdown for possible conditions
         newCondition.setCellFactory(param -> new ListCell<>() {
@@ -81,6 +98,7 @@ public class MissionEditController extends BaseController{
                 }
             }
         });
+        newCondition.setItems(possibleConditions);
 
         // active conditions for the mission
         missionConditions.setCellFactory(param -> new ListCell<>() {
@@ -97,17 +115,29 @@ public class MissionEditController extends BaseController{
         });
         missionConditions.setItems(conditions);
 
-        possibleUnits = FXCollections.observableArrayList();
         newUnitsize.setItems(possibleUnits);
 
-        hideNewChoiceInput();
+        newConditionObject.setCellFactory(param -> new ListCell<>() {
+            @Override
+            protected void updateItem(Named item, boolean empty) {
+                super.updateItem(item, empty);
 
-        initializeTestdata();
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getName());
+                }
+            }
+        });
+        newConditionObject.setItems(possibleConditionRelationObjects);
+
+        hideNewChoiceInput();
+        hideNewConditionRelation();
     }
 
     // test data, missions would be stored on disk
     private void initializeTestdata() {
-        possibleConditions = FXCollections.observableArrayList();
+        editedMission = new Mission();
 
         possibleConditions.add(MaximumTime.class);
         possibleConditions.add(HoldoutTime.class);
@@ -115,7 +145,17 @@ public class MissionEditController extends BaseController{
         possibleConditions.add(Avoid.class);
         possibleConditions.add(Depart.class);
 
-        newCondition.setItems(possibleConditions);
+        possibleConditionRelationObjects.addAll(editedMission.getAllNamedAstronomicalObjects());
+    }
+
+    private void hideNewConditionRelation() {
+        newConditionInRelationLabel.setVisible(false);
+        newConditionObject.setVisible(false);
+    }
+
+    private void showNewConditionRelation() {
+        newConditionInRelationLabel.setVisible(true);
+        newConditionObject.setVisible(true);
     }
 
     private void hideNewChoiceInput() {
@@ -172,6 +212,16 @@ public class MissionEditController extends BaseController{
         }
 
         lastSelectedUnitsize = newUnitsize.getSelectionModel().getSelectedItem();
+
+        Parameter secondParam = getCurrentChoiceParameter(getCurrentChoiceConstructor(true), false, 1);
+
+        hideNewConditionRelation();
+
+        if (secondParam != null) {
+            if (secondParam.getType() == Named.class) {
+                showNewConditionRelation();
+            }
+        }
     }
 
     @FXML

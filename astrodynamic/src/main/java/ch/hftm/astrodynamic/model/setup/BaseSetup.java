@@ -27,8 +27,11 @@ public abstract class BaseSetup implements Named, Setup {
         return description;
     }
 
-    // should only be accessible for subclasses
-    protected void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

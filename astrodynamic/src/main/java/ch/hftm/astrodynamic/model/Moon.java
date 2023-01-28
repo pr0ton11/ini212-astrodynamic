@@ -19,5 +19,7 @@ import ch.hftm.astrodynamic.utils.*;
 public class Moon extends Planetoid {
     public Moon() {
         super(new LengthScalar(new Quad(1.7374).multiply(new Quad(10).pow(6))), new MassScalar(new Quad(7.34767309).multiply(new Quad(10).pow(22))), new BaseVector(Unit.LENGTH), new BaseVector(Unit.ANGLE), new BaseVector(Unit.VELOCITY), new BaseVector(Unit.ANGULAR_VELOCITY));
+        setName("Moon");
+        setDescription("Our faithfull companion");
     }
 }

@@ -10,4 +10,6 @@ package ch.hftm.astrodynamic.utils;
 public interface Named {
     String getName();
     String getDescription();
+    void setName(String name);
+    void setDescription(String description);
 }
