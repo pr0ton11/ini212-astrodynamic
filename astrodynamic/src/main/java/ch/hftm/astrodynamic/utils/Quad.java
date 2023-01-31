@@ -60,7 +60,7 @@ public class Quad implements Comparable<Quad>, Serializable {
 
     // Special constructor that accepts a scientific notation
     public Quad(double mantissa, int powerOfTen) {
-        this.num = new Quad(mantissa).multiply(TEN).pow(powerOfTen).getAsDecimal64();
+        this.num = new Quad(mantissa).multiply(TEN.pow(powerOfTen)).getAsDecimal64();
     }
 
     // Special constructor that accepts Decimal64
