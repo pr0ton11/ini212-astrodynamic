@@ -21,7 +21,6 @@ public final class MissionRepository {
 
     private ObservableList<Mission> missions;  // List of missions
     private Mission activeMission;  // Current active mission
-    private ConfigRepository config;  // Current configuration
 
     // Retrieving and working with the singleton class, used primarly internally
     public static MissionRepository getInstance() {
