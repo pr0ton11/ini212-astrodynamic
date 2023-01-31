@@ -32,8 +32,10 @@ public class ForceScalar extends BaseScalar {
         switch (scalar.getUnit()) {
             case UNITLESS:
                 return new ForceScalar(value);
+            //case ANGLE:
+            //    return new ForceScalar(value);
             default:
-                throw new UnitConversionError(String.format("Multiplication between %s and %s not possible in length scalar", getUnit().toString(), scalar.getUnit().toString()));
+                throw new UnitConversionError(String.format("Multiplication between %s and %s not possible in %s", getUnit().toString(), scalar.getUnit().toString(), this.getClass().getSimpleName()));
         }
     }
 

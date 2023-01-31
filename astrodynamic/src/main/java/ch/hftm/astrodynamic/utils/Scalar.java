@@ -1,5 +1,8 @@
 package ch.hftm.astrodynamic.utils;
 
+import ch.hftm.astrodynamic.scalar.ScalarFactory;
+import ch.hftm.astrodynamic.scalar.ScalarFactory.FittedValue;
+
 /*
  *  Project Astrodynamic
  *  HFTM BBIN21.2a
@@ -20,4 +23,16 @@ public interface Scalar {
 
     // Flags
     boolean isUnitless();
+
+    // Mathematical comperators
+    boolean gt(Scalar comperator);
+    boolean ge(Scalar comperator);
+    boolean lt(Scalar comperator);
+    boolean le(Scalar comperator);
+
+    // Nice representation for UI
+    default String toFittedString() {
+        FittedValue fv = ScalarFactory.getFittingUnitsize(this);
+        return String.format("%s %s", fv.value.doubleValue().toString(), fv.unitsize);
+    };
 }

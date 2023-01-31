@@ -6,15 +6,17 @@
 
 package ch.hftm.astrodynamic.physics;
 
+import ch.hftm.astrodynamic.scalar.AngleScalar;
 import ch.hftm.astrodynamic.scalar.ForceScalar;
 import ch.hftm.astrodynamic.scalar.LengthScalar;
 import ch.hftm.astrodynamic.scalar.MassScalar;
 import ch.hftm.astrodynamic.scalar.ScalarFactory;
 import ch.hftm.astrodynamic.scalar.UnitlessScalar;
+import ch.hftm.astrodynamic.scalar.VelocityScalar;
 import ch.hftm.astrodynamic.utils.*;
 
 // Base to fill computational methods, abstract to force use of specific child classes
-public abstract class BaseAstronomicalObject implements AstronomicalObject {
+public abstract class BaseAstronomicalObject implements AstronomicalObject, Named {
     private Scalar zeroPointHeight;
     private Scalar mass;
     private Vector position;
@@ -22,22 +24,20 @@ public abstract class BaseAstronomicalObject implements AstronomicalObject {
     private Vector velocity;
     private Vector rotationalVelocity;
 
+    private String name;
+    private String description;
+
     public BaseAstronomicalObject(double zeroPointHeight, double mass, Vector position, Vector rotation, Vector velocity, Vector rotationalVelocity) {
-        this.zeroPointHeight = new LengthScalar(zeroPointHeight);
-        this.mass = new MassScalar(mass);
-        this.position = new BaseVector(position, Unit.LENGTH);
-        this.rotation = new BaseVector(rotation);
-        this.velocity = new BaseVector(velocity);
-        this.rotationalVelocity = new BaseVector(rotationalVelocity);
+        this(new LengthScalar(zeroPointHeight), new MassScalar(mass), position, rotation, velocity, rotationalVelocity);
     }
 
     public BaseAstronomicalObject(Scalar zeroPointHeight, Scalar mass, Vector position, Vector rotation, Vector velocity, Vector rotationalVelocity) {
         this.zeroPointHeight = new LengthScalar(zeroPointHeight);
         this.mass = new MassScalar(mass);
         this.position = new BaseVector(position, Unit.LENGTH);
-        this.rotation = new BaseVector(rotation);
-        this.velocity = new BaseVector(velocity);
-        this.rotationalVelocity = new BaseVector(rotationalVelocity);
+        this.rotation = new BaseVector(rotation, Unit.ANGLE);
+        this.velocity = new BaseVector(velocity, Unit.VELOCITY);
+        this.rotationalVelocity = new BaseVector(rotationalVelocity, Unit.ANGULAR_VELOCITY);
     }
 
     public Collision calculateCollision(AstronomicalObject partner) throws UnitConversionError {
@@ -110,6 +110,19 @@ public abstract class BaseAstronomicalObject implements AstronomicalObject {
         return offset.getLength().getValue().le(getZeroElevation().getValue());
     }
 
+    public Vector getDirection(AstronomicalObject partner) throws UnitConversionError {
+        return partner.getPosition().subtract(getPosition());
+    }
+
+    public Scalar getDistance(AstronomicalObject partner) throws UnitConversionError {
+        Scalar lenScalar = getDirection(partner).getLength();
+        if (lenScalar.getValue().doubleValue() < 0)
+        {
+            return lenScalar.negate();
+        }
+        return lenScalar;
+    }
+
     /* Calculates the force in Newton from the gravity between two astronomical objects
      * To keep the scalar unit dimension calculations intact intermediate helper units are used
      * kg² / m² * N * m² * kg⁻² = N
@@ -117,7 +130,7 @@ public abstract class BaseAstronomicalObject implements AstronomicalObject {
     public Vector calculateGravitationalForce(AstronomicalObject partner) throws UnitConversionError {
         
         // direction is calculated from partner to get direction to partner as difference (if we calculate this.pos - partner.pos we get the direction from the partner to us)
-        Vector direction = partner.getPosition().subtract(getPosition());
+        Vector direction = getDirection(partner);
         Scalar cubic_distance = direction.getLength().multiply(direction.getLength()); // cubic distance = area
 
         // here we use the intermediate helper units: cubic_mass, M2_div_L2 (kg² / m²), and the gravitational constant unit F_L2_Mn2 (N * m² * kg⁻²)
@@ -132,5 +145,37 @@ public abstract class BaseAstronomicalObject implements AstronomicalObject {
     // a = F / m
     public Vector calculateAccelerationFromForce(Vector force) throws UnitConversionError {
         return force.divide(getMass());
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Vector calculateOrbitalSpeed(AstronomicalObject partner) throws UnitConversionError {
+        Scalar distance = getDistance(partner);
+        Vector direction = getDirection(partner).normalize();
+
+        // TODO: fix dimensional unit
+        Scalar velocity = new VelocityScalar(partner.getMass().getValue().multiply(distance.getValue()).multiply(ScalarFactory.gravitationalConstant().getValue()));
+
+        // here we turn the velocity vector by 90° to the partner direction to gain an orbit
+        // TODO: dot/cross product would be more stable/sane
+        Vector velocityVector = new BaseVector(
+            velocity.multiply(direction.getX()), 
+            velocity.multiply(direction.getY()), 
+            velocity.multiply(direction.getZ())).rotateZ(new AngleScalar(Quad.PI.divide(Quad.TWO)));
+        return velocityVector;
     }
 }

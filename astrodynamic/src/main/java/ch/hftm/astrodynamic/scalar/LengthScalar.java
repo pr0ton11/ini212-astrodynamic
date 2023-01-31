@@ -36,13 +36,16 @@ public class LengthScalar extends BaseScalar {
     
     @Override
     public Scalar multiply(Scalar scalar) throws UnitConversionError  {
+        Quad newValue = getValue().multiply(scalar.getValue());
         switch (scalar.getUnit()) {
             case LENGTH:
-                return new AreaScalar(getValue().multiply(scalar.getValue()));
+                return new AreaScalar(newValue);
             case AREA:
-                return new VolumeScalar(getValue().multiply(scalar.getValue()));
+                return new VolumeScalar(newValue);
             case UNITLESS:
-                return new LengthScalar(getValue().multiply(scalar.getValue()));
+                return new LengthScalar(newValue);
+            case F_L2_Mn2:
+                return new VelocityScalar(newValue);
             default:
                 throw new UnitConversionError(String.format("Multiplication between %s and %s not possible in length scalar", getUnit().toString(), scalar.getUnit().toString()));
         }
@@ -50,11 +53,12 @@ public class LengthScalar extends BaseScalar {
 
     @Override
     public Scalar divide(Scalar scalar) throws UnitConversionError  {
+        Quad newValue = getValue().divide(scalar.getValue());
         switch (scalar.getUnit()) {
             case UNITLESS:
-                return new LengthScalar(getValue().divide(scalar.getValue()));
+                return new LengthScalar(newValue);
             case LENGTH:
-                return new UnitlessScalar(getValue().divide(scalar.getValue()));
+                return new UnitlessScalar(newValue);
             default:
                 throw new UnitConversionError(String.format("Division between %s and %s not possible in length scalar", getUnit().toString(), scalar.getUnit().toString()));
         }
