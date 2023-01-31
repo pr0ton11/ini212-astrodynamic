@@ -40,6 +40,8 @@ public class VelocityScalar extends BaseScalar {
                 return new VelocityScalar(value);
             case TIME:
                 return new LengthScalar(value);
+            case ANGLE:
+                return new VelocityScalar(value);
             default:
                 throw new UnitConversionError(String.format("Multiplication between %s and %s not possible in %s", getUnit().toString(), scalar.getUnit().toString(), this.getClass().getSimpleName()));
         }

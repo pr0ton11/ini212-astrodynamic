@@ -1,5 +1,10 @@
 package ch.hftm.astrodynamic.scalar;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
+
 import ch.hftm.astrodynamic.utils.Quad;
 import ch.hftm.astrodynamic.utils.Scalar;
 import ch.hftm.astrodynamic.utils.Unit;
@@ -13,6 +18,125 @@ import ch.hftm.astrodynamic.utils.UnitConversionError;
 
  // Factory to create specific scalars depending on Unit
 public class ScalarFactory {
+
+    static final Map<Unit, Map<String, Quad>> conversions;
+    static {
+        conversions = new HashMap<>();
+        Map<String, Quad> timeConversion = new HashMap<>();
+        timeConversion.put("seconds", new Quad(1.0));
+        timeConversion.put("minutes", new Quad(60.0));
+        timeConversion.put("hours", new Quad(60.0 * 60.0));
+        timeConversion.put("days", new Quad(24.0 * 60.0 * 60.0));
+        timeConversion.put("weeks", new Quad(7.0 * 24.0 * 60.0 * 60.0));
+        conversions.put(Unit.TIME, timeConversion);
+
+        Map<String, Quad> lengthConversion = new HashMap<>();
+        lengthConversion.put("meter", new Quad(1.0));
+        lengthConversion.put("kilometer", new Quad(1000.0));
+        lengthConversion.put("AU", new Quad(1.495978707).multiply(Quad.TEN.pow(11)));
+        conversions.put(Unit.LENGTH, lengthConversion);
+
+        Map<String, Quad> velocityConversions = new HashMap<>();
+        velocityConversions.put("m/s", new Quad(1.0));
+        velocityConversions.put("km/s", new Quad(1000.0));
+        velocityConversions.put("km/h", new Quad(3.6));
+        conversions.put(Unit.VELOCITY, velocityConversions);
+    }
+
+    public static Quad convert(Unit unit, Quad oldValue, String oldUnitSize, String newUnitsize) throws UnitConversionError {
+        Scalar old = create(oldValue, unit, oldUnitSize);
+        return convert(old, newUnitsize);
+    }
+
+    public static Quad convert(Scalar value, String unitsize) {
+        return value.getValue().divide(getConversionFactor(value.getUnit(), unitsize));
+    }
+
+    // quad with unitsize string fitted for best display
+    public static class FittedValue {
+        public String unitsize;
+        public Quad value;
+        public Unit unit;
+
+        FittedValue(Quad value, Unit unit, String unitsize) {
+            this.unit = unit;
+            this.unitsize = unitsize;
+            this.value = value;
+        }
+    }
+
+    // returns best fitting unit size for scalar
+    public static FittedValue getFittingUnitsize(Scalar value) {
+        String bestFit = getBaseUnitSize(value.getUnit());
+        Quad displayValue = value.getValue();
+        int displayLength = displayValue.doubleValue().toString().length();
+
+        for (String convSize: getUnitSizes(value.getUnit())) {
+            Quad comparedValue = convert(value, convSize);
+            int comparedLength = comparedValue.doubleValue().toString().length();
+            if (comparedLength < displayLength) {
+                displayLength = comparedLength;
+                displayValue = comparedValue;
+                bestFit = convSize;
+            }
+        }
+
+        return new FittedValue(displayValue, value.getUnit(), bestFit);
+    }
+
+    // helper gets unit for a scalar class
+    public static Unit getUnitFromClass(Class scalarClass) {
+        if (scalarClass == TimeScalar.class) {
+            return Unit.TIME;
+        }
+        if (scalarClass == LengthScalar.class) {
+            return Unit.LENGTH;
+        }
+
+        return null;
+    }
+
+    // returns the baseunit string which is the key of the value 1.0 of the unit for the class
+    public static String getBaseUnitSize(Class scalarClass) {
+        return getBaseUnitSize(getUnitFromClass(scalarClass));
+    }
+
+    // returns the baseunit string which is the key of the value 1.0 of the unit
+    public static String getBaseUnitSize(Unit unit) {
+        for (Entry<String, Quad> ent: conversions.get(unit).entrySet()) {
+            if (ent.getValue().equals(Quad.ONE)) {
+                return ent.getKey();
+            }
+        }
+        return null;
+    }
+
+    // returns all possible unitsizes which can be converted for the unit
+    public static String[] getUnitSizes(Class scalarClass) {
+        return getUnitSizes(getUnitFromClass(scalarClass));
+    }
+
+    // returns all possible unitsizes which can be converted for the unit
+    public static String[] getUnitSizes(Unit unit) {
+        Set<String> keys = conversions.get(unit).keySet();
+        String[] keyStr = new String[keys.size()];
+        int i = 0;
+        for (String s: keys)
+            keyStr[i++] = s;
+
+        return keyStr;
+    }
+
+    private static Quad getConversionFactor(Unit unit, String unitsize) {
+        return conversions.get(unit).get(unitsize);
+    }
+
+    // converts between different units in dimension, returns in base unit
+    public static Scalar create(Quad value, Unit unit, String unitSize) throws UnitConversionError {
+        Quad conversionFactor = getConversionFactor(unit, unitSize);
+
+        return create(value.multiply(conversionFactor), unit);
+    }
 
     // returns specific scalar class instance depending on unit
     public static Scalar create(Quad value, Unit unit) throws UnitConversionError {
@@ -65,6 +189,21 @@ public class ScalarFactory {
     // wrapper to create from other scalar value
     public static Scalar create(Scalar scalar, Unit unit) throws UnitConversionError {
         return ScalarFactory.create(new Quad(scalar.getValue()), unit);
+    }
+
+    // wrapper to create with int
+    public static Scalar create(int value, Unit unit, String unitSize) throws UnitConversionError {
+        return ScalarFactory.create(new Quad(value), unit, unitSize);
+    }
+
+    // wrapper to create with double
+    public static Scalar create(double value, Unit unit, String unitSize) throws UnitConversionError {
+        return ScalarFactory.create(new Quad(value), unit, unitSize);
+    }
+
+    // wrapper to create from other scalar value
+    public static Scalar create(Scalar scalar, Unit unit, String unitSize) throws UnitConversionError {
+        return ScalarFactory.create(new Quad(scalar.getValue()), unit, unitSize);
     }
 
     // returns a gravitational constant scalar

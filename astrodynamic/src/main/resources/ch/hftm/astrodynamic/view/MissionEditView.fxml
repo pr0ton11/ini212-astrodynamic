@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.web.HTMLEditor?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="799.0" prefWidth="634.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.hftm.astrodynamic.controller.MissionEditController">
+   <children>
+      <Label text="Mission name" />
+      <TextField fx:id="missionName" />
+      <Label text="Description" />
+      <HTMLEditor fx:id="missionDescription" htmlText="&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable=&quot;true&quot;&gt;&lt;/body&gt;&lt;/html&gt;" prefHeight="357.0" prefWidth="1192.0" />
+      <Label text="Player Spaceship" />
+      <ComboBox prefWidth="150.0" />
+      <Label text="Condition" />
+      <Label text="Add new Condition" />
+      <HBox prefHeight="36.0" prefWidth="634.0">
+         <children>
+            <ComboBox fx:id="newCondition" onAction="#newConditionChoice" prefWidth="150.0" />
+            <TextField fx:id="newConditionParameter" prefHeight="24.0" prefWidth="122.0" />
+            <ComboBox fx:id="newUnitsize" onAction="#newUnitsizeChanged" prefHeight="24.0" prefWidth="128.0" />
+            <Label fx:id="newConditionInRelationLabel" text="to" />
+            <ComboBox fx:id="newConditionObject" prefHeight="24.0" prefWidth="138.0" />
+            <Button mnemonicParsing="false" onAction="#addChoiceToList" text="Add" />
+         </children>
+      </HBox>
+      <Label text="Conditions" />
+      <ListView fx:id="missionConditions" prefHeight="200.0" prefWidth="200.0" />
+   </children>
+</VBox>

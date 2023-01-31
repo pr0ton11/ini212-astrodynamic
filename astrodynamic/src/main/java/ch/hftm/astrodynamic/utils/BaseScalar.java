@@ -156,4 +156,26 @@ public abstract class BaseScalar implements Scalar {
     public String toString() {
         return String.format("<Scalar %s (%f, %s)>", this.getClass().getSimpleName(), getValue().doubleValue(), getUnit().toString());
     }
+
+    // Mathematical comperators
+    public boolean gt(Scalar comperator) {
+        if (!unitMatches(comperator))
+            assert 1 == 2; // dont do this
+        return getValue().gt(comperator.getValue());
+    }
+    public boolean ge(Scalar comperator) {
+        if (!unitMatches(comperator))
+            assert 1 == 2; // dont do this
+        return getValue().ge(comperator.getValue());
+    }
+    public boolean lt(Scalar comperator) {
+        if (!unitMatches(comperator))
+            assert 1 == 2; // dont do this
+        return getValue().lt(comperator.getValue());
+    }
+    public boolean le(Scalar comperator) {
+        if (!unitMatches(comperator))
+            assert 1 == 2; // dont do this
+        return getValue().le(comperator.getValue());
+    }
 }
