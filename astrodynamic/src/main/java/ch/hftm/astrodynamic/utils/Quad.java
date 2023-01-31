@@ -164,6 +164,11 @@ public class Quad implements Comparable<Quad>, Serializable {
         return false;
     }
 
+    // almostEquals checks with a +- delta to allow rounded value checks in ranges
+    public boolean almostEquals(Quad comparator, Quad delta) {
+        return ((comparator.le(this.add(delta))) && (comparator.ge(this.subtract(delta))));
+    }
+
     // Static common number assignments
     public static Quad PI = new Quad(Decimal64.parse("3.141592653589793238462643383279502884197169399375105820974944592307816406286"));
     public static Quad TEN = new Quad(Decimal64.TEN);

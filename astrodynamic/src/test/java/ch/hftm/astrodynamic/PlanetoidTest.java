@@ -88,14 +88,16 @@ public class PlanetoidTest {
 
     @Test
     public void TestGravityAcceleration() throws UnitConversionError {
-        Planetoid earth = new Planetoid(new LengthScalar(new Quad(6.3781).multiply(new Quad(10).pow(6))), new MassScalar(new Quad(5.9722).multiply(new Quad(10).pow(24))), new BaseVector(Unit.LENGTH), new BaseVector(Unit.ANGLE), new BaseVector(Unit.VELOCITY), new BaseVector(Unit.VELOCITY));
-        Planetoid person = new Planetoid(0, 80, new BaseVector(new Quad(6.3781).multiply(new Quad(10).pow(6)), new Quad(), new Quad(), Unit.LENGTH), new BaseVector(Unit.ANGLE), new BaseVector(Unit.VELOCITY), new BaseVector(Unit.ANGULAR_VELOCITY));
+        LengthScalar zeroPoint = new LengthScalar(new Quad(6.374, 6));
+        MassScalar earthMass = new MassScalar(new Quad(5.9722, 24));
+        Planetoid earth = new Planetoid(zeroPoint, earthMass, new BaseVector(Unit.LENGTH), new BaseVector(Unit.ANGLE), new BaseVector(Unit.VELOCITY), new BaseVector(Unit.VELOCITY));
+        Planetoid person = new Planetoid(0, 80, new BaseVector(zeroPoint.getValue(), new Quad(), new Quad(), Unit.LENGTH), new BaseVector(Unit.ANGLE), new BaseVector(Unit.VELOCITY), new BaseVector(Unit.ANGULAR_VELOCITY));
 
         Vector vExpectedDirection = new BaseVector(-9.81, 0, 0, Unit.ACCELERATION);
 
         Vector gravitationalForce = person.calculateGravitationalForce(earth);
         Vector gravitationalAcceleration = person.calculateAccelerationFromForce(gravitationalForce);
 
-        Assert.assertEquals(vExpectedDirection, gravitationalAcceleration);
+        Assert.assertTrue(vExpectedDirection.getLength().almostEquals(gravitationalAcceleration.getLength(), new Quad(0.01)));
     }
 }

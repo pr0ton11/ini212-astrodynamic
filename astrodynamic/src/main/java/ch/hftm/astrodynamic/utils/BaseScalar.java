@@ -178,4 +178,10 @@ public abstract class BaseScalar implements Scalar {
             assert 1 == 2; // dont do this
         return getValue().le(comperator.getValue());
     }
+
+    public boolean almostEquals(Scalar comperator, Quad delta) {
+        if (!unitMatches(comperator))
+            assert 1 == 2; // dont do this
+        return this.getValue().almostEquals(comperator.getValue(), delta);
+    }
 }
