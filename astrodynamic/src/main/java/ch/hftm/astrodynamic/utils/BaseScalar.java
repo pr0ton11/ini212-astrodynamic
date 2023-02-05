@@ -154,7 +154,7 @@ public abstract class BaseScalar implements Scalar {
     }
 
     public String toString() {
-        return String.format("<Scalar %s (%f, %s)>", this.getClass().getSimpleName(), getValue().doubleValue(), getUnit().toString());
+        return String.format("<Scalar %s (%s, %s)>", this.getClass().getSimpleName(), getValue().toString(), getUnit().toString());
     }
 
     // Mathematical comperators
