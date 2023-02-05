@@ -177,5 +177,9 @@ public class Quad implements Comparable<Quad>, Serializable {
     public static Quad ZERO = new Quad();
     public static Quad INFINITY = new Quad(Decimal64.POSITIVE_INFINITY);
     public static Quad NEGINFINITY = new Quad(Decimal64.NEGATIVE_INFINITY);
+    public static Quad GRAVITATIONAL_CONSTANT = new Quad(6.67430, -11); // accordint to nist
 
+    public String toString() {
+        return Decimal64.toScientificString(num);
+    }
 }
