@@ -42,4 +42,8 @@ public interface AstronomicalObject {
     Scalar getDistance(AstronomicalObject partner) throws UnitConversionError;
 
     Vector calculateOrbitalSpeed(AstronomicalObject partner) throws UnitConversionError;
+
+    void applyAcceleration(Vector velocity, Scalar time) throws UnitConversionError;
+
+    void applyVelocity(Scalar time) throws UnitConversionError;
 }

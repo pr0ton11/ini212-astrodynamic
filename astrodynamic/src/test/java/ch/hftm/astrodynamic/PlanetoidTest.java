@@ -15,6 +15,7 @@ import ch.hftm.astrodynamic.scalar.AccelerationScalar;
 import ch.hftm.astrodynamic.scalar.ForceScalar;
 import ch.hftm.astrodynamic.scalar.LengthScalar;
 import ch.hftm.astrodynamic.scalar.MassScalar;
+import ch.hftm.astrodynamic.scalar.TimeScalar;
 import ch.hftm.astrodynamic.utils.*;
 
 public class PlanetoidTest {
@@ -150,6 +151,19 @@ public class PlanetoidTest {
         Assert.assertTrue(
             String.format("Earth gravitational acceleration expected %s, measured %s", expectedAccelerationEarth.toString(), earthAcceleration.getLength().toString()),
             appleAcceleration.getLength().almostEquals(expectedAccelerationEarth, expectedAccelerationEarthAcceptableError)
+        );
+
+        // now we apply 1 second of this acceleration and check if the apple ends up where we expect it to
+        Vector expectedPosition = apple.getPosition().subtract(new BaseVector(appleAcceleration.getLength().getValue(), Quad.ZERO, Quad.ZERO, Unit.LENGTH));
+        Quad expectedPositionAcceptableError = Quad.ONE;
+
+        TimeScalar oneSecond = new TimeScalar(Quad.ONE);
+        apple.applyAcceleration(appleAcceleration, oneSecond);
+        apple.applyVelocity(oneSecond);
+
+        Assert.assertTrue(
+            String.format("Apple position expected to be %s from center, measured %s", expectedPosition.getLength().toString(), apple.getPosition().getLength().toString()),
+            apple.getPosition().getLength().almostEquals(expectedPosition.getLength(), expectedPositionAcceptableError)
         );
     }
 

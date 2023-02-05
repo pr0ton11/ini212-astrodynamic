@@ -19,7 +19,7 @@ import ch.hftm.astrodynamic.physics.*;
 import ch.hftm.astrodynamic.scalar.ScalarFactory;
  
  public class ModelTest {
-    @Ignore
+    //@Ignore
     @Test
     public void TestEarthMoonOrbit() throws UnitConversionError{
         Planetoid earth = new Earth();
@@ -30,12 +30,11 @@ import ch.hftm.astrodynamic.scalar.ScalarFactory;
         int secondsInDay = 86400;
         int secondsInWeek = secondsInDay * 7;
 
-        // average distance earth to moon is 3.85e+8 m
-        moon.setPosition(new BaseVector(385000000,0,0, Unit.LENGTH));
+        // average distance earth to moon is 3.85e+8 m ?? e+10 m
+        moon.setPosition(earth.getPosition().add(new BaseVector(new Quad(3.85, 8), new Quad(), new Quad(), Unit.LENGTH)));
 
         // average speed of moon is 1.022e+3 m/s
-        //moon.setVelocity(new BaseVector(0, 0, 1022000, Unit.VELOCITY));
-        moon.setVelocity(new BaseVector(0, 0, 0, Unit.VELOCITY));
+        moon.setVelocity(new BaseVector(new Quad(), new Quad(1.025, 3), new Quad(), Unit.VELOCITY).add(earth.getVelocity()));
 
         // seconds in a year: 3.154e+7
         for (int i = 0; i < secondsTestTotal; i++) {
@@ -47,15 +46,15 @@ import ch.hftm.astrodynamic.scalar.ScalarFactory;
             Vector moonAcceleration = moon.calculateAccelerationFromForce(force.invert());
 
             // add acceleration to the velocity
-            earth.setVelocity(earth.getVelocity().add(earthAcceleration.multiply(oneSecond)));
-            moon.setVelocity(moon.getVelocity().add(moonAcceleration.multiply(oneSecond)));
+            earth.applyAcceleration(earthAcceleration, oneSecond);
+            moon.applyAcceleration(moonAcceleration, oneSecond);
 
             // move objects by adding velocity to position
-            earth.setPosition(earth.getPosition().add(earth.getVelocity().multiply(oneSecond)));
-            moon.setPosition(moon.getPosition().add(moon.getVelocity().multiply(oneSecond)));
+            earth.applyVelocity(oneSecond);
+            moon.applyVelocity(oneSecond);
 
             if (i%secondsInWeek == 0) {
-                System.out.println(String.format("%03d/%03d: moon velocity: %08.6f moon distance: %08.6f", i/secondsTestTotal, secondsInYear/secondsTestTotal, moon.getVelocity().getLength().getValue().doubleValue(), earth.getPosition().subtract(moon.getPosition()).getLength().getValue().doubleValue()));
+                System.out.println(String.format("KW %d \nmoon velocity: %s \nmoon distance: %s", i/secondsInWeek+1, moon.getVelocity().getLength().toString(), earth.getPosition().subtract(moon.getPosition()).getLength().toString()));
             }
         }
 
