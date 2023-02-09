@@ -154,7 +154,7 @@ public abstract class BaseScalar implements Scalar {
     }
 
     public String toString() {
-        return String.format("<Scalar %s (%f, %s)>", this.getClass().getSimpleName(), getValue().doubleValue(), getUnit().toString());
+        return String.format("<Scalar %s (%s, %s)>", this.getClass().getSimpleName(), getValue().toString(), getUnit().toString());
     }
 
     // Mathematical comperators
@@ -177,5 +177,11 @@ public abstract class BaseScalar implements Scalar {
         if (!unitMatches(comperator))
             assert 1 == 2; // dont do this
         return getValue().le(comperator.getValue());
+    }
+
+    public boolean almostEquals(Scalar comperator, Quad delta) {
+        if (!unitMatches(comperator))
+            assert 1 == 2; // dont do this
+        return this.getValue().almostEquals(comperator.getValue(), delta);
     }
 }

@@ -30,6 +30,9 @@ public interface Scalar {
     boolean lt(Scalar comperator);
     boolean le(Scalar comperator);
 
+    // compares a scalar in a acceptable delta range +-
+    boolean almostEquals(Scalar comperator, Quad delta);
+
     // Nice representation for UI
     default String toFittedString() {
         FittedValue fv = ScalarFactory.getFittingUnitsize(this);
