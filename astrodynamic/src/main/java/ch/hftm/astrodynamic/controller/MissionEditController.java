@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import ch.hftm.astrodynamic.model.Mission;
 import ch.hftm.astrodynamic.model.conditions.Approach;
@@ -16,6 +17,7 @@ import ch.hftm.astrodynamic.model.conditions.SetupHeavyLander;
 import ch.hftm.astrodynamic.scalar.ScalarFactory;
 import ch.hftm.astrodynamic.scalar.TimeScalar;
 import ch.hftm.astrodynamic.utils.BaseScalar;
+import ch.hftm.astrodynamic.utils.Log;
 import ch.hftm.astrodynamic.utils.Named;
 import ch.hftm.astrodynamic.utils.Quad;
 import ch.hftm.astrodynamic.utils.Scalar;
@@ -34,6 +36,9 @@ import javafx.scene.web.HTMLEditor;
 import javafx.stage.Stage;
 
 public class MissionEditController extends BaseController{
+
+    private Logger log = Log.build("controller/MissionEditController");
+
     @FXML
     TextField missionName;
 
@@ -281,8 +286,7 @@ public class MissionEditController extends BaseController{
             Quad newValue = ScalarFactory.convert(ScalarFactory.getUnitFromClass(firstParam.getType()), oldValue, lastSelectedUnitsize, newUnitsize.getSelectionModel().getSelectedItem());
             newConditionParameter.setText(newValue.doubleValue().toString());
         } catch (Exception ex) {
-            // we ignore that to not inconvinience the user
-            //System.out.println(ex);
+            log.warning("Conversion between old and new unit sizes impossible");
         }
 
         lastSelectedUnitsize = newUnitsize.getSelectionModel().getSelectedItem();

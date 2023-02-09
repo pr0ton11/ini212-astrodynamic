@@ -5,11 +5,11 @@
  */
 
 
- package ch.hftm.astrodynamic;
+package ch.hftm.astrodynamic;
 
- import org.junit.Assert;
- import org.junit.Test;
- import org.junit.Ignore;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.Ignore;
  
 import ch.hftm.astrodynamic.model.*;
 import ch.hftm.astrodynamic.model.planetoids.Earth;

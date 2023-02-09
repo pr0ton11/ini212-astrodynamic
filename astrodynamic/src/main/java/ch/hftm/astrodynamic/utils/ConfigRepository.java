@@ -102,7 +102,7 @@ public class ConfigRepository {
 
     // Adds configuration to the instance
     public void addConfiguration(String key, String value) {
-        config.put(key, value);
+        config.put(key.toLowerCase(), value);
     }
 
     // Adds configuration to the instance
@@ -110,11 +110,15 @@ public class ConfigRepository {
         getInstance().addConfiguration(key, value);
     }
 
+    public static Boolean keyExists(String key) {
+        return getInstance().config.containsKey(key.toLowerCase());  
+    }
+
     // Getter for optional string
     public static String get(String key, String defaultValue) {
         // Key exists in config
-        if (getInstance().config.containsKey(key)) {
-            return getInstance().config.get(key);
+        if (keyExists(key)) {
+            return getInstance().config.get(key.toLowerCase());
         // Value is not optional, must exist
         } else if (defaultValue == "") {
             throw new NoSuchElementException(String.format("The config value %s is mandatory but did not exist", key));

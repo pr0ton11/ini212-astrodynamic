@@ -1,5 +1,7 @@
 package ch.hftm.astrodynamic.model.conditions;
 
+import java.util.logging.Logger;
+
 import com.epam.deltix.dfp.Decimal;
 
 import ch.hftm.astrodynamic.model.EndType;
@@ -10,6 +12,7 @@ import ch.hftm.astrodynamic.physics.Planetoid;
 import ch.hftm.astrodynamic.physics.Spaceship;
 import ch.hftm.astrodynamic.scalar.LengthScalar;
 import ch.hftm.astrodynamic.scalar.ScalarFactory;
+import ch.hftm.astrodynamic.utils.Log;
 import ch.hftm.astrodynamic.utils.Named;
 import ch.hftm.astrodynamic.utils.Scalar;
 import ch.hftm.astrodynamic.utils.Unit;
@@ -23,6 +26,9 @@ import ch.hftm.astrodynamic.utils.UnitConversionError;
 
 // can be a win or loss condition triggered by elapsed mission time
 public class DistanceContstraint extends Condition {
+
+    private Logger log = Log.build("model/conditions/DistanceConstraint");
+
     Scalar altitudeGate;
     boolean checkForGreater;
     EndType ending;
@@ -76,7 +82,7 @@ public class DistanceContstraint extends Condition {
                 return heigth.le(altitudeGate);
             }
         } catch (UnitConversionError ex) {
-            System.out.println(ex);
+            log.severe(ex.getMessage());
         }
 
         return false;
