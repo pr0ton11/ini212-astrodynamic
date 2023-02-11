@@ -9,6 +9,14 @@ import ch.hftm.astrodynamic.model.Mission;
 import ch.hftm.astrodynamic.utils.Log;
 import ch.hftm.astrodynamic.utils.MissionRepository;
 
+
+/*
+ *  Project Astrodynamic
+ *  HFTM BBIN21.2a
+ *  Rafael Stauffer, Marc Singer
+ */
+
+// Tests the Data Access Object
 public class DAOTest {
  
     private Logger log = Log.build();  // Logger for unit tests
