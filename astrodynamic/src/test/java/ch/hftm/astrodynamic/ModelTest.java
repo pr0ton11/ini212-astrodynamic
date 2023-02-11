@@ -59,7 +59,7 @@ import ch.hftm.astrodynamic.scalar.ScalarFactory;
             moon.applyVelocity(oneSecond);
 
             if (i%secondsInWeek == 0) {
-                log.info(String.format("KW %d \nmoon velocity: %s \nmoon distance: %s", i/secondsInWeek+1, moon.getVelocity().getLength().toString(), earth.getPosition().subtract(moon.getPosition()).getLength().toString()));
+                log.info(String.format("KW %d moon velocity: %s, moon distance: %s", i/secondsInWeek+1, moon.getVelocity().getLength().toString(), earth.getPosition().subtract(moon.getPosition()).getLength().toString()));
             }
         }
 
