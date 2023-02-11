@@ -38,7 +38,7 @@ public final class MissionRepository {
     }
 
     // Gets all missions as list
-    public static List<Mission> getMissions() {
+    public static ArrayList<Mission> getMissions() {
         ArrayList<Mission> missions = new ArrayList<>();
         for (Mission mission : getInstance().missions) {
             missions.add(mission);
