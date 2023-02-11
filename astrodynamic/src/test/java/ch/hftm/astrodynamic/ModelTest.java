@@ -24,7 +24,7 @@ import ch.hftm.astrodynamic.scalar.ScalarFactory;
 
     private Logger log = Log.build();
 
-    //@Ignore
+    // @Ignore
     @Test
     public void TestEarthMoonOrbit() throws UnitConversionError{
         Planetoid earth = new Earth();
