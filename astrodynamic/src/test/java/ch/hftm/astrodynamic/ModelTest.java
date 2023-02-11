@@ -22,7 +22,7 @@ import ch.hftm.astrodynamic.scalar.ScalarFactory;
  
  public class ModelTest {
 
-    private Logger log = Log.build();
+    private Logger log = Log.build();  // Logger for unit tests
 
     // @Ignore
     @Test
@@ -59,10 +59,10 @@ import ch.hftm.astrodynamic.scalar.ScalarFactory;
             moon.applyVelocity(oneSecond);
 
             if (i%secondsInWeek == 0) {
-                log.info(String.format("KW %d moon velocity: %s, moon distance: %s", i/secondsInWeek+1, moon.getVelocity().getLength().toString(), earth.getPosition().subtract(moon.getPosition()).getLength().toString()));
+                log.fine(String.format("KW %d moon velocity: %s, moon distance: %s", i/secondsInWeek+1, moon.getVelocity().getLength().toString(), earth.getPosition().subtract(moon.getPosition()).getLength().toString()));
             }
         }
 
-        log.info(moon.getPosition().toString());
+        log.fine(moon.getPosition().toString());
     }
 }

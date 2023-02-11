@@ -1,11 +1,11 @@
 package ch.hftm.astrodynamic.utils;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
+
 import ch.hftm.astrodynamic.model.Mission;
 
 /*
@@ -86,4 +86,11 @@ public final class MissionRepository {
         }
         throw new NoSuchElementException();
     }
+
+    public static void addTestMissions() {
+        addMission(new Mission("Driving Miss Daisy", "<h1>Driving Miss Daisy</h1><br>A bunch of scientists want to travel to the ISS.<br>You'll be the driver.<br><img src=\"https://www.nasa.gov/sites/default/files/styles/full_width/public/thumbnails/image/progress_1_29_tianzhou_4_depating_from_tiangong.jpg?itok=sqE2bAY_\" width=300px height=200px>"));
+        addMission(new Mission("New Dawn", "<h1>New Dawn</h1><br>We picked a suitable landingspot on Ganymede.<br>Bring a flag.<br><img src=\"https://www.nasa.gov/sites/default/files/thumbnails/image/e1_-_pia24682_-_juno_ganymede_sru_-_darkside.png\" alt=\"Ganymede landing spot\" width=200px height=200px>"));
+        addMission(new Mission("In the Well", "<h1>In the Well</h1><br>The jovian ammonia harvesting station lost its engines.<br>Evacuate the personel before it drifts into Jupiter.<br><img src=\"https://www.nasa.gov/sites/default/files/thumbnails/image/hotspot_cover_1280.jpg\" width=400px height=200px>"));
+    }
+    
 }
