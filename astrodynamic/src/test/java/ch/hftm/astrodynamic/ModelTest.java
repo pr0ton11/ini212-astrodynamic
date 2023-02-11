@@ -7,6 +7,8 @@
 
 package ch.hftm.astrodynamic;
 
+import java.util.logging.Logger;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.Ignore;
@@ -19,6 +21,9 @@ import ch.hftm.astrodynamic.physics.*;
 import ch.hftm.astrodynamic.scalar.ScalarFactory;
  
  public class ModelTest {
+
+    private Logger log = Log.build();
+
     //@Ignore
     @Test
     public void TestEarthMoonOrbit() throws UnitConversionError{
@@ -54,10 +59,10 @@ import ch.hftm.astrodynamic.scalar.ScalarFactory;
             moon.applyVelocity(oneSecond);
 
             if (i%secondsInWeek == 0) {
-                System.out.println(String.format("KW %d \nmoon velocity: %s \nmoon distance: %s", i/secondsInWeek+1, moon.getVelocity().getLength().toString(), earth.getPosition().subtract(moon.getPosition()).getLength().toString()));
+                log.info(String.format("KW %d \nmoon velocity: %s \nmoon distance: %s", i/secondsInWeek+1, moon.getVelocity().getLength().toString(), earth.getPosition().subtract(moon.getPosition()).getLength().toString()));
             }
         }
 
-        System.out.println(moon.getPosition().toString());
+        log.info(moon.getPosition().toString());
     }
 }

@@ -36,6 +36,7 @@ public class Log {
             if (fileHandler == null) {
                 try {
                     fileHandler = new FileHandler(filePath, true);
+                    fileHandler.setFormatter(new java.util.logging.SimpleFormatter());
                 } catch (Exception ex) {
                     fileError = true;
                     System.out.println(String.format("Error initializing file logger with path: %s; falling back to console", filePath)); 
@@ -46,7 +47,7 @@ public class Log {
 
     // Returns true if a file should be used for logging
     public static boolean useFile() {
-        // if a fileError happened before, do not try to use file again
+        // if a FileError happened before, do not try to use file again
         if (fileError) {
             return false;
         }
@@ -60,8 +61,8 @@ public class Log {
 
     // Builds a logger
     // Returns the logger for use
-    public static Logger build(String applicationPart) {
-        Logger logger = Logger.getLogger(String.format("<%s>", applicationPart));
+    public static Logger build() {
+        Logger logger = Logger.getLogger("ch.hftm.astrodynamic.log");
         logger.setUseParentHandlers(false);
         // Logger configuration
         configure();  // Ensures that everything is properly initialized

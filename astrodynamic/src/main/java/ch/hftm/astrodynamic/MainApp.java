@@ -20,7 +20,7 @@ import ch.hftm.astrodynamic.utils.Log;
 // Taken from OOP1, Creates a stage for the first window, after that the controllers are self-governing
 public class MainApp extends Application {
 
-    private Logger log = Log.build("MainApp");
+    private Logger log = Log.build();
 
     private Stage primaryStage;
 

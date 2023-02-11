@@ -23,7 +23,7 @@ import ch.hftm.astrodynamic.utils.Log;
 
 public class MissionController extends BaseController{
 
-    private Logger log = Log.build("controller/MissionController");
+    private Logger log = Log.build();
 
     @FXML
     TextField searchField;

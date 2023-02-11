@@ -15,7 +15,7 @@ public class ConfigRepository {
     private static final String ENV_PREFIX = "AD_";  // AstroDynamic
     
     private static ConfigRepository instance; // Single instance of the config repository
-    private static String[] cmdArgs;  // Contains all command line arguments
+    private static String[] cmdArgs = new String[0];  // Contains all command line arguments
 
     private HashMap<String, String> config = new HashMap<>();  // Contains configuration keys and values as strings
 
@@ -25,6 +25,8 @@ public class ConfigRepository {
     public static ConfigRepository getInstance() {
         if(instance == null) {
             instance = new ConfigRepository();
+            // Add defaults
+            defaults();
             // Load environment variables first
             instance.fromEnv();
             // Load command line parameters, this overrides environment
@@ -172,6 +174,10 @@ public class ConfigRepository {
     // Getter for mandatory int
     public static Float getFloat(String key) throws NumberFormatException {
         return Float.parseFloat(get(key));
+    }
+
+    public static void defaults() {
+        add("log_file", "astrodynamic.log");
     }
 
 }

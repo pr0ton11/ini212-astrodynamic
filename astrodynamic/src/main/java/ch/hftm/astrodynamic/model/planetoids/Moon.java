@@ -22,7 +22,7 @@ import ch.hftm.astrodynamic.utils.*;
 */
 public class Moon extends Planetoid {
 
-    private static Logger log = Log.build("model/planetoids/Moon");
+    private static Logger log = Log.build();
 
     public Moon() {
         super(

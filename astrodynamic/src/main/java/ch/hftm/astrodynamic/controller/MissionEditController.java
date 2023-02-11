@@ -37,7 +37,7 @@ import javafx.stage.Stage;
 
 public class MissionEditController extends BaseController{
 
-    private Logger log = Log.build("controller/MissionEditController");
+    private Logger log = Log.build();
 
     @FXML
     TextField missionName;
