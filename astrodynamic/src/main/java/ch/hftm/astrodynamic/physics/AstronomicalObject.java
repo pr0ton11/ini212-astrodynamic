@@ -46,4 +46,10 @@ public interface AstronomicalObject {
     void applyAcceleration(Vector velocity, Scalar time) throws UnitConversionError;
 
     void applyVelocity(Scalar time) throws UnitConversionError;
+
+    // returns -1.0 to 1.0 to denote the difference to the position and rotation
+    double getGrundtrackFactorX(AstronomicalObject partner);
+
+    // returns -1.0 to 1.0 to denote the difference to the position and rotation
+    double getGroundtrackFactorY(AstronomicalObject partner);
 }

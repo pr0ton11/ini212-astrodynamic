@@ -19,6 +19,8 @@ import ch.hftm.astrodynamic.utils.UnitConversionError;
  // Factory to create specific scalars depending on Unit
 public class ScalarFactory {
 
+    private static long MILLIS_TO_TIME = 1000000;
+
     static final Map<Unit, Map<String, Quad>> conversions;
     static {
         conversions = new HashMap<>();
@@ -210,5 +212,13 @@ public class ScalarFactory {
     public static Scalar gravitationalConstant() throws UnitConversionError {
         // According to NIST Reference https://physics.nist.gov/cgi-bin/cuu/Value?bg
         return ScalarFactory.create(Quad.GRAVITATIONAL_CONSTANT, Unit.F_L2_Mn2);
+    }
+
+    public static Scalar createFromMillis(long value) {
+        return new TimeScalar(new Quad(value / MILLIS_TO_TIME));
+    }
+
+    public static Scalar createFromCurrentMillis() {
+        return createFromMillis(System.currentTimeMillis());
     }
 }

@@ -104,10 +104,13 @@ public class MissionController extends BaseController{
     // 
     @FXML
     void missionSelected(MouseEvent e) {
-        missionData.setVisible(true);
-
         Mission selectedMission = missionList.getSelectionModel().getSelectedItem();
-        missionDescription.getEngine().loadContent(selectedMission.getDescription());
+        if (selectedMission != null) {
+            missionData.setVisible(true);
+            missionDescription.getEngine().loadContent(selectedMission.getDescription());
+        } else {
+            missionData.setVisible(false);
+        }
     }
 
     // user clicked edit button
@@ -126,6 +129,8 @@ public class MissionController extends BaseController{
     @FXML
     void startSimulation(ActionEvent e) {
         Mission selectedMission = missionList.getSelectionModel().getSelectedItem();
-        showError("Error starting simulation of mission " + selectedMission.getName() + ".\nNot implemented!");
+        //showError("Error starting simulation of mission " + selectedMission.getName() + ".\nNot implemented!");
+
+        showSceneOnNewStage("Simulation - " + selectedMission.getName(), true, "view/SimulationView.fxml");
     }
 }

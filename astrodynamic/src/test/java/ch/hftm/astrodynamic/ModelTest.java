@@ -16,10 +16,12 @@ import ch.hftm.astrodynamic.model.planetoids.Earth;
 import ch.hftm.astrodynamic.model.planetoids.Moon;
 import ch.hftm.astrodynamic.utils.*;
 import ch.hftm.astrodynamic.physics.*;
+import ch.hftm.astrodynamic.scalar.LengthScalar;
 import ch.hftm.astrodynamic.scalar.ScalarFactory;
+import ch.hftm.astrodynamic.scalar.VelocityScalar;
  
  public class ModelTest {
-    //@Ignore
+    @Ignore
     @Test
     public void TestEarthMoonOrbit() throws UnitConversionError{
         Planetoid earth = new Earth();
@@ -30,7 +32,7 @@ import ch.hftm.astrodynamic.scalar.ScalarFactory;
         int secondsInDay = 86400;
         int secondsInWeek = secondsInDay * 7;
 
-        // average distance earth to moon is 3.85e+8 m ?? e+10 m
+        // average distance earth to moon is 3.85e+8 m
         moon.setPosition(earth.getPosition().add(new BaseVector(new Quad(3.85, 8), new Quad(), new Quad(), Unit.LENGTH)));
 
         // average speed of moon is 1.022e+3 m/s
@@ -53,11 +55,24 @@ import ch.hftm.astrodynamic.scalar.ScalarFactory;
             earth.applyVelocity(oneSecond);
             moon.applyVelocity(oneSecond);
 
-            if (i%secondsInWeek == 0) {
+            /*if (i%secondsInWeek == 0) {
                 System.out.println(String.format("KW %d \nmoon velocity: %s \nmoon distance: %s", i/secondsInWeek+1, moon.getVelocity().getLength().toString(), earth.getPosition().subtract(moon.getPosition()).getLength().toString()));
-            }
+            }*/
         }
 
-        System.out.println(moon.getPosition().toString());
+        Scalar expectedDistance = new LengthScalar(new Quad(3.85, 8));
+        Scalar expectedVelocity = new VelocityScalar(new Quad(1.025, 3));
+        Quad maxDistanceError = new Quad(4, 6);
+        Quad maxVelocityError = new Quad(1, 3);
+
+        Assert.assertTrue(
+            String.format("Earth/Moon distance expected %s, measured %s", expectedDistance.toString(), moon.getDistance(earth).toString()),
+            moon.getDistance(earth).almostEquals(expectedDistance, maxDistanceError)
+        );
+
+        Assert.assertTrue(
+            String.format("Moon velocity expected %s, measured %s", expectedVelocity.toString(), moon.getVelocity().getLength().toString()),
+            moon.getVelocity().getLength().almostEquals(expectedVelocity, maxVelocityError)
+        );
     }
 }

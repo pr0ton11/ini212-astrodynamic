@@ -28,5 +28,4 @@ public class TimeScalar extends BaseScalar {
     public TimeScalar(double value) {
         super(value, Unit.TIME);
     }
-    
 }
