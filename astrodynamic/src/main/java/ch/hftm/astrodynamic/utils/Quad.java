@@ -60,7 +60,7 @@ public class Quad implements Comparable<Quad>, Serializable {
 
     // Special constructor that accepts a scientific notation
     public Quad(double mantissa, int powerOfTen) {
-        this.num = new Quad(mantissa).multiply(TEN).pow(powerOfTen).getAsDecimal64();
+        this.num = new Quad(mantissa).multiply(TEN.pow(powerOfTen)).getAsDecimal64();
     }
 
     // Special constructor that accepts Decimal64
@@ -130,7 +130,7 @@ public class Quad implements Comparable<Quad>, Serializable {
 
     // Comparator functions
     public boolean isNaN() {
-        return num.isNaN();
+        return num.isNaN() || num.isInfinity();
     }
     public boolean isZero() {
         return num.isZero();
@@ -156,8 +156,17 @@ public class Quad implements Comparable<Quad>, Serializable {
         return num.isLessOrEqual(comperator.getAsDecimal64());
     }
 
-    public boolean equals(Quad comperator) {
-        return num.isEqual(comperator.getAsDecimal64());
+    public boolean equals(Object comperator) {
+        if (comperator instanceof Quad) {
+            Quad q = (Quad)comperator;
+            return num.isEqual(q.getAsDecimal64());
+        }
+        return false;
+    }
+
+    // almostEquals checks with a +- delta to allow rounded value checks in ranges
+    public boolean almostEquals(Quad comparator, Quad delta) {
+        return ((comparator.le(this.add(delta))) && (comparator.ge(this.subtract(delta))));
     }
 
     // Static common number assignments
@@ -165,7 +174,12 @@ public class Quad implements Comparable<Quad>, Serializable {
     public static Quad TEN = new Quad(Decimal64.TEN);
     public static Quad TWO = new Quad(Decimal64.TWO);
     public static Quad ONE = new Quad(Decimal64.ONE);
+    public static Quad ZERO = new Quad();
     public static Quad INFINITY = new Quad(Decimal64.POSITIVE_INFINITY);
     public static Quad NEGINFINITY = new Quad(Decimal64.NEGATIVE_INFINITY);
+    public static Quad GRAVITATIONAL_CONSTANT = new Quad(6.67430, -11); // accordint to nist
 
+    public String toString() {
+        return Decimal64.toScientificString(num);
+    }
 }

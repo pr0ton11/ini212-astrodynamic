@@ -113,9 +113,11 @@ public class QuadTest {
         Quad q1 = new Quad(10);
         Quad qZero = new Quad(0);
         Quad q2 = new Quad(3);
+        Quad qNegative = new Quad(-3);
 
         // division by Zero is not a number
         Assert.assertTrue(q1.divide(qZero).isNaN());
+        Assert.assertTrue(qNegative.divide(qZero).isNaN());
 
         // 10/3 = 3.333...
         Assert.assertEquals(3.333, q1.divide(q2).doubleValue(), 0.01);
@@ -132,5 +134,18 @@ public class QuadTest {
         Quad qResult = Quad.TWO.divide(Quad.TEN);
 
         Assert.assertEquals(qExpected, qResult);
+    }
+
+    // check if a mantissa + power initialisation nets the same result as a quad calculation
+    @Test
+    public void TestMantissaInitialisation() {
+        double mantissa = 6.3781;
+        int power = 6;
+        Quad q1 = new Quad(mantissa).multiply(new Quad(10).pow(power));
+        Quad q2 = new Quad(mantissa, power);
+        Quad q3 = new Quad(mantissa).multiply(Quad.TEN.pow(power));
+
+        Assert.assertEquals(q1, q2);
+        Assert.assertEquals(q2, q3);
     }
 }

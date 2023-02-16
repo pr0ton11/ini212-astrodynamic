@@ -11,8 +11,11 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import ch.hftm.astrodynamic.physics.*;
+import ch.hftm.astrodynamic.scalar.AccelerationScalar;
+import ch.hftm.astrodynamic.scalar.ForceScalar;
 import ch.hftm.astrodynamic.scalar.LengthScalar;
 import ch.hftm.astrodynamic.scalar.MassScalar;
+import ch.hftm.astrodynamic.scalar.TimeScalar;
 import ch.hftm.astrodynamic.utils.*;
 
 public class PlanetoidTest {
@@ -88,14 +91,90 @@ public class PlanetoidTest {
 
     @Test
     public void TestGravityAcceleration() throws UnitConversionError {
-        Planetoid earth = new Planetoid(new LengthScalar(new Quad(6.3781).multiply(new Quad(10).pow(6))), new MassScalar(new Quad(5.9722).multiply(new Quad(10).pow(24))), new BaseVector(Unit.LENGTH), new BaseVector(Unit.ANGLE), new BaseVector(Unit.VELOCITY), new BaseVector(Unit.VELOCITY));
-        Planetoid person = new Planetoid(0, 80, new BaseVector(new Quad(6.3781).multiply(new Quad(10).pow(6)), new Quad(), new Quad(), Unit.LENGTH), new BaseVector(Unit.ANGLE), new BaseVector(Unit.VELOCITY), new BaseVector(Unit.ANGULAR_VELOCITY));
+        LengthScalar zeroPoint = new LengthScalar(new Quad(6.374, 6));
+        MassScalar earthMass = new MassScalar(new Quad(5.9722, 24));
+        Planetoid earth = new Planetoid(zeroPoint, earthMass, new BaseVector(Unit.LENGTH), new BaseVector(Unit.ANGLE), new BaseVector(Unit.VELOCITY), new BaseVector(Unit.VELOCITY));
+        Planetoid person = new Planetoid(0, 80, new BaseVector(zeroPoint.getValue(), new Quad(), new Quad(), Unit.LENGTH), new BaseVector(Unit.ANGLE), new BaseVector(Unit.VELOCITY), new BaseVector(Unit.ANGULAR_VELOCITY));
 
         Vector vExpectedDirection = new BaseVector(-9.81, 0, 0, Unit.ACCELERATION);
 
         Vector gravitationalForce = person.calculateGravitationalForce(earth);
         Vector gravitationalAcceleration = person.calculateAccelerationFromForce(gravitationalForce);
 
-        Assert.assertEquals(vExpectedDirection, gravitationalAcceleration);
+        Assert.assertTrue(vExpectedDirection.getLength().almostEquals(gravitationalAcceleration.getLength(), new Quad(0.01)));
+    }
+
+    // the famous apple should have an acceleration of 9.81 m/s², it is derived from the example on this website https://www.mathsisfun.com/physics/gravity.html 
+    @Test
+    public void TestAppleOnEarth() throws UnitConversionError {
+        ForceScalar expectedForce = new ForceScalar(new Quad(0.98));
+        Quad expectedForceAcceptableError = new Quad(0.01);
+
+        AccelerationScalar expectedAccelerationApple = new AccelerationScalar(new Quad(9.81));
+        Quad expectedAccelerationAppleAcceptableError = new Quad(0.01);
+        AccelerationScalar expectedAccelerationEarth = new AccelerationScalar(new Quad(1.64,-25));
+        Quad expectedAccelerationEarthAcceptableError = new Quad(1, -25);
+
+        Planetoid earth = new Planetoid(
+            new LengthScalar(), // zero elevation should not matter for this example
+            new MassScalar(new Quad(5.972, 24)), 
+            new BaseVector(Unit.LENGTH), // possitioned at coordinate origin 
+            new BaseVector(Unit.ANGLE), 
+            new BaseVector(Unit.VELOCITY), 
+            new BaseVector(Unit.ANGULAR_VELOCITY)
+        );
+
+        Planetoid apple = new Planetoid(
+            new LengthScalar(), // zero elevation should not matter for this example
+            new MassScalar(new Quad(0.1, 0)), // the apple weights 100g
+            new BaseVector(new Quad(6.371, 6), Quad.ZERO, Quad.ZERO, Unit.LENGTH), // possitioned at sea level relative to earth
+            new BaseVector(Unit.ANGLE), 
+            new BaseVector(Unit.VELOCITY), 
+            new BaseVector(Unit.ANGULAR_VELOCITY)
+        );
+
+        Vector gravitationalForce = apple.calculateGravitationalForce(earth);
+
+        Assert.assertTrue(
+            String.format("Earth/Apple gravitational force expected %s, measured %s", expectedForce.toString(), gravitationalForce.getLength().toString()),
+            gravitationalForce.getLength().almostEquals(expectedForce, expectedForceAcceptableError)
+        );
+
+        Vector appleAcceleration = apple.calculateAccelerationFromForce(gravitationalForce);
+        Vector earthAcceleration = earth.calculateAccelerationFromForce(gravitationalForce.invert());
+
+        Assert.assertTrue(
+            String.format("Apple gravitational acceleration expected %s, measured %s", expectedAccelerationApple.toString(), appleAcceleration.getLength().toString()),
+            appleAcceleration.getLength().almostEquals(expectedAccelerationApple, expectedAccelerationAppleAcceptableError)
+        );
+
+        Assert.assertTrue(
+            String.format("Earth gravitational acceleration expected %s, measured %s", expectedAccelerationEarth.toString(), earthAcceleration.getLength().toString()),
+            appleAcceleration.getLength().almostEquals(expectedAccelerationEarth, expectedAccelerationEarthAcceptableError)
+        );
+
+        // now we apply 1 second of this acceleration and check if the apple ends up where we expect it to
+        Vector expectedPosition = apple.getPosition().subtract(new BaseVector(appleAcceleration.getLength().getValue(), Quad.ZERO, Quad.ZERO, Unit.LENGTH));
+        Quad expectedPositionAcceptableError = Quad.ONE;
+
+        TimeScalar oneSecond = new TimeScalar(Quad.ONE);
+        apple.applyAcceleration(appleAcceleration, oneSecond);
+        apple.applyVelocity(oneSecond);
+
+        Assert.assertTrue(
+            String.format("Apple position expected to be %s from center, measured %s", expectedPosition.getLength().toString(), apple.getPosition().getLength().toString()),
+            apple.getPosition().getLength().almostEquals(expectedPosition.getLength(), expectedPositionAcceptableError)
+        );
+    }
+
+    @Test
+    public void TestEarthMoonGravitationAcceleration() throws UnitConversionError {
+        Planetoid earth = new Planetoid(new LengthScalar(0), new MassScalar(new Quad(5.96).multiply(new Quad(10).pow(24))), new BaseVector(Unit.LENGTH), new BaseVector(Unit.ANGLE), new BaseVector(Unit.VELOCITY), new BaseVector(Unit.VELOCITY));
+        Planetoid moon = new Planetoid(new LengthScalar(0), new MassScalar(new Quad(7.33).multiply(new Quad(10).pow(22))), new BaseVector(new Quad(3.84).multiply(new Quad(10).pow(8)), new Quad(), new Quad(), Unit.LENGTH), new BaseVector(Unit.ANGLE), new BaseVector(Unit.VELOCITY), new BaseVector(Unit.VELOCITY));
+
+        Vector gravitationalForce = moon.calculateGravitationalForce(earth);
+
+        Vector gravitationalAcceleration = moon.calculateAccelerationFromForce(gravitationalForce);
+
     }
 }

@@ -1,5 +1,7 @@
 package ch.hftm.astrodynamic.model.conditions;
 
+import java.util.logging.Logger;
+
 import ch.hftm.astrodynamic.model.EndType;
 import ch.hftm.astrodynamic.model.Simulation;
 import ch.hftm.astrodynamic.model.spaceships.HeavyLander;
@@ -9,6 +11,7 @@ import ch.hftm.astrodynamic.scalar.ScalarFactory;
 import ch.hftm.astrodynamic.scalar.VelocityScalar;
 import ch.hftm.astrodynamic.scalar.ScalarFactory.FittedValue;
 import ch.hftm.astrodynamic.utils.BaseVector;
+import ch.hftm.astrodynamic.utils.Log;
 import ch.hftm.astrodynamic.utils.Named;
 import ch.hftm.astrodynamic.utils.Scalar;
 import ch.hftm.astrodynamic.utils.Unit;
@@ -17,6 +20,8 @@ import ch.hftm.astrodynamic.utils.Vector;
 
 // adds a heavy lander to the simulation on add
 public class SetupHeavyLander extends Condition {
+
+    private Logger log = Log.build();
 
     String landerName;
     Scalar distance;
@@ -47,7 +52,7 @@ public class SetupHeavyLander extends Condition {
                 referenceObjectName,
                 velocity.getLength().toFittedString()));
             } catch (UnitConversionError ex) {
-                System.out.println(ex);
+                log.severe(ex.getMessage());
             }
         }
 

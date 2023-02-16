@@ -16,10 +16,15 @@ import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 import ch.hftm.astrodynamic.model.*;
+import ch.hftm.astrodynamic.utils.Log;
 
 public class MissionController extends BaseController{
+
+    private Logger log = Log.build();
+
     @FXML
     TextField searchField;
 
@@ -89,7 +94,6 @@ public class MissionController extends BaseController{
     @FXML
     void searchTyping(KeyEvent e) {
         String searchText = searchField.getText().toLowerCase();
-        //System.out.println("Searching: " + searchText);
         missionList.setItems(filteredMissions.filtered((t) -> {
             return (t.getName().toLowerCase().contains(searchText)) || (t.getDescription().toLowerCase().contains(searchText));
         }));
@@ -116,8 +120,7 @@ public class MissionController extends BaseController{
         Mission selectedMission = missionList.getSelectionModel().getSelectedItem();
 
         File f = new File("view/MissionEditView.fxml");
-        System.out.println(f.exists());
-        System.out.println(f.getAbsolutePath());
+        log.info(f.getAbsolutePath());
 
         showSceneOnNewStage("Mission Editor - " + selectedMission.getName(), true, "view/MissionEditView.fxml");
     }

@@ -178,4 +178,12 @@ public abstract class BaseAstronomicalObject implements AstronomicalObject, Name
             velocity.multiply(direction.getZ())).rotateZ(new AngleScalar(Quad.PI.divide(Quad.TWO)));
         return velocityVector;
     }
+
+    public void applyAcceleration(Vector velocity, Scalar time) throws UnitConversionError {
+        this.velocity = this.velocity.add(velocity.multiply(time));
+    }
+
+    public void applyVelocity(Scalar time) throws UnitConversionError {
+        this.position = this.position.add(this.velocity.multiply(time));
+    }
 }

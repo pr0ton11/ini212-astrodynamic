@@ -209,6 +209,6 @@ public class ScalarFactory {
     // returns a gravitational constant scalar
     public static Scalar gravitationalConstant() throws UnitConversionError {
         // According to NIST Reference https://physics.nist.gov/cgi-bin/cuu/Value?bg
-        return ScalarFactory.create(new Quad(6.67430).multiply(new Quad(10).pow(-11)), Unit.F_L2_Mn2);
+        return ScalarFactory.create(Quad.GRAVITATIONAL_CONSTANT, Unit.F_L2_Mn2);
     }
 }
