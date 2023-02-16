@@ -64,8 +64,8 @@ import ch.hftm.astrodynamic.scalar.VelocityScalar;
 
         Scalar expectedDistance = new LengthScalar(new Quad(3.85, 8));
         Scalar expectedVelocity = new VelocityScalar(new Quad(1.025, 3));
-        Quad maxDistanceError = new Quad(4, 6);
-        Quad maxVelocityError = new Quad(1, 3);
+        Quad maxDistanceError = new Quad(3.0, 6);
+        Quad maxVelocityError = new Quad(1.0, 3);
 
         Assert.assertTrue(
             String.format("Earth/Moon distance expected %s, measured %s", expectedDistance.toString(), moon.getDistance(earth).toString()),
