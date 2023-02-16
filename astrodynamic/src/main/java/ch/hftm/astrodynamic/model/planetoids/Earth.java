@@ -1,5 +1,7 @@
 package ch.hftm.astrodynamic.model.planetoids;
 
+import java.util.logging.Logger;
+
 import ch.hftm.astrodynamic.model.Simulation;
 
 /*
@@ -19,6 +21,9 @@ import ch.hftm.astrodynamic.utils.*;
 * TODO: axial tilt
 */
 public class Earth extends Planetoid {
+
+    private static Logger log = Log.build();
+
     public Earth() {
         super(
             new LengthScalar(new Quad(6.3781, 6)),
@@ -46,7 +51,7 @@ public class Earth extends Planetoid {
                 earth.setPosition(sun.getPosition().add(new BaseVector(new Quad(149.6, 11), new Quad(), new Quad(), Unit.LENGTH)));
                 earth.setVelocity(new BaseVector(new Quad(), new Quad(2.978, 4), new Quad(), Unit.VELOCITY).add(sun.getVelocity()));
             } catch (UnitConversionError ex) {
-                System.out.println(ex);
+                log.severe(ex.getMessage());
             }
         }
 

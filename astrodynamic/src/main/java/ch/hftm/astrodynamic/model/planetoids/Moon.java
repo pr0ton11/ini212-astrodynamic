@@ -1,5 +1,7 @@
 package ch.hftm.astrodynamic.model.planetoids;
 
+import java.util.logging.Logger;
+
 import ch.hftm.astrodynamic.model.Simulation;
 
 /*
@@ -19,6 +21,9 @@ import ch.hftm.astrodynamic.utils.*;
 * TODO: axial tilt
 */
 public class Moon extends Planetoid {
+
+    private static Logger log = Log.build();
+
     public Moon() {
         super(
             new LengthScalar(new Quad(1.7374, 6)), 
@@ -47,7 +52,7 @@ public class Moon extends Planetoid {
                 moon.setPosition(earth.getPosition().add(new BaseVector(new Quad(3.85, 8), new Quad(), new Quad(), Unit.LENGTH)));
                 moon.setVelocity(new BaseVector(new Quad(), new Quad(1.025, 3), new Quad(), Unit.VELOCITY).add(earth.getVelocity()));
             } catch (UnitConversionError ex) {
-                System.out.println(ex);
+                log.severe(ex.getMessage());
             }
         }
 

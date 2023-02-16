@@ -7,16 +7,27 @@ package ch.hftm.astrodynamic;
  */
 
 import java.io.IOException;
+import java.util.logging.Logger;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import ch.hftm.astrodynamic.utils.ConfigRepository;
+import ch.hftm.astrodynamic.utils.Log;
+
 // Taken from OOP1, Creates a stage for the first window, after that the controllers are self-governing
 public class MainApp extends Application {
+
+    private Logger log = Log.build();
+
     private Stage primaryStage;
 
     public static void main(String[] args) {
+        // Register args in Configuration repository
+        ConfigRepository.registerArgs(args);
+        // Launch application with args
         launch(args);
     }
 
@@ -39,7 +50,7 @@ public class MainApp extends Application {
             primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println(e.toString());
+            log.severe(e.getMessage());
         }
     }
 }

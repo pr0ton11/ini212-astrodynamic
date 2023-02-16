@@ -176,7 +176,5 @@ public class PlanetoidTest {
 
         Vector gravitationalAcceleration = moon.calculateAccelerationFromForce(gravitationalForce);
 
-        //System.out.println(gravitationalForce);
-        //System.out.println(gravitationalAcceleration);
     }
 }
