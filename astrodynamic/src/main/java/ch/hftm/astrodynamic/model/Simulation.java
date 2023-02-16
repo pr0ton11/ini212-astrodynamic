@@ -168,6 +168,11 @@ public class Simulation {
             condition.changeSimulationOnRemove(this);
     }
 
+    // get the list to display in gui, not observable because we want to keep the model as gui agnostic as possible
+    public List<Condition> getConditions() {
+        return conditions;
+    }
+
     // returns names of planetoids for the ground track gui
     public List<String> getPlanetoidNames() {
         List<String> names = new ArrayList<>();

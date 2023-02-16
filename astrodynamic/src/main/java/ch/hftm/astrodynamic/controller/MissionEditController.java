@@ -18,6 +18,7 @@ import ch.hftm.astrodynamic.scalar.ScalarFactory;
 import ch.hftm.astrodynamic.scalar.TimeScalar;
 import ch.hftm.astrodynamic.utils.BaseScalar;
 import ch.hftm.astrodynamic.utils.Log;
+import ch.hftm.astrodynamic.utils.MissionRepository;
 import ch.hftm.astrodynamic.utils.Named;
 import ch.hftm.astrodynamic.utils.Quad;
 import ch.hftm.astrodynamic.utils.Scalar;
@@ -25,6 +26,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -79,11 +81,6 @@ public class MissionEditController extends BaseController{
     }
 
     @Override
-    protected Stage getCurrentStage() {
-        return null;
-    }
-
-    @Override
     public void initialize(){
 
         conditions = FXCollections.observableArrayList();
@@ -91,7 +88,8 @@ public class MissionEditController extends BaseController{
         possibleUnits = FXCollections.observableArrayList();
         possibleConditionRelationObjects = FXCollections.observableArrayList();
 
-        initializeTestdata();
+        initializeMissionData();
+        missionDataToFields();
 
         // dropdown for possible conditions
         newCondition.setCellFactory(param -> new ListCell<>() {
@@ -144,10 +142,17 @@ public class MissionEditController extends BaseController{
     }
 
     // test data, missions would be stored on disk
-    private void initializeTestdata() {
-        editedMission = new Mission();
-        editedMission.setupStandardSolarSystem();
+    private void initializeMissionData() {
+        editedMission = MissionRepository.getActiveMission();
 
+        if (editedMission.getPlanetoidNames().size() < 1) {
+            editedMission.setupStandardSolarSystem();
+        }
+
+        for (Condition c: editedMission.getConditions()) {
+            conditions.add(c);
+        }
+        
         possibleConditions.add(MaximumTime.class);
         possibleConditions.add(HoldoutTime.class);
         possibleConditions.add(Approach.class);
@@ -156,6 +161,16 @@ public class MissionEditController extends BaseController{
         possibleConditions.add(SetupHeavyLander.class);
 
         possibleConditionRelationObjects.addAll(editedMission.getAllNamedAstronomicalObjects());
+    }
+
+    private void missionDataToFields() {
+        missionName.setText(editedMission.getName());
+        missionDescription.setHtmlText(editedMission.getDescription());
+    }
+
+    private void fieldsToMissionData() {
+        editedMission.setName(missionName.getText());
+        editedMission.setDescription(missionDescription.getHtmlText());
     }
 
     private void hideNewConditionRelation() {
@@ -290,5 +305,11 @@ public class MissionEditController extends BaseController{
         }
 
         lastSelectedUnitsize = newUnitsize.getSelectionModel().getSelectedItem();
+    }
+
+    @FXML
+    void saveMission(ActionEvent e) {
+        fieldsToMissionData();
+        getCurrentStage(e).close();
     }
 }

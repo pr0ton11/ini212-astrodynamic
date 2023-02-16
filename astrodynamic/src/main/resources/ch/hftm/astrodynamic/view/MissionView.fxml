@@ -21,11 +21,8 @@
          <children>
             <VBox prefHeight="398.0" prefWidth="164.0">
                <children>
-                  <HBox prefHeight="409.0" prefWidth="203.0">
-                     <children>
-                        <ListView fx:id="missionList" onMouseClicked="#missionSelected" prefHeight="167.0" prefWidth="203.0" />
-                     </children>
-                  </HBox>
+                  <ListView fx:id="missionList" onMouseClicked="#missionSelected" prefHeight="363.0" prefWidth="164.0" />
+                  <Button mnemonicParsing="false" onAction="#newMission" text="New Mission" />
                </children>
             </VBox>
             <VBox fx:id="missionData" prefHeight="100.0" prefWidth="436.0">
@@ -33,6 +30,8 @@
                   <WebView fx:id="missionDescription" prefHeight="442.0" prefWidth="389.0" />
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
+                        <Button mnemonicParsing="false" onAction="#deleteMission" text="Delete" />
+                        <Button mnemonicParsing="false" onAction="#copyMission" text="Copy" />
                         <Button fx:id="missionEditButton" mnemonicParsing="false" onAction="#startEditor" text="Edit" />
                         <Button fx:id="missionSimulateButton" mnemonicParsing="false" onAction="#startSimulation" text="Simulate" />
                      </children>

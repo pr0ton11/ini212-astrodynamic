@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableSet;
+import javafx.collections.ObservableList;
 
 import ch.hftm.astrodynamic.model.Mission;
 
@@ -21,7 +21,7 @@ public final class MissionRepository {
 
     private MissionRepository() {}  // Constructor
 
-    private ObservableSet<Mission> missions = FXCollections.observableSet();  // List of missions
+    private ObservableList<Mission> missions = FXCollections.observableArrayList();  // List of missions
     private Mission activeMission;  // Current active mission
 
     // Retrieving and working with the singleton class, used primarly internally
@@ -34,7 +34,12 @@ public final class MissionRepository {
 
     // Adds a mission
     public static boolean addMission(Mission m) {
-        return getInstance().missions.add(m);
+        if (!getInstance().missions.contains(m)) {
+            getInstance().missions.add(m);
+            return true;
+        }
+
+        return false;
     }
 
     // Gets all missions as list
@@ -47,7 +52,7 @@ public final class MissionRepository {
     }
 
     // Gets all missions as observable list
-    public static ObservableSet<Mission> getObservableMissions() {
+    public static ObservableList<Mission> getObservableMissions() {
         return getInstance().missions;
     }
 

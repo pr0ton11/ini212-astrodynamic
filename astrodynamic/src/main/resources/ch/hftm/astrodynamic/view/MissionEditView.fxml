@@ -5,11 +5,12 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.web.HTMLEditor?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="799.0" prefWidth="634.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.hftm.astrodynamic.controller.MissionEditController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="763.0" prefWidth="634.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.hftm.astrodynamic.controller.MissionEditController">
    <children>
       <Label text="Mission name" />
       <TextField fx:id="missionName" />
@@ -31,5 +32,10 @@
       </HBox>
       <Label text="Conditions" />
       <ListView fx:id="missionConditions" prefHeight="200.0" prefWidth="200.0" />
+      <BorderPane prefHeight="31.0" prefWidth="634.0">
+         <right>
+            <Button mnemonicParsing="false" onAction="#saveMission" text="Save" BorderPane.alignment="CENTER" />
+         </right>
+      </BorderPane>
    </children>
 </VBox>

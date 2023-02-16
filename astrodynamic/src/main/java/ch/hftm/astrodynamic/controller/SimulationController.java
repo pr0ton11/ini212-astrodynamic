@@ -40,11 +40,6 @@ public class SimulationController extends BaseController{
     }
 
     @Override
-    protected Stage getCurrentStage() {
-        return null;
-    }
-
-    @Override
     public void initialize(){
         
         String initialTrackedPlanet = "Earth";
