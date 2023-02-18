@@ -1,12 +1,13 @@
+
+package ch.hftm.astrodynamic.physics;
+
+import ch.hftm.astrodynamic.utils.*;
+
 /*
  *  Project Astrodynamic
  *  HFTM BBIN21.2a
  *  Rafael Stauffer, Marc Singer
  */
-
-package ch.hftm.astrodynamic.physics;
-
-import ch.hftm.astrodynamic.utils.*;
 
 // calculates density and oxygen content of atmosphere
 public interface Atmosphere {
