@@ -6,7 +6,7 @@ package ch.hftm.astrodynamic.utils;
  *  Rafael Stauffer, Marc Singer
  */
 
-// for gui things like missions, parameters, and such
+// named thing with description, for gui things like missions, parameters, and such
 public interface Named {
     String getName();
     String getDescription();
