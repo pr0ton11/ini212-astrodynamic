@@ -23,6 +23,13 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 
+/*
+ *  Project Astrodynamic
+ *  HFTM BBIN21.2a
+ *  Rafael Stauffer, Marc Singer
+ */
+
+// Running simulation information
 public class SimulationController extends BaseController{
     @FXML
     Canvas orbitView;

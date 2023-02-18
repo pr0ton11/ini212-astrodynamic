@@ -13,6 +13,7 @@ import javafx.stage.Stage;
  *  Rafael Stauffer, Marc Singer
  */
 
+// edit parameters of a planetoid
 public class PlanetoidEditController extends BaseController{
     @FXML
     TextField posX;
