@@ -39,13 +39,13 @@ public class LengthScalar extends BaseScalar {
         Quad newValue = getValue().multiply(scalar.getValue());
         switch (scalar.getUnit()) {
             case LENGTH:
-                return new AreaScalar(newValue);
+                return new AreaScalar(newValue); // length * length = area
             case AREA:
-                return new VolumeScalar(newValue);
+                return new VolumeScalar(newValue); // length * area = volume
             case UNITLESS:
-                return new LengthScalar(newValue);
+                return new LengthScalar(newValue); // length * unitless = length
             case F_L2_Mn2:
-                return new VelocityScalar(newValue);
+                return new VelocityScalar(newValue); // length * (N * area * mass⁻²) = velocity
             default:
                 throw new UnitConversionError(String.format("Multiplication between %s and %s not possible in length scalar", getUnit().toString(), scalar.getUnit().toString()));
         }

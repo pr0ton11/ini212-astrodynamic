@@ -19,8 +19,10 @@ import ch.hftm.astrodynamic.utils.UnitConversionError;
  // Factory to create specific scalars depending on Unit
 public class ScalarFactory {
 
+    // milliseconds to second conversion outside of conversions for faster access
     private static long MILLIS_TO_TIME = 1000000;
 
+    // conversions for a unittype for easier display in gui, unittype {conversionName, multiplicatorToBase}
     static final Map<Unit, Map<String, Quad>> conversions;
     static {
         conversions = new HashMap<>();
@@ -45,11 +47,13 @@ public class ScalarFactory {
         conversions.put(Unit.VELOCITY, velocityConversions);
     }
 
+    // oldValue gets converted from oldunitSize to newUnitSize
     public static Quad convert(Unit unit, Quad oldValue, String oldUnitSize, String newUnitsize) throws UnitConversionError {
         Scalar old = create(oldValue, unit, oldUnitSize);
         return convert(old, newUnitsize);
     }
 
+    // value in unitsize gets converted to new quad in standard unit
     public static Quad convert(Scalar value, String unitsize) {
         return value.getValue().divide(getConversionFactor(value.getUnit(), unitsize));
     }
@@ -129,6 +133,7 @@ public class ScalarFactory {
         return keyStr;
     }
 
+    // searches conversion factor for unit/unitsize out of map
     private static Quad getConversionFactor(Unit unit, String unitsize) {
         return conversions.get(unit).get(unitsize);
     }
@@ -214,10 +219,12 @@ public class ScalarFactory {
         return ScalarFactory.create(Quad.GRAVITATIONAL_CONSTANT, Unit.F_L2_Mn2);
     }
 
+    // create time scalar from milliseconds
     public static Scalar createFromMillis(long value) {
         return new TimeScalar(new Quad(value / MILLIS_TO_TIME));
     }
 
+    // create time scalar from currentTimeMillis
     public static Scalar createFromCurrentMillis() {
         return createFromMillis(System.currentTimeMillis());
     }

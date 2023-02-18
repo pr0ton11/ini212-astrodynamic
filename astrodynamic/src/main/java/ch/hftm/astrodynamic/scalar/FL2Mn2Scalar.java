@@ -33,11 +33,12 @@ public class FL2Mn2Scalar extends BaseScalar {
     
     @Override
     public Scalar multiply(Scalar scalar) throws UnitConversionError  {
+        Quad multiplicationResult = this.getValue().multiply(scalar.getValue());
         switch (scalar.getUnit()) {
             case UNITLESS:
-                return new FL2Mn2Scalar(getValue().multiply(scalar.getValue()));
+                return new FL2Mn2Scalar(multiplicationResult); // multiplication with unitless results in another scalar in same unit as this
             case M2_DIV_L2:
-                return new ForceScalar(getValue().multiply(scalar.getValue()));
+                return new ForceScalar(multiplicationResult); // dimensions cancel out to result in force (newtons)
             default:
                 throw new UnitConversionError(String.format("Multiplication between %s and %s not possible in %s", getUnit().toString(), scalar.getUnit().toString(), this.getClass().getSimpleName()));
         }
