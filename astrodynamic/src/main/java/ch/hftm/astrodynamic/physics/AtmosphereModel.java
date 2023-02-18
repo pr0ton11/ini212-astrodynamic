@@ -6,6 +6,7 @@ package ch.hftm.astrodynamic.physics;
  *  Rafael Stauffer, Marc Singer
  */
 
+// type of atmosphere model for density calculation
 public enum AtmosphereModel {
     LINEAR_FALLOFF,
     QUADRATIC_FALLOFF;
