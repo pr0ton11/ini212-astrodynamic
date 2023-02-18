@@ -1,13 +1,15 @@
+
+package ch.hftm.astrodynamic.physics;
+
+import ch.hftm.astrodynamic.scalar.UnitlessScalar;
+
+import ch.hftm.astrodynamic.utils.*;
+
 /*
  *  Project Astrodynamic
  *  HFTM BBIN21.2a
  *  Rafael Stauffer, Marc Singer
  */
-
-package ch.hftm.astrodynamic.physics;
-
-import ch.hftm.astrodynamic.scalar.UnitlessScalar;
-import ch.hftm.astrodynamic.utils.*;
 
 // Can be a planet, moon or asteroid, shape is a sphere
 public class Planetoid extends BaseAstronomicalObject implements Atmosphere {
