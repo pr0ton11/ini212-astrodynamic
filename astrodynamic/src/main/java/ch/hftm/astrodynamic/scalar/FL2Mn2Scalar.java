@@ -12,6 +12,7 @@ import ch.hftm.astrodynamic.utils.UnitConversionError;
  *  Rafael Stauffer, Marc Singer
  */
 
+ // Scalar for intermediate calculation steps, N * Area * Mass⁻²
 public class FL2Mn2Scalar extends BaseScalar {
 
     public FL2Mn2Scalar(Scalar scalar) {
