@@ -38,10 +38,10 @@ public interface AstronomicalObject {
     // returns acceleration from force
     Vector calculateAccelerationFromForce(Vector force) throws UnitConversionError;
 
-    // unitless direction from this to partner
+    // length direction from this to partner
     Vector getDirection(AstronomicalObject partner) throws UnitConversionError;
 
-    // lenght from this to partner
+    // length from this to partner
     Scalar getDistance(AstronomicalObject partner) throws UnitConversionError;
 
     // velocity from this relative to partner

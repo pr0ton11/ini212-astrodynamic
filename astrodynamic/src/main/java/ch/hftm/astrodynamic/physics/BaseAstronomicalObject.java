@@ -1,8 +1,3 @@
-/*
- *  Project Astrodynamic
- *  HFTM BBIN21.2a
- *  Rafael Stauffer, Marc Singer
- */
 
 package ch.hftm.astrodynamic.physics;
 
@@ -13,7 +8,14 @@ import ch.hftm.astrodynamic.scalar.MassScalar;
 import ch.hftm.astrodynamic.scalar.ScalarFactory;
 import ch.hftm.astrodynamic.scalar.UnitlessScalar;
 import ch.hftm.astrodynamic.scalar.VelocityScalar;
+
 import ch.hftm.astrodynamic.utils.*;
+
+/*
+ *  Project Astrodynamic
+ *  HFTM BBIN21.2a
+ *  Rafael Stauffer, Marc Singer
+ */
 
 // Base to fill computational methods, abstract to force use of specific child classes
 public abstract class BaseAstronomicalObject implements AstronomicalObject, Named {
@@ -41,8 +43,10 @@ public abstract class BaseAstronomicalObject implements AstronomicalObject, Name
     }
 
     public Collision calculateCollision(AstronomicalObject partner) throws UnitConversionError {
-        Vector midpoint = getPosition().add(partner.getPosition()).divide(new UnitlessScalar(2.0));
+        // our position + half the direction to the partner is the midpoint between the two bodies
+        Vector midpoint = getPosition().add(getDirection(partner).divide(new UnitlessScalar(2.0)));
 
+        // if we and the partner body both touch the midpoint we have a collision
         if ((this.isColliding(midpoint)) && (partner.isColliding(midpoint))){
             Collision collision = new Collision();
             collision.shapeA = this;
@@ -56,7 +60,7 @@ public abstract class BaseAstronomicalObject implements AstronomicalObject, Name
         return null;
     }
 
-    // E = 1/2 m v²
+    // E = 1/2 * m * v²
     public Scalar calculateImpactEnergy(Vector velocityA, Vector velocityB, Scalar massA, Scalar massB) throws UnitConversionError {
         return new ForceScalar(massA.add(massB).multiply(velocityA.subtract(velocityB).getLength().pow(2)).divide(new UnitlessScalar(2)));
     }
@@ -118,7 +122,7 @@ public abstract class BaseAstronomicalObject implements AstronomicalObject, Name
         Scalar lenScalar = getDirection(partner).getLength();
         if (lenScalar.getValue().doubleValue() < 0)
         {
-            return lenScalar.negate();
+            return lenScalar.negate(); // we always return a positive distance
         }
         return lenScalar;
     }
@@ -193,7 +197,7 @@ public abstract class BaseAstronomicalObject implements AstronomicalObject, Name
         try {
             direction = this.getDirection(partner);
 
-            // TODO: negate??? order of operations???
+            // TODO: order of operations?
             direction = direction.rotateX((AngleScalar)this.getRotation().getX());
             direction = direction.rotateY((AngleScalar)this.getRotation().getY());
             direction = direction.rotateZ((AngleScalar)this.getRotation().getZ());
