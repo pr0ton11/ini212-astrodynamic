@@ -1,16 +1,17 @@
 package ch.hftm.astrodynamic.physics;
 
+import ch.hftm.astrodynamic.utils.*;
+
 /*
  *  Project Astrodynamic
  *  HFTM BBIN21.2a
  *  Rafael Stauffer, Marc Singer
  */
 
-import ch.hftm.astrodynamic.utils.*;
-
+// Spaceship encapsulates all controllable astronomical objects without atmosphere but with drag calculation
 public class Spaceship extends BaseAstronomicalObject implements Drag {
 
-    private static Quad MINIMUM_DENSITY = new Quad(1).multiply(new Quad(10).pow(-11));
+    private static Quad MINIMUM_DENSITY = new Quad(1.0, -11); // minimum density before calculation rounds of to zero
 
     public Spaceship(double zeroPointHeight, double mass, Vector position, Vector rotation, Vector velocity, Vector rotationalVelocity) {
         super(zeroPointHeight, mass, position, rotation, velocity, rotationalVelocity);
@@ -33,6 +34,7 @@ public class Spaceship extends BaseAstronomicalObject implements Drag {
         return null;
     }
 
+    // drag coefficient formula with reynolds number, 1/2 C p v² a
     @Override
     public Vector getDragForce(Planetoid partner) throws UnitConversionError {
         // get atmos density from planet on our position
