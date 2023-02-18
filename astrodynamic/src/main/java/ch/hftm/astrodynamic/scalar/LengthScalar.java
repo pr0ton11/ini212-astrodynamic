@@ -15,7 +15,7 @@ import ch.hftm.astrodynamic.utils.UnitConversionError;
 public class LengthScalar extends BaseScalar {
 
     public LengthScalar() {
-        super(0, Unit.LENGTH);
+        super(Unit.LENGTH);
     }
 
     public LengthScalar(Scalar scalar) {

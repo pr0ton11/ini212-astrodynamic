@@ -13,6 +13,10 @@ import ch.hftm.astrodynamic.utils.Unit;
 
 public class AngleScalar extends BaseScalar {
 
+    public AngleScalar() {
+        super(Unit.ANGLE);
+    }
+
     public AngleScalar(Scalar scalar) {
         super(scalar, Unit.ANGLE);
     }

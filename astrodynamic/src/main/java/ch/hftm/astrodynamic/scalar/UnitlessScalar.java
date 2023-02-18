@@ -14,6 +14,10 @@ import ch.hftm.astrodynamic.utils.UnitConversionError;
 
 public class UnitlessScalar extends BaseScalar {
 
+    public UnitlessScalar() {
+        super(Unit.UNITLESS);
+    }
+
     public UnitlessScalar(Scalar scalar) {
         super(scalar, Unit.UNITLESS);
     }

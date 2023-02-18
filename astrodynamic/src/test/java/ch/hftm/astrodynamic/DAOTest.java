@@ -1,5 +1,8 @@
 package ch.hftm.astrodynamic;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.util.logging.Logger;
 
 import org.junit.Assert;
@@ -8,6 +11,7 @@ import org.junit.Test;
 import ch.hftm.astrodynamic.model.Mission;
 import ch.hftm.astrodynamic.utils.Log;
 import ch.hftm.astrodynamic.utils.MissionRepository;
+import ch.hftm.astrodynamic.utils.Serializer;
 
 
 /*
@@ -44,5 +48,43 @@ public class DAOTest {
         log.fine("Checked updated mission pointers");
     }
 
+    @Test
+    public void SerializationTest() {
+        
+    }
+
+    @Test
+    public void MissionSerializationTest() {
+        // Initialization
+        MissionRepository.addTestMissions();
+        log.fine("Added mission from Test Missions");
+        Mission mission2 = MissionRepository.getMissionByName("New Dawn");
+        log.fine("Loaded mission from test missions");
+        MissionRepository.setActiveMission(mission2);
+        // Preparation
+        String serializedMission = Serializer.serializeMission(MissionRepository.getActiveMission());
+        log.fine(String.format("Serialized (active) mission New Dawn to JSON: \n %s", serializedMission));
+
+    }
+
+    @Test
+    public void MissionCloneTest() {
+        // Initialization
+        MissionRepository.addTestMissions();
+        log.fine("Added mission from Test Missions");
+        Mission mission2 = MissionRepository.getMissionByName("New Dawn");
+        log.fine("Loaded mission from test missions");
+        MissionRepository.setActiveMission(mission2);
+        // Preparation
+        String serializedMission = Serializer.serializeMission(MissionRepository.getActiveMission());
+        Mission clonedMission2 = Serializer.deserializeMission(serializedMission);
+        // Tests
+        assertEquals(MissionRepository.getActiveMission().getName(), clonedMission2.getName());
+        assertEquals(MissionRepository.getActiveMission().getDescription(), clonedMission2.getDescription());
+        for (String planetoidName :MissionRepository.getActiveMission().getPlanetoidNames()) {
+            assertTrue(clonedMission2.getPlanetoidNames().contains(planetoidName));
+        }
+        log.info(serializedMission);
+    }
 
 }

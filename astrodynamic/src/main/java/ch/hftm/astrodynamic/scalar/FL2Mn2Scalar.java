@@ -14,6 +14,10 @@ import ch.hftm.astrodynamic.utils.UnitConversionError;
 
 public class FL2Mn2Scalar extends BaseScalar {
 
+    public FL2Mn2Scalar() {
+        super(Unit.F_L2_Mn2);
+    }
+
     public FL2Mn2Scalar(Scalar scalar) {
         super(scalar, Unit.F_L2_Mn2);
     }

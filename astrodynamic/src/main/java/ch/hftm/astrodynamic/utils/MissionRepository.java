@@ -92,12 +92,19 @@ public final class MissionRepository {
         throw new NoSuchElementException();
     }
 
+    // Clones the currently active mission to a new Mission
+    // Returns the reference to the new mission
     public static Mission cloneMission() throws NoSuchElementException {
-        throw new Exception("Not implemented you retard");
         if (getInstance().activeMission != null) {
-            // This will return a new object
-            // Copy and serialization
+            return Serializer.deserializeMission(Serializer.serializeMission(getActiveMission()));
         }
+        throw new NoSuchElementException();
+    }
+
+    // Overrides the currently existing instance with a new mission repository
+    // This is used internally to deserialize from a file
+    public static void overrideInstance(MissionRepository source) {
+        MissionRepository.instance = source;  // Overrides the pointer with a new mission
     }
 
     // Add static test missions
