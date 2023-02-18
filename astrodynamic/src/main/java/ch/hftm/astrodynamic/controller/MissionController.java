@@ -9,20 +9,23 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
-import javafx.stage.Stage;
 
-import java.io.File;
 import java.util.logging.Logger;
 
 import ch.hftm.astrodynamic.model.*;
 import ch.hftm.astrodynamic.utils.Log;
 import ch.hftm.astrodynamic.utils.MissionRepository;
 
+/*
+ *  Project Astrodynamic
+ *  HFTM BBIN21.2a
+ *  Rafael Stauffer, Marc Singer
+ */
+
+// Controller for overview list of missions
 public class MissionController extends BaseController{
 
     private Logger log = Log.build();
@@ -48,8 +51,8 @@ public class MissionController extends BaseController{
     @FXML
     VBox missionData;
 
-    ObservableList<Mission> missions;
-    FilteredList<Mission> filteredMissions;
+    ObservableList<Mission> missions; // get from MissionRepository DAO
+    FilteredList<Mission> filteredMissions; // for searchField filtering
 
     public MissionController() {
         super();
@@ -57,6 +60,8 @@ public class MissionController extends BaseController{
 
     @Override
     public void initialize(){
+
+        // mission list shows mission name
         missionList.setCellFactory(param -> new ListCell<Mission>() {
             @Override
             protected void updateItem(Mission item, boolean empty) {
@@ -74,13 +79,14 @@ public class MissionController extends BaseController{
 
         missions = MissionRepository.getObservableMissions();
 
+        // adding testmissions if no mission is loaded
         if (missions.size() < 1) {
             //showInfo("No missions found, added test missions to list.");
             MissionRepository.addTestMissions();
         }
 
         filteredMissions = new FilteredList<>(missions);
-        missionList.setItems(missions);
+        missionList.setItems(filteredMissions); // show filtered missions in list
     }
 
     // user searches mission in top search bar
@@ -92,17 +98,19 @@ public class MissionController extends BaseController{
         }));
     }
 
+    // empty search field
     @FXML
     void clearSearch(ActionEvent e) {
         searchField.setText("");
         missionList.setItems(filteredMissions);
     }
 
+    // selected mission from mission list
     Mission getSelectedMission() {
         return missionList.getSelectionModel().getSelectedItem();
     }
 
-    // 
+    // fired when user clicks on mission in list, sets active mission in repository and shows description
     @FXML
     void missionSelected(MouseEvent e) {
         Mission selectedMission = getSelectedMission();
@@ -115,14 +123,14 @@ public class MissionController extends BaseController{
         }
     }
 
-    // user clicked edit button
+    // user clicked edit button, open mission editor
     @FXML
     void startEditor(ActionEvent e) {
         Mission selectedMission = getSelectedMission();
         showSceneOnNewStage("Mission Editor - " + selectedMission.getName(), true, "view/MissionEditView.fxml");
     }
 
-    // user clicked simulate button
+    // user clicked simulate button, open simulation window
     @FXML
     void startSimulation(ActionEvent e) {
         Mission selectedMission = getSelectedMission();
@@ -130,6 +138,7 @@ public class MissionController extends BaseController{
         showSceneOnNewStage("Simulation - " + selectedMission.getName(), true, "view/SimulationView.fxml");
     }
 
+    // user clicked delete mission, ask him if he is sure, if yes delete mission from repository
     @FXML
     void deleteMission(ActionEvent e) {
         Mission selectedMission = getSelectedMission();
@@ -142,6 +151,7 @@ public class MissionController extends BaseController{
         }
     }
 
+    // user clicked new mission, add new mission to repository, open mission editor
     @FXML
     void newMission(ActionEvent e) {
         Mission newMission = new Mission("","");
@@ -150,7 +160,7 @@ public class MissionController extends BaseController{
         showSceneOnNewStage("Mission Editor - New mission", true, "view/MissionEditView.fxml");
     }
 
-    // user clicked copy button
+    // user clicked copy button, copy selected mission in repository, open mission editor
     @FXML
     void copyMission(ActionEvent e) {
         showError("Error copy mission.\nNot implemented!");
