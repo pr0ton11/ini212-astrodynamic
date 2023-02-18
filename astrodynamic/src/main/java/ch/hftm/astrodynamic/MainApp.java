@@ -1,11 +1,5 @@
 package ch.hftm.astrodynamic;
 
-/*
- *  Project Astrodynamic
- *  HFTM BBIN21.2a
- *  Rafael Stauffer, Marc Singer
- */
-
 import java.io.IOException;
 import java.util.logging.Logger;
 
@@ -16,6 +10,12 @@ import javafx.stage.Stage;
 
 import ch.hftm.astrodynamic.utils.ConfigRepository;
 import ch.hftm.astrodynamic.utils.Log;
+
+/*
+ *  Project Astrodynamic
+ *  HFTM BBIN21.2a
+ *  Rafael Stauffer, Marc Singer
+ */
 
 // Taken from OOP1, Creates a stage for the first window, after that the controllers are self-governing
 public class MainApp extends Application {
@@ -31,14 +31,16 @@ public class MainApp extends Application {
         launch(args);
     }
 
+    // launches primary window
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Astrodynamic");
-        this.showTestView();
+        this.showMissionView();
     }
 
-    public void showTestView() {
+    // opens up the mission overview
+    public void showMissionView() {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("view/MissionView.fxml"));
