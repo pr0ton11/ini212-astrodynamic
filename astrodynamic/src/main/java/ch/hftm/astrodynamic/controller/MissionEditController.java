@@ -6,6 +6,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.scene.web.HTMLEditor;
+
 import ch.hftm.astrodynamic.model.Mission;
 import ch.hftm.astrodynamic.model.conditions.Approach;
 import ch.hftm.astrodynamic.model.conditions.Avoid;
@@ -15,28 +26,19 @@ import ch.hftm.astrodynamic.model.conditions.HoldoutTime;
 import ch.hftm.astrodynamic.model.conditions.MaximumTime;
 import ch.hftm.astrodynamic.model.conditions.SetupHeavyLander;
 import ch.hftm.astrodynamic.scalar.ScalarFactory;
-import ch.hftm.astrodynamic.scalar.TimeScalar;
-import ch.hftm.astrodynamic.utils.BaseScalar;
 import ch.hftm.astrodynamic.utils.Log;
 import ch.hftm.astrodynamic.utils.MissionRepository;
 import ch.hftm.astrodynamic.utils.Named;
 import ch.hftm.astrodynamic.utils.Quad;
 import ch.hftm.astrodynamic.utils.Scalar;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
-import javafx.scene.web.HTMLEditor;
-import javafx.stage.Stage;
 
+/*
+ *  Project Astrodynamic
+ *  HFTM BBIN21.2a
+ *  Rafael Stauffer, Marc Singer
+ */
+
+ // mission edit handles modification of parameters and conditions of a mission
 public class MissionEditController extends BaseController{
 
     private Logger log = Log.build();
@@ -69,10 +71,10 @@ public class MissionEditController extends BaseController{
 
     ObservableList<Condition> conditions;
 
-    ObservableList<String> possibleUnits;
-    String lastSelectedUnitsize;
+    ObservableList<String> possibleUnits; // unit sizes for current condition parameter entry
+    String lastSelectedUnitsize; // save last unit size for conversion calculations
 
-    ObservableList<Named> possibleConditionRelationObjects;
+    ObservableList<Named> possibleConditionRelationObjects; // 
 
     Mission editedMission;
 
@@ -145,10 +147,13 @@ public class MissionEditController extends BaseController{
     private void initializeMissionData() {
         editedMission = MissionRepository.getActiveMission();
 
+        // if we have no planetoids in the mission, add default planetoids
         if (editedMission.getPlanetoidNames().size() < 1) {
+            log.info("Mission has no planetoids, setting up standard planets");
             editedMission.setupStandardSolarSystem();
         }
 
+        // load existing conditions into gui list
         for (Condition c: editedMission.getConditions()) {
             conditions.add(c);
         }
@@ -163,31 +168,37 @@ public class MissionEditController extends BaseController{
         possibleConditionRelationObjects.addAll(editedMission.getAllNamedAstronomicalObjects());
     }
 
+    // name and description from mission object to gui fields
     private void missionDataToFields() {
         missionName.setText(editedMission.getName());
         missionDescription.setHtmlText(editedMission.getDescription());
     }
 
+    // name and description from gui fields to mission object
     private void fieldsToMissionData() {
         editedMission.setName(missionName.getText());
         editedMission.setDescription(missionDescription.getHtmlText());
     }
 
+    // hide condition relation parameter fields
     private void hideNewConditionRelation() {
         newConditionInRelationLabel.setVisible(false);
         newConditionObject.setVisible(false);
     }
 
+    // show condition relation parameter fields
     private void showNewConditionRelation() {
         newConditionInRelationLabel.setVisible(true);
         newConditionObject.setVisible(true);
     }
 
+    // hide condition unit value parameter fields
     private void hideNewChoiceInput() {
         newUnitsize.setVisible(false);
         newConditionParameter.setVisible(false);
     }
 
+    // show condition unit value parameter fields with supported unitsizes in the dropdown
     private void showNewChoiceInput(String defaultUnitsize, String[] unitsizes) {
         newUnitsize.setVisible(true);
         possibleUnits.clear();
@@ -199,6 +210,7 @@ public class MissionEditController extends BaseController{
         lastSelectedUnitsize = newUnitsize.getSelectionModel().getSelectedItem();
     }
 
+    // reflection get the constructor of the condition
     Constructor getCurrentChoiceConstructor(boolean showErrorMsg) {
         // check if we have a constructor else error
         Class selConditionClass = newCondition.getSelectionModel().getSelectedItem();
@@ -211,6 +223,7 @@ public class MissionEditController extends BaseController{
         return constructors[0];
     }
 
+    // reflection get the parameter of a condition constructor on position paramPosition
     Parameter getCurrentChoiceParameter(Constructor constructor, boolean showErrorMsg, int paramPosition) {
         Parameter[] parameters = constructor.getParameters();
         if (parameters.length - 1 < paramPosition) {
@@ -249,6 +262,7 @@ public class MissionEditController extends BaseController{
         }
     }
 
+    // user clicked add condition, initialize the condition with the parameters, add to the mission, show in the gui condition list
     @FXML
     void addChoiceToList(ActionEvent e) {
         Class selConditionClass = newCondition.getSelectionModel().getSelectedItem();
@@ -262,6 +276,7 @@ public class MissionEditController extends BaseController{
 
         List<Object> instanceParams = new ArrayList<>();
 
+        // if we have a first parameter this is a scalar value, create and add it to the instanceParams
         if (firstParam != null) {
             try {
                 scalarParam = ScalarFactory.create(Double.parseDouble(newConditionParameter.getText()), ScalarFactory.getUnitFromClass(firstParam.getType()), lastSelectedUnitsize);
@@ -271,6 +286,7 @@ public class MissionEditController extends BaseController{
             }
         }
 
+        // if we have a second parameter this is a reference, get it and add it to the instanceParams
         if (secondParam != null) {
             try {
                 if (secondParam.getType() == Named.class) {
@@ -282,6 +298,7 @@ public class MissionEditController extends BaseController{
             }
         }
 
+        // create the new condition, add to the mission, add to the gui list
         try {
             Condition condition = (Condition)selConditionClass.getConstructors()[0].newInstance(instanceParams.toArray(new Object[0]));
             conditions.add(condition);
@@ -298,6 +315,8 @@ public class MissionEditController extends BaseController{
 
         try {
             Quad oldValue = new Quad(Double.parseDouble(newConditionParameter.getText()));
+
+            // use factory to convert between old and new unitsize
             Quad newValue = ScalarFactory.convert(ScalarFactory.getUnitFromClass(firstParam.getType()), oldValue, lastSelectedUnitsize, newUnitsize.getSelectionModel().getSelectedItem());
             newConditionParameter.setText(newValue.doubleValue().toString());
         } catch (Exception ex) {
@@ -307,6 +326,7 @@ public class MissionEditController extends BaseController{
         lastSelectedUnitsize = newUnitsize.getSelectionModel().getSelectedItem();
     }
 
+    // user clicked save, update mission from gui fields and exit edit window
     @FXML
     void saveMission(ActionEvent e) {
         fieldsToMissionData();
