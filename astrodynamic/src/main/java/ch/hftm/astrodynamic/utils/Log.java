@@ -14,10 +14,10 @@ import java.util.logging.FileHandler;
 // Logger Factory
 public class Log {
 
-    private static FileHandler fileHandler;
+    private static FileHandler fileHandler;  // Contains the handler for the log file
     private static boolean fileError = false; // Flag to check if file errors happened
-    private static ConsoleHandler consoleHandler = new ConsoleHandler();
-    private static Level logLevel = Level.INFO;
+    private static ConsoleHandler consoleHandler = new ConsoleHandler();  // Contains the console handler
+    private static Level logLevel = Level.INFO;  // Sets the default log level
 
     // Configures the logger based on the configuration repository
     public static void configure() {
