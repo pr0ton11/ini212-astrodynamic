@@ -19,7 +19,7 @@ import javafx.stage.Stage;
  *  Rafael Stauffer, Marc Singer
  */
 
-// base controller implements reused methods
+// base controller implements reused window methods
 public abstract class BaseController {
 
     // used to setup javaFX window
