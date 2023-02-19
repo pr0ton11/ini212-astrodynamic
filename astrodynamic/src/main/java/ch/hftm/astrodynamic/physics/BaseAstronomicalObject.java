@@ -219,4 +219,9 @@ public abstract class BaseAstronomicalObject implements AstronomicalObject, Name
         Vector direction = getDirectionWithRotation(partner);
         return direction.getY().getValue().doubleValue();
     }
+
+    // sets zero elevation heigth in meters
+    public void setZeroElevation(Scalar zeroElevation) {
+        zeroPointHeight = zeroElevation;
+    }
 }

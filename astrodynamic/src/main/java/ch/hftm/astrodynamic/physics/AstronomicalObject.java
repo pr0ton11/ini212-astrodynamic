@@ -26,6 +26,9 @@ public interface AstronomicalObject {
     // returns the zero elevation height in meters
     Scalar getZeroElevation();
 
+    // sets zero elevation heigth in meters
+    void setZeroElevation(Scalar zeroElevation);
+
     // returns true if offset point from center is filled with the collision shape
     boolean isColliding(Vector offset);
 

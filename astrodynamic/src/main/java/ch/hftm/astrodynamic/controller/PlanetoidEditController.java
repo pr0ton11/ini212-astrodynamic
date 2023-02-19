@@ -5,12 +5,20 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
+
+import java.util.logging.Logger;
+
 import ch.hftm.astrodynamic.physics.AtmosphereModel;
 import ch.hftm.astrodynamic.physics.Planetoid;
 import ch.hftm.astrodynamic.scalar.ScalarFactory;
+import ch.hftm.astrodynamic.utils.BaseVector;
+import ch.hftm.astrodynamic.utils.Log;
 import ch.hftm.astrodynamic.utils.MissionRepository;
+import ch.hftm.astrodynamic.utils.Quad;
 import ch.hftm.astrodynamic.utils.Scalar;
 import ch.hftm.astrodynamic.utils.Unit;
+import ch.hftm.astrodynamic.utils.UnitConversionError;
+import ch.hftm.astrodynamic.utils.Vector;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,6 +32,10 @@ import javafx.stage.Stage;
 
 // edit parameters of a planetoid
 public class PlanetoidEditController extends BaseController{
+    // for better exception messages
+    static final String VECTOR_NAME_POSITION = "position_";
+    static final String VECTOR_NAME_VELOCITY = "velocity_";
+
     @FXML
     TextField posX;
 
@@ -73,24 +85,31 @@ public class PlanetoidEditController extends BaseController{
     @FXML
     ComboBox<String> massUnit;
     ObservableList<String> massUnitOptions;
+    String previousMassUnit;
 
     @FXML
     ComboBox<String> zeroElevationUnit;
     ObservableList<String> zeroElevationUnitOptions;
+    String previousZeroElevationUnit;
 
     @FXML
     ComboBox<String> positionUnit;
     ObservableList<String> positionUnitOptions;
+    String previousPositionUnit;
 
     @FXML
     ComboBox<String> velocityUnit;
     ObservableList<String> velocityUnitOptions;
+    String previousVelocityUnit;
 
     @FXML
     ComboBox<String> atmosHeightUnit;
     ObservableList<String> atmosHeightUnitOptions;
+    String previousAtmosHeightUnit;
 
     Planetoid planetoidToEdit;
+
+    Logger log = Log.build();
 
     public PlanetoidEditController() {
         super();
@@ -119,6 +138,12 @@ public class PlanetoidEditController extends BaseController{
         initializeUnitBox(positionUnit, positionUnitOptions, Unit.LENGTH);
         initializeUnitBox(velocityUnit, velocityUnitOptions, Unit.VELOCITY);
         initializeUnitBox(atmosHeightUnit, atmosHeightUnitOptions, Unit.LENGTH);
+
+        previousMassUnit = ScalarFactory.getBaseUnitSize(Unit.MASS);
+        previousZeroElevationUnit = ScalarFactory.getBaseUnitSize(Unit.LENGTH);
+        previousPositionUnit = ScalarFactory.getBaseUnitSize(Unit.LENGTH);
+        previousVelocityUnit = ScalarFactory.getBaseUnitSize(Unit.VELOCITY);
+        previousAtmosHeightUnit = ScalarFactory.getBaseUnitSize(Unit.LENGTH);
     }
 
     // converts scalar to size set in unitsizeBox and outputs it to the field as String
@@ -149,34 +174,98 @@ public class PlanetoidEditController extends BaseController{
         atmosOxygenPercentage.setText(planetoidToEdit.getOxygenPercentage().getValue().doubleValue().toString());
     }
 
+    // tries to convert field to scalar, throws descriptive exception with field id if fail
+    Scalar fillFieldToScalar(TextField field, Unit unit, String unitsize, String fieldPrefixForError) throws UnitConversionError, NumberFormatException {
+        try {
+            return ScalarFactory.create(new Quad(Double.parseDouble(field.getText())), unit, unitsize);
+        } catch (NumberFormatException ex) {
+            throw new NumberFormatException(String.format("Text '%s' in field '%s%s' can not be parsed to a number", field.getText(), fieldPrefixForError, field.getId()));
+        } catch (UnitConversionError ex) {
+            throw new UnitConversionError(String.format("Text '%s' in field '%s%s' can not be converted from %s, %s to base unitsize", field.getText(), fieldPrefixForError, field.getId(), unit.toString(), unitsize));
+        }
+    }
+
+    // overload without field prefix
+    Scalar fillFieldToScalar(TextField field, Unit unit, String unitsize) throws UnitConversionError, NumberFormatException {
+        return fillFieldToScalar(field, unit, unitsize, "");
+    }
+
+    Vector fillFieldsToVector(TextField x, TextField y, TextField z, Unit unit, String unitsize, String vectorName) throws UnitConversionError, NumberFormatException {
+        Scalar sx = fillFieldToScalar(x, unit, unitsize, vectorName);
+        Scalar sy = fillFieldToScalar(y, unit, unitsize, vectorName);
+        Scalar sz = fillFieldToScalar(z, unit, unitsize, vectorName);
+
+        return new BaseVector(sx, sy, sz);
+    }
+
+    // convert and transfer data from the gui fields to the planetoid object
+    void moveDataFromGuiToObject() throws UnitConversionError, NumberFormatException {
+        planetoidToEdit.setName(name.getText());
+        planetoidToEdit.setDescription(description.getText());
+        
+        planetoidToEdit.setMass(fillFieldToScalar(mass, Unit.MASS, previousMassUnit));
+        planetoidToEdit.setZeroElevation(fillFieldToScalar(zeroElevation, Unit.LENGTH, previousZeroElevationUnit));
+
+        planetoidToEdit.setPosition(fillFieldsToVector(posX, posY, posZ, Unit.LENGTH, previousPositionUnit, VECTOR_NAME_POSITION));
+        planetoidToEdit.setVelocity(fillFieldsToVector(velX, velY, velZ, Unit.VELOCITY, previousVelocityUnit, VECTOR_NAME_VELOCITY));
+
+        // TODO atmos model
+        planetoidToEdit.setAtmosphereHeight(fillFieldToScalar(atmosHeight, Unit.LENGTH, previousAtmosHeightUnit));
+        // TODO oxygen percentage
+    }
+
+    // converts field text from one unitsize to another via ScalarFactory
+    void convertUnit(TextField field, ComboBox<String> unitsizeBox, Unit unit, String previousUnitsize) {
+        try {
+            Quad oldValue = new Quad(Double.parseDouble(field.getText()));
+
+            // use factory to convert between old and new unitsize
+            Quad newValue = ScalarFactory.convert(unit, oldValue, previousUnitsize, unitsizeBox.getSelectionModel().getSelectedItem());
+            field.setText(newValue.doubleValue().toString());
+        } catch (Exception ex) {
+            log.warning(String.format("Conversion between old %s and new %s unit sizes impossible", previousUnitsize, unitsizeBox.getSelectionModel().getSelectedItem()));
+        }
+    }
+
     // user changed the unitsize, convert value
     @FXML
     void massUnitChanged(ActionEvent e) {
-        askYesNo("You like tests?");
+        convertUnit(mass, massUnit, Unit.MASS, previousMassUnit);
+        previousMassUnit = massUnit.getSelectionModel().getSelectedItem();
     }
 
     // user changed the unitsize, convert value
     @FXML
     void zeroElevationUnitChanged(ActionEvent e) {
-        askYesNo("You like tests?");
+        convertUnit(zeroElevation, zeroElevationUnit, Unit.LENGTH, previousZeroElevationUnit);
+        previousZeroElevationUnit = zeroElevationUnit.getSelectionModel().getSelectedItem();
     }
 
     // user changed the unitsize, convert value
     @FXML
     void positionUnitChanged(ActionEvent e) {
-        askYesNo("You like tests?");
+        convertUnit(posX, positionUnit, Unit.LENGTH, previousPositionUnit);
+        convertUnit(posY, positionUnit, Unit.LENGTH, previousPositionUnit);
+        convertUnit(posZ, positionUnit, Unit.LENGTH, previousPositionUnit);
+        convertUnit(posMagnitude, positionUnit, Unit.LENGTH, previousPositionUnit);
+        previousPositionUnit = positionUnit.getSelectionModel().getSelectedItem();
     }
 
     // user changed the unitsize, convert value
     @FXML
     void velocityUnitChanged(ActionEvent e) {
-        askYesNo("You like tests?");
+        convertUnit(velX, velocityUnit, Unit.VELOCITY, previousVelocityUnit);
+        convertUnit(velY, velocityUnit, Unit.VELOCITY, previousVelocityUnit);
+        convertUnit(velZ, velocityUnit, Unit.VELOCITY, previousVelocityUnit);
+        convertUnit(velMagnitude, velocityUnit, Unit.VELOCITY, previousVelocityUnit);
+        previousVelocityUnit = velocityUnit.getSelectionModel().getSelectedItem();
     }
 
     // user changed the unitsize, convert value
     @FXML
     void atmosHeightChanged(ActionEvent e) {
-        askYesNo("You like tests?");
+        convertUnit(atmosHeight, atmosHeightUnit, Unit.LENGTH, previousAtmosHeightUnit);
+        previousAtmosHeightUnit = atmosHeightUnit.getSelectionModel().getSelectedItem();
     }
 
     // user changed the atmospheric model
@@ -188,13 +277,18 @@ public class PlanetoidEditController extends BaseController{
     // user cancels editing
     @FXML
     void cancelClicked(ActionEvent e) {
-        askYesNo("You like tests?");
+        getCurrentStage(e).close();
     }
 
     // user saves editing
     @FXML
     void okClicked(ActionEvent e) {
-        askYesNo("You like tests?");
+        try {
+            moveDataFromGuiToObject();
+            getCurrentStage(e).close();
+        } catch (UnitConversionError | NumberFormatException ex) {
+            showError("Can not save planetoid!\n"+ex.toString());
+        }
     }
 
     // user types in position dimension, update magnitude
