@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import ch.hftm.astrodynamic.physics.AtmosphereModel;
 import ch.hftm.astrodynamic.physics.Planetoid;
 import ch.hftm.astrodynamic.scalar.ScalarFactory;
@@ -194,5 +195,29 @@ public class PlanetoidEditController extends BaseController{
     @FXML
     void okClicked(ActionEvent e) {
         askYesNo("You like tests?");
+    }
+
+    // user types in position dimension, update magnitude
+    @FXML
+    void updatePosMagnitude(KeyEvent e) {
+        
+    }
+
+    // user types in position magnitude, scale dimensions
+    @FXML
+    void updatePosVector(KeyEvent e) {
+        
+    }
+
+    // user types in velocity dimension, update magnitude
+    @FXML
+    void updateVelMagnitude(KeyEvent e) {
+        
+    }
+
+    // user types in velocity magnitude, scale dimensions
+    @FXML
+    void updateVelVector(KeyEvent e) {
+        
     }
 }

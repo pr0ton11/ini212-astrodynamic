@@ -90,7 +90,7 @@
       <Label text="Model" GridPane.rowIndex="18" />
       <Label text="Height ground to outer space" GridPane.rowIndex="19" />
       <Label text="Oxygen percentage" GridPane.rowIndex="20" />
-      <ComboBox fx:id="atmosModel" onAction="#atmosModelChanged" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="18" />
+      <ComboBox fx:id="atmosModel" onAction="#atmosModelChanged" prefHeight="24.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="18" />
       <TextField fx:id="atmosHeight" GridPane.columnIndex="1" GridPane.rowIndex="19" />
       <ComboBox fx:id="massUnit" onAction="#massUnitChanged" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
       <ComboBox fx:id="zeroElevationUnit" onAction="#zeroElevationUnitChanged" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />

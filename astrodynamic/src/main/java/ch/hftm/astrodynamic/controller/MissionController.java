@@ -157,7 +157,7 @@ public class MissionController extends BaseController{
         Mission newMission = new Mission("","");
         MissionRepository.addMission(newMission);
         MissionRepository.setActiveMission(newMission);
-        showSceneOnNewStage("Mission Editor - New mission", true, "view/MissionEditView.fxml");
+        showSceneOnNewStage("Mission Editor - New mission", false, "view/MissionEditView.fxml");
     }
 
     // user clicked copy button, copy selected mission in repository, open mission editor

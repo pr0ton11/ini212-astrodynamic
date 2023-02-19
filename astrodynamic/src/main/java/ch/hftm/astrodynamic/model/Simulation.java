@@ -196,4 +196,12 @@ public class Simulation {
     public void setPlayerControlledVessel(Spaceship spaceship) {
         playerControlledVessel = spaceship;
     }
+
+    public List<Planetoid> getPlanetoids() {
+        return planetoids;
+    }
+
+    public List<Spaceship> getSpaceships() {
+        return spaceships;
+    }
 }

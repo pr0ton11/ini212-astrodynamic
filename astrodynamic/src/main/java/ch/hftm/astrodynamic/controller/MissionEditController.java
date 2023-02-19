@@ -25,6 +25,8 @@ import ch.hftm.astrodynamic.model.conditions.Depart;
 import ch.hftm.astrodynamic.model.conditions.HoldoutTime;
 import ch.hftm.astrodynamic.model.conditions.MaximumTime;
 import ch.hftm.astrodynamic.model.conditions.SetupHeavyLander;
+import ch.hftm.astrodynamic.physics.Planetoid;
+import ch.hftm.astrodynamic.physics.Spaceship;
 import ch.hftm.astrodynamic.scalar.ScalarFactory;
 import ch.hftm.astrodynamic.utils.Log;
 import ch.hftm.astrodynamic.utils.MissionRepository;
@@ -74,7 +76,15 @@ public class MissionEditController extends BaseController{
     ObservableList<String> possibleUnits; // unit sizes for current condition parameter entry
     String lastSelectedUnitsize; // save last unit size for conversion calculations
 
-    ObservableList<Named> possibleConditionRelationObjects; // 
+    ObservableList<Named> possibleConditionRelationObjects; // object which could be used as relation to a condition in the add new condition dropdown
+
+    @FXML
+    ListView<Planetoid> missionPlanetoids;
+    ObservableList<Planetoid> planetoids;
+
+    @FXML
+    ListView<Spaceship> missionSpaceships;
+    ObservableList<Spaceship> spaceships;
 
     Mission editedMission;
 
@@ -86,6 +96,9 @@ public class MissionEditController extends BaseController{
     public void initialize(){
 
         conditions = FXCollections.observableArrayList();
+        planetoids = FXCollections.observableArrayList();
+        spaceships = FXCollections.observableArrayList();
+        
         possibleConditions = FXCollections.observableArrayList();
         possibleUnits = FXCollections.observableArrayList();
         possibleConditionRelationObjects = FXCollections.observableArrayList();
@@ -141,6 +154,52 @@ public class MissionEditController extends BaseController{
 
         hideNewChoiceInput();
         hideNewConditionRelation();
+
+        missionPlanetoids.setCellFactory(param -> new ListCell<>() {
+            @Override
+            protected void updateItem(Planetoid item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getName());
+                }
+            }
+        });
+        missionPlanetoids.setItems(planetoids);
+
+        missionSpaceships.setCellFactory(param -> new ListCell<>() {
+            @Override
+            protected void updateItem(Spaceship item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getName());
+                }
+            }
+        });
+        missionSpaceships.setItems(spaceships);
+    }
+
+    // planetoid and spaceship changes are unobservable from gui, refresh them here
+    private void updateUnobservedListsFromObject() {
+        planetoids.clear();
+        // load existing planetoids into gui list
+        for (Planetoid p: editedMission.getPlanetoids()) {
+            planetoids.add(p);
+        }
+
+        spaceships.clear();
+        // load existing spaceships into gui list
+        for (Spaceship s: editedMission.getSpaceships()) {
+            spaceships.add(s);
+        }
+
+        possibleConditionRelationObjects.clear();
+        possibleConditionRelationObjects.addAll(editedMission.getAllNamedAstronomicalObjects());
     }
 
     // test data, missions would be stored on disk
@@ -165,7 +224,7 @@ public class MissionEditController extends BaseController{
         possibleConditions.add(Depart.class);
         possibleConditions.add(SetupHeavyLander.class);
 
-        possibleConditionRelationObjects.addAll(editedMission.getAllNamedAstronomicalObjects());
+        updateUnobservedListsFromObject();
     }
 
     // name and description from mission object to gui fields
@@ -303,6 +362,7 @@ public class MissionEditController extends BaseController{
             Condition condition = (Condition)selConditionClass.getConstructors()[0].newInstance(instanceParams.toArray(new Object[0]));
             conditions.add(condition);
             editedMission.addCondition(condition);
+            updateUnobservedListsFromObject(); // condition might changed something in planetoids/spaceships, update listviews
         } catch (Exception ex) {
             showError(ex.getMessage());
         }
@@ -331,5 +391,17 @@ public class MissionEditController extends BaseController{
     void saveMission(ActionEvent e) {
         fieldsToMissionData();
         getCurrentStage(e).close();
+    }
+
+    // user clicked on edit button under planetoids, open edit planetoid window if planetoid selected
+    @FXML
+    void editPlanetoid(ActionEvent e) {
+        if (missionPlanetoids.getSelectionModel().getSelectedItem() == null) {
+            showError("No planetoid selected in list. Please select planetoid first");
+        }
+
+        editedMission.setReferencePlanetoid(missionPlanetoids.getSelectionModel().getSelectedItem());
+
+        showSceneOnNewStage("Planetoid Editor - " + missionPlanetoids.getSelectionModel().getSelectedItem().getName(), false, "view/PlanetoidEditView.fxml");
     }
 }

@@ -45,6 +45,12 @@ public class ScalarFactory {
         velocityConversions.put("km/s", new Quad(1000.0));
         velocityConversions.put("km/h", new Quad(3.6));
         conversions.put(Unit.VELOCITY, velocityConversions);
+
+        Map<String, Quad> massConversions = new HashMap<>();
+        massConversions.put("kg", new Quad(1.0));
+        massConversions.put("g", new Quad(0.001));
+        massConversions.put("ton", new Quad(1000.0));
+        conversions.put(Unit.MASS, massConversions);
     }
 
     // oldValue gets converted from oldunitSize to newUnitSize
