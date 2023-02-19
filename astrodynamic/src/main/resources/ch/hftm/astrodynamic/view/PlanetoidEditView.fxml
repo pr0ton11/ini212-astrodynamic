@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
@@ -43,7 +42,7 @@
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <HBox prefHeight="100.0" prefWidth="294.0" GridPane.columnIndex="1" GridPane.rowIndex="22">
+      <HBox prefHeight="100.0" prefWidth="294.0" GridPane.columnIndex="2" GridPane.rowIndex="22">
          <children>
             <Button mnemonicParsing="false" onAction="#cancelClicked" text="Cancel" />
             <Button mnemonicParsing="false" onAction="#okClicked" text="Ok" />
@@ -90,14 +89,14 @@
       </Label>
       <Label text="Model" GridPane.rowIndex="18" />
       <Label text="Height ground to outer space" GridPane.rowIndex="19" />
-      <Label text="Contains oxygen" GridPane.rowIndex="20" />
+      <Label text="Oxygen percentage" GridPane.rowIndex="20" />
       <ComboBox fx:id="atmosModel" onAction="#atmosModelChanged" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="18" />
-      <CheckBox fx:id="atmosOxygen" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="20" />
       <TextField fx:id="atmosHeight" GridPane.columnIndex="1" GridPane.rowIndex="19" />
       <ComboBox fx:id="massUnit" onAction="#massUnitChanged" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
       <ComboBox fx:id="zeroElevationUnit" onAction="#zeroElevationUnitChanged" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
       <ComboBox fx:id="positionUnit" onAction="#positionUnitChanged" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
       <ComboBox fx:id="velocityUnit" onAction="#velocityUnitChanged" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="11" />
       <ComboBox fx:id="atmosHeightUnit" onAction="#atmosHeightChanged" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="19" />
+      <TextField fx:id="atmosOxygenPercentage" GridPane.columnIndex="1" GridPane.rowIndex="20" />
    </children>
 </GridPane>

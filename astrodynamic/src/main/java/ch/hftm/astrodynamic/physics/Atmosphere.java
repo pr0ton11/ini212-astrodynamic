@@ -22,4 +22,14 @@ public interface Atmosphere {
 
     // wind speed in m/s, absolute position 
     Vector getAtmosphereSpeed(Vector position);
+
+    // length over zero elevation, calculation cut off point
+    Scalar getAtmosphereHeight();
+
+    // length over zero elevation, calculation cut off point
+    void setAtmosphereHeight(Scalar height);
+
+    void setAtmosphereModel(AtmosphereModel model);
+
+    AtmosphereModel getAtmosphereModel();
 }

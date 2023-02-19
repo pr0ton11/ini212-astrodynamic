@@ -22,6 +22,7 @@ public class Simulation {
     Scalar totalTime;
 
     Spaceship playerControlledVessel; // this is a reference to the controlled vessel, vessel must also be present in spaceships list
+    Planetoid referencePlanetoid; // this is a reference, it is used as frame of reference for calculations in gui
     List<Planetoid> planetoids;
     List<Spaceship> spaceships;
     List<Condition> conditions;
@@ -182,5 +183,17 @@ public class Simulation {
         }
 
         return names;
+    }
+
+    public Planetoid getReferencePlanetoid() {
+        return referencePlanetoid;
+    }
+
+    public void setReferencePlanetoid(Planetoid planetoid) {
+        referencePlanetoid = planetoid;
+    }
+
+    public void setPlayerControlledVessel(Spaceship spaceship) {
+        playerControlledVessel = spaceship;
     }
 }
