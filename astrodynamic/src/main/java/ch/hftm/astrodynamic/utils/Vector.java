@@ -26,17 +26,11 @@ public interface Vector {
 
     Vector subtract(Vector vector) throws UnitConversionError;
 
-    Vector multiply(Vector vector) throws UnitConversionError;
-
     Vector multiply(Scalar value) throws UnitConversionError;
-
-    Vector divide(Vector vector) throws UnitConversionError;
 
     Vector divide(Scalar value) throws UnitConversionError;
 
     Vector normalize() throws UnitConversionError;
-    
-    Vector percentage() throws UnitConversionError;
 
     Vector rotateZ(AngleScalar rotation) throws UnitConversionError;
 
