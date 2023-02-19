@@ -37,7 +37,7 @@ public class MassScalar extends BaseScalar {
             case VELOCITY:
                 return new ForceScalar(multiplicationResult); // mass * velocity = force
             case MASS:
-                return new CubicMassScalar(multiplicationResult);- // mass * mass = cubic mass (mass²)
+                return new CubicMassScalar(multiplicationResult); // mass * mass = cubic mass (mass²)
             case UNITLESS:
                 return new MassScalar(multiplicationResult);
             default:
