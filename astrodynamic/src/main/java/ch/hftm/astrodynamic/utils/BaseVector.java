@@ -24,65 +24,6 @@ public class BaseVector implements Vector, Cloneable {
 
     private static Logger logger = Log.build();
 
-    @Override
-    public boolean equals(Object arg0) {
-        if (arg0 instanceof Vector) {
-            Vector ov = (Vector)arg0;
-            // vecotrs are equal if all three dimensions (x, y, z) are equal and the unit is equal
-            return ((ov.getX().equals(this.getX())) && (ov.getY().equals(this.getY())) && (ov.getZ().equals(this.getZ())) && (ov.getUnit() == this.getUnit()));
-        }
-        return false;
-    }
-
-    public BaseVector clone() {
-        return new BaseVector(this);
-    }
-
-    public Scalar getX() {
-        try {
-            return ScalarFactory.create(x, unit);
-        } catch (UnitConversionError e) {
-            logger.severe(String.format("Could not get scalar from %s .", this.toString()));
-        }
-        return null;
-    }
-
-    public Scalar getY() {
-        try {
-            return ScalarFactory.create(y, unit);
-        } catch (UnitConversionError e) {
-            logger.severe(String.format("Could not get scalar from %s .", this.toString()));
-        }
-        return null;
-    }
-
-    public Scalar getZ() {
-        try {
-            return ScalarFactory.create(z, unit);
-        } catch (UnitConversionError e) {
-            logger.severe(String.format("Could not get scalar from %s .", this.toString()));
-        }
-        return null;
-    }
-
-    public Scalar getLength() {
-        try {
-            return ScalarFactory.create(length, unit);
-        } catch (UnitConversionError e) {
-            logger.severe(String.format("Could not get scalar from %s .", this.toString()));
-        }
-        return null;
-    }
-
-    // magnitude from taking the root of ( x² + y² + z² )
-    private void calculateLength() {
-        Quad qX = getX().getValue().pow(2);
-        Quad qY = getY().getValue().pow(2);
-        Quad qZ = getZ().getValue().pow(2);
-
-        this.length = qX.add(qY).add(qZ).sqrt();
-    }
-
     // unitless zero vector
     public BaseVector() {
         this.x = new Quad();
@@ -160,6 +101,65 @@ public class BaseVector implements Vector, Cloneable {
         this.z = vector.getZ().getValue();
         this.unit = unit;
         calculateLength();
+    }
+
+    @Override
+    public boolean equals(Object arg0) {
+        if (arg0 instanceof Vector) {
+            Vector ov = (Vector)arg0;
+            // vecotrs are equal if all three dimensions (x, y, z) are equal and the unit is equal
+            return ((ov.getX().equals(this.getX())) && (ov.getY().equals(this.getY())) && (ov.getZ().equals(this.getZ())) && (ov.getUnit() == this.getUnit()));
+        }
+        return false;
+    }
+
+    public BaseVector clone() {
+        return new BaseVector(this);
+    }
+
+    public Scalar getX() {
+        try {
+            return ScalarFactory.create(x, unit);
+        } catch (UnitConversionError e) {
+            logger.severe(String.format("Could not get scalar from %s .", this.toString()));
+        }
+        return null;
+    }
+
+    public Scalar getY() {
+        try {
+            return ScalarFactory.create(y, unit);
+        } catch (UnitConversionError e) {
+            logger.severe(String.format("Could not get scalar from %s .", this.toString()));
+        }
+        return null;
+    }
+
+    public Scalar getZ() {
+        try {
+            return ScalarFactory.create(z, unit);
+        } catch (UnitConversionError e) {
+            logger.severe(String.format("Could not get scalar from %s .", this.toString()));
+        }
+        return null;
+    }
+
+    public Scalar getLength() {
+        try {
+            return ScalarFactory.create(length, unit);
+        } catch (UnitConversionError e) {
+            logger.severe(String.format("Could not get scalar from %s .", this.toString()));
+        }
+        return null;
+    }
+
+    // magnitude from taking the root of ( x² + y² + z² )
+    private void calculateLength() {
+        Quad qX = getX().getValue().pow(2);
+        Quad qY = getY().getValue().pow(2);
+        Quad qZ = getZ().getValue().pow(2);
+
+        this.length = qX.add(qY).add(qZ).sqrt();
     }
 
     public Unit getUnit() {
