@@ -53,7 +53,7 @@ public class ScalarFactory {
         return convert(old, newUnitsize);
     }
 
-    // value in unitsize gets converted to new quad in standard unit
+    // value in standard unit gets converted to quad in unitsize 
     public static Quad convert(Scalar value, String unitsize) {
         return value.getValue().divide(getConversionFactor(value.getUnit(), unitsize));
     }
