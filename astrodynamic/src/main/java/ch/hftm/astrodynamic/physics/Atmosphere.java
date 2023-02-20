@@ -1,6 +1,7 @@
 
 package ch.hftm.astrodynamic.physics;
 
+import ch.hftm.astrodynamic.scalar.UnitlessScalar;
 import ch.hftm.astrodynamic.utils.*;
 
 /*
@@ -17,8 +18,8 @@ public interface Atmosphere {
     // density in kg/m^3, height in m over zero-height mark of celestial body
     Scalar getDensity(Scalar height);
 
-    // percentage constant with altitude, multiply with density to get availability
-    Scalar getOxygenPercentage();
+    // factor constant with altitude, multiply with density to get availability
+    Scalar getOxygenFactor();
 
     // wind speed in m/s, absolute position 
     Vector getAtmosphereSpeed(Vector position);
@@ -32,4 +33,11 @@ public interface Atmosphere {
     void setAtmosphereModel(AtmosphereModel model);
 
     AtmosphereModel getAtmosphereModel();
+
+    void setOxygenFactor(Scalar oxygenFactor);
+
+    // default for convinient setting
+    default void setOxygenFactor(double oxygenFactor) {
+        setOxygenFactor(new UnitlessScalar(oxygenFactor));
+    }
 }

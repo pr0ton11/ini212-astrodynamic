@@ -3,6 +3,8 @@ package ch.hftm.astrodynamic.controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 
@@ -35,6 +37,11 @@ public class PlanetoidEditController extends BaseController{
     // for better exception messages
     static final String VECTOR_NAME_POSITION = "position_";
     static final String VECTOR_NAME_VELOCITY = "velocity_";
+
+    // oxygen spinner parameters
+    static final double OXYGEN_MIN = 0.0;
+    static final double OXYGEN_MAX = 1.0;
+    static final double OXYGEN_STEP = 0.01; // one percent per spinner step
 
     @FXML
     TextField posX;
@@ -79,7 +86,8 @@ public class PlanetoidEditController extends BaseController{
     ComboBox<AtmosphereModel> atmosModel;
 
     @FXML
-    TextField atmosOxygenPercentage;
+    Spinner<Double> atmosOxygenPercentage;
+    SpinnerValueFactory<Double> oxygenValues;
 
     // now the unit combo boxes for convinient unit display
     @FXML
@@ -119,9 +127,17 @@ public class PlanetoidEditController extends BaseController{
     public void initialize(){
         planetoidToEdit = MissionRepository.getActiveMission().getReferencePlanetoid();
 
+        initializeSpinner();
+
         initializeUnitComboboxes();
 
         moveDataFromObjectToGui();
+    }
+
+    // initialize the oxygen spinner with the double values
+    void initializeSpinner() {
+        oxygenValues = new SpinnerValueFactory.DoubleSpinnerValueFactory(OXYGEN_MIN, OXYGEN_MAX, OXYGEN_MIN, OXYGEN_STEP);
+        atmosOxygenPercentage.setValueFactory(oxygenValues);
     }
 
     // here we load a single unitsize into a dropdown and set the base unit
@@ -171,7 +187,7 @@ public class PlanetoidEditController extends BaseController{
 
         atmosModel.getSelectionModel().select(planetoidToEdit.getAtmosphereModel());
         fillScalarToField(planetoidToEdit.getAtmosphereHeight(), atmosHeight, atmosHeightUnit);
-        atmosOxygenPercentage.setText(planetoidToEdit.getOxygenPercentage().getValue().doubleValue().toString());
+        oxygenValues.setValue(planetoidToEdit.getOxygenFactor().getValue().doubleValue());
     }
 
     // tries to convert field to scalar, throws descriptive exception with field id if fail
@@ -209,9 +225,9 @@ public class PlanetoidEditController extends BaseController{
         planetoidToEdit.setPosition(fillFieldsToVector(posX, posY, posZ, Unit.LENGTH, previousPositionUnit, VECTOR_NAME_POSITION));
         planetoidToEdit.setVelocity(fillFieldsToVector(velX, velY, velZ, Unit.VELOCITY, previousVelocityUnit, VECTOR_NAME_VELOCITY));
 
-        // TODO atmos model
+        planetoidToEdit.setAtmosphereModel(atmosModel.getSelectionModel().getSelectedItem());
         planetoidToEdit.setAtmosphereHeight(fillFieldToScalar(atmosHeight, Unit.LENGTH, previousAtmosHeightUnit));
-        // TODO oxygen percentage
+        planetoidToEdit.setOxygenFactor(oxygenValues.getValue());
     }
 
     // converts field text from one unitsize to another via ScalarFactory
