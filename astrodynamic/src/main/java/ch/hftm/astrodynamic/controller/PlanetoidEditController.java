@@ -291,27 +291,67 @@ public class PlanetoidEditController extends BaseController{
         }
     }
 
+    // shorthand conversion between position fields to magnitude field, the unit and unitsize is unused in this case because it has no impact on the calculation
+    void updateMagnitudeFromPositions(TextField x, TextField y, TextField z, TextField m) throws UnitConversionError, NumberFormatException {
+        Vector vec = new BaseVector(Double.parseDouble(x.getText()), Double.parseDouble(y.getText()), Double.parseDouble(z.getText()));
+        m.setText(vec.getLength().getValue().doubleValue().toString());
+    }
+
+    // shorthand conversion between magnitude field to position fields, the unit and unitsize is unused in this case because it has no impact on the calculation
+    void updatePositionsFromMagnitude(TextField x, TextField y, TextField z, TextField m) throws UnitConversionError, NumberFormatException {
+        // make a normalized unitvector to get direction
+        Vector vec = new BaseVector(Double.parseDouble(x.getText()), Double.parseDouble(y.getText()), Double.parseDouble(z.getText()));
+        Vector normalized = vec.normalize();
+
+        // multiply (scale) by magnitude to get back new positions
+        Double magnitude = Double.parseDouble(m.getText());
+        Double xValue = normalized.getX().getValue().doubleValue() * magnitude;
+        Double yValue = normalized.getY().getValue().doubleValue() * magnitude;
+        Double zValue = normalized.getZ().getValue().doubleValue() * magnitude;
+
+        // fill into fields
+        x.setText(xValue.toString());
+        y.setText(yValue.toString());
+        z.setText(zValue.toString());
+    }
+
     // user types in position dimension, update magnitude
     @FXML
     void updatePosMagnitude(KeyEvent e) {
-        
+        try {
+            updateMagnitudeFromPositions(posX, posY, posZ, posMagnitude);
+        } catch (UnitConversionError | NumberFormatException ex) {
+            // user could still be typing, ignore error to not distract him
+        }
     }
 
     // user types in position magnitude, scale dimensions
     @FXML
     void updatePosVector(KeyEvent e) {
-        
+        try {
+            updatePositionsFromMagnitude(posX, posY, posZ, posMagnitude);
+        } catch (UnitConversionError | NumberFormatException ex) {
+            // user could still be typing, ignore error to not distract him
+        }
     }
 
     // user types in velocity dimension, update magnitude
     @FXML
     void updateVelMagnitude(KeyEvent e) {
-        
+        try {
+            updateMagnitudeFromPositions(velX, velY, velZ, velMagnitude);
+        } catch (UnitConversionError | NumberFormatException ex) {
+            // user could still be typing, ignore error to not distract him
+        }
     }
 
     // user types in velocity magnitude, scale dimensions
     @FXML
     void updateVelVector(KeyEvent e) {
-        
+        try {
+            updatePositionsFromMagnitude(velX, velY, velZ, velMagnitude);
+        } catch (UnitConversionError | NumberFormatException ex) {
+            // user could still be typing, ignore error to not distract him
+        }
     }
 }
