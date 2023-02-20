@@ -41,12 +41,14 @@ public class Serializer {
 
     // Loads the MissionRepository Object from a path
     public static void fromFile(String path) {
+        // Configure the object mapper, if not initialized
+        configureObjectMapper();
         try {
             // Read file with embedded file parser
-            MissionRepository mr = om.readValue(path, MissionRepository.class);
+            MissionRepository mr = om.readValue(Paths.get(path).toFile(), MissionRepository.class);
             // Update current mission repository from path
             MissionRepository.overrideInstance(mr);
-        } catch (JsonProcessingException ex) {
+        } catch (Exception ex) {
             log.severe(String.format("Could not load MissionRepository from file %s:", path));
             log.severe(ex.toString());
         }
@@ -54,6 +56,8 @@ public class Serializer {
 
     // Writes the MissionRepository Object to a path
     public static void toFile(String path) {
+        // Configure the object mapper, if not initialized
+        configureObjectMapper();
         try {
             // Write file with embedded file parser
             om.writeValue(Paths.get(path).toFile(), MissionRepository.getInstance());

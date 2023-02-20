@@ -3,6 +3,8 @@ package ch.hftm.astrodynamic.utils;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -51,7 +53,14 @@ public final class MissionRepository {
         return missions;
     }
 
+    // Replace missions with ArrayList missions
+    public static void setMissions(ArrayList<Mission> missions) {
+        getInstance().missions.clear();
+        getInstance().missions.addAll(missions);
+    }
+
     // Gets all missions as observable list
+    @JsonIgnore
     public static ObservableList<Mission> getObservableMissions() {
         return getInstance().missions;
     }

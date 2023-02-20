@@ -18,18 +18,23 @@ import ch.hftm.astrodynamic.scalar.ScalarFactory;
  *  Rafael Stauffer, Marc Singer
  */
 
+// Custom Deserializer for Scalars
 public class ScalarDeserializer extends StdDeserializer<Scalar> {
 
-    private static Logger log = Log.build();
+    private static Logger log = Log.build();  // Logger for this Deserializer
 
+    // Constructor
     public ScalarDeserializer() {
         this(null);
     }
 
+    // Constructor
     public ScalarDeserializer(Class<?> vc) {
         super(vc);
     }
 
+    // Custom deserialize function
+    // Returns a ScalarFactory created scalar built by the ScalarFactory with the right unit
     @Override
     public Scalar deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JacksonException {
         ObjectCodec codec = p.getCodec();
@@ -42,7 +47,7 @@ public class ScalarDeserializer extends StdDeserializer<Scalar> {
             Unit scalarUnit = Enum.valueOf(Unit.class, unitNode.asText());
             return ScalarFactory.create(scalarValue, scalarUnit);
         } catch(UnitConversionError ex) {
-            log.severe("Serialization of Scalar failed, invalid unit detected. Dafuq?");
+            log.severe("Serialization of Scalar failed, invalid unit detected");
             return null;
         }
     }
