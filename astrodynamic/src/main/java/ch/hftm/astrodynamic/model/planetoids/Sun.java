@@ -11,6 +11,7 @@ import ch.hftm.astrodynamic.model.Simulation;
 import ch.hftm.astrodynamic.physics.*;
 import ch.hftm.astrodynamic.scalar.LengthScalar;
 import ch.hftm.astrodynamic.scalar.MassScalar;
+import ch.hftm.astrodynamic.scalar.UnitlessScalar;
 import ch.hftm.astrodynamic.utils.*;
 
 /* the sun
@@ -26,7 +27,11 @@ public class Sun extends Planetoid {
             new BaseVector(Unit.LENGTH),
             new BaseVector(Unit.ANGLE),
             new BaseVector(Unit.VELOCITY),
-            new BaseVector(Unit.ANGULAR_VELOCITY));
+            new BaseVector(Unit.ANGULAR_VELOCITY),
+            new LengthScalar(new Quad(3.0, 6)), // 3000 km, wild guess according to https://en.wikipedia.org/wiki/Solar_transition_region#/media/File:Temperature-height_graph_for_solar_atmosphere.jpg
+            AtmosphereModel.QUADRATIC_FALLOFF,
+            new UnitlessScalar(0.0)
+            );
 
         setName("Sun");
         setDescription("Also called Helios or Sol");
