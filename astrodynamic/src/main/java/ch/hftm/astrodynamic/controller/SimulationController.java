@@ -86,6 +86,8 @@ public class SimulationController extends BaseController{
         initializeZoom();
         initializeEnlarge();
 
+        // TODO thick labels and tick marks: https://docs.oracle.com/javase/8/javafx/api/javafx/scene/control/Slider.html
+
         try {
             projection.draw();
         } catch (UnitConversionError e) {
