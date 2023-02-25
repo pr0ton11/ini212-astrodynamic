@@ -29,7 +29,8 @@ public class FlatProjection {
 
     private static final Scalar MINIMUM_DIAMETER = new LengthScalar(1);
     private static final Scalar MINIMUM_DIAMETER_TEXT_PLANETOID = new LengthScalar(40); // minimum screen size to show name
-    private static final Scalar MINIMUM_DIAMETER_TEXT_SHIP = new LengthScalar(4); // minimum screen size to show name
+    private static final Scalar MINIMUM_DIAMETER_TEXT_SHIP = new LengthScalar(2); // minimum screen size to show name
+    private static final boolean ALWAYS_SHOW_FOCUS_NAME = true; // always show name of focus object
 
     private Simulation simulation;
 
@@ -100,7 +101,7 @@ public class FlatProjection {
 
             gc.stroke();
 
-            if (diameter.ge(MINIMUM_DIAMETER_TEXT_PLANETOID)) {
+            if ((diameter.ge(MINIMUM_DIAMETER_TEXT_PLANETOID)) || ((ALWAYS_SHOW_FOCUS_NAME) && (p == focus))) {
                 gc.fillText(p.getName(), posX.getValue().doubleValue(), posY.getValue().doubleValue());
                 gc.fill();
             }
@@ -127,7 +128,7 @@ public class FlatProjection {
 
             gc.stroke();
 
-            if (diameter.ge(MINIMUM_DIAMETER_TEXT_SHIP)) {
+            if ((diameter.ge(MINIMUM_DIAMETER_TEXT_SHIP)) || ((ALWAYS_SHOW_FOCUS_NAME) && (s == focus))) {
                 gc.fillText(s.getName(), posX.getValue().doubleValue(), posY.getValue().doubleValue());
                 gc.fill();
             }

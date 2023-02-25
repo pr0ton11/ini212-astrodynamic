@@ -390,15 +390,38 @@ public class MissionEditController extends BaseController{
         getCurrentStage(e).close();
     }
 
+    // check if we have a valid planetoid selected else display error
+    boolean checkPlanetoidSelected() {
+        if (missionPlanetoids.getSelectionModel().getSelectedItem() == null) {
+            showError("No planetoid selected in list. Please select planetoid first");
+            return false;
+        }
+        return true;
+    }
+
     // user clicked on edit button under planetoids, open edit planetoid window if planetoid selected
     @FXML
     void editPlanetoid(ActionEvent e) {
-        if (missionPlanetoids.getSelectionModel().getSelectedItem() == null) {
-            showError("No planetoid selected in list. Please select planetoid first");
-        }
+        if (!checkPlanetoidSelected()) return;
 
         editedMission.setReferencePlanetoid(missionPlanetoids.getSelectionModel().getSelectedItem());
 
         showSceneOnNewStage("Planetoid Editor - " + missionPlanetoids.getSelectionModel().getSelectedItem().getName(), false, "view/PlanetoidEditView.fxml");
+    }
+
+    @FXML
+    void deletePlanetoid(ActionEvent e) {
+        if (!checkPlanetoidSelected()) return;
+
+        Planetoid selectedPlanetoid = missionPlanetoids.getSelectionModel().getSelectedItem();
+        if (askYesNo(String.format("Do you really want to delete planetoid '%s'?", selectedPlanetoid.getName()))) {
+            editedMission.removeAstronomicalObjectByName(selectedPlanetoid.getName());
+            updateUnobservedListsFromObject();
+        }
+    }
+
+    @FXML
+    void newPlanetoid(ActionEvent e) {
+        showError("Not implemented yet");
     }
 }

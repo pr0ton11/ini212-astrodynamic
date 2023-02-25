@@ -7,6 +7,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import ch.hftm.astrodynamic.model.Mission;
+import ch.hftm.astrodynamic.model.conditions.Approach;
+import ch.hftm.astrodynamic.model.conditions.SetupHeavyLander;
+import ch.hftm.astrodynamic.model.conditions.SetupISS;
+import ch.hftm.astrodynamic.scalar.LengthScalar;
 
 /*
  *  Project Astrodynamic
@@ -100,6 +104,11 @@ public final class MissionRepository {
         for (Mission m: getMissions()) {
             m.setupStandardSolarSystem();
         }
+
+        Mission tempMission = getMissionByName("Driving Miss Daisy");
+        tempMission.addCondition(new SetupHeavyLander(new LengthScalar(300000), tempMission.getAstronomicalObjectByName("Earth")));
+        tempMission.addCondition(new SetupISS(new LengthScalar(500000), tempMission.getAstronomicalObjectByName("Earth")));
+        tempMission.addCondition(new Approach(new LengthScalar(300), tempMission.getAstronomicalObjectByName("ISS")));
     }
     
 }
