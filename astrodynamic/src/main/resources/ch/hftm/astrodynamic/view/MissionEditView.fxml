@@ -38,7 +38,13 @@
       <ListView fx:id="missionConditions" prefHeight="200.0" prefWidth="200.0" />
       <Label text="Planetoids" />
       <ListView fx:id="missionPlanetoids" prefHeight="200.0" prefWidth="200.0" />
-      <Button mnemonicParsing="false" onAction="#editPlanetoid" text="Edit" />
+      <HBox prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#deletePlanetoid" text="Delete" />
+            <Button mnemonicParsing="false" onAction="#editPlanetoid" text="Edit" />
+            <Button mnemonicParsing="false" onAction="#newPlanetoid" text="New" />
+         </children>
+      </HBox>
       <Label text="Spaceships" />
       <ListView fx:id="missionSpaceships" prefHeight="200.0" prefWidth="200.0" />
       <BorderPane prefHeight="31.0" prefWidth="634.0">
