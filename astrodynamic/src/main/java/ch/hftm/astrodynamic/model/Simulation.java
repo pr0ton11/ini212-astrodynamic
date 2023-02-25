@@ -28,6 +28,9 @@ public class Simulation {
     List<Spaceship> spaceships;
     List<Condition> conditions;
 
+    boolean conditionMet;
+    Condition metCondition; // we only track the first condition that is met, after that the simulation should end
+
     public Simulation() {
         // ArrayLists instead of LinkedLists because number of list manipulations are low but access high
         planetoids = new ArrayList<>();
@@ -74,6 +77,12 @@ public class Simulation {
 
     // runs all simulation steps according to time passed since last simulation step
     public void simulate(Scalar deltaTime) throws SimulationRuntimeError, UnitConversionError {
+
+        // simulation ended because of a condition?
+        if (isResolved()) {
+            return;
+        }
+
         // we can not guarantee correct scalar behaviour if not time
         if (deltaTime.getUnit() != Unit.TIME) {
             throw new UnitConversionError("deltaTime must have unit time");
@@ -108,6 +117,8 @@ public class Simulation {
             // move objects by adding velocity to position
             o.applyVelocity(deltaTime);
         }
+
+        checkConditions();
         
         totalTime = totalTime.add(deltaTime);
     }
@@ -247,5 +258,31 @@ public class Simulation {
 
     public List<Spaceship> getSpaceships() {
         return spaceships;
+    }
+
+    // check conditons, if one is satisfied we set condtionsMet and reference it
+    private void checkConditions() {
+        for (Condition c: conditions) {
+            if (c.conditionMet(this)) {
+                conditionMet = true;
+                metCondition = c;
+            }
+        }
+    }
+
+    // have we resolved the simulation by satisfying a condition
+    public boolean isResolved() {
+        return conditionMet;
+    }
+
+    public Condition getMetCondition() {
+        return metCondition;
+    }
+
+    public String getMetConditionInfo() {
+        if (!isResolved()) {
+            return "";
+        }
+        return String.format("%s: %s", getMetCondition().getEndType().toString(), getMetCondition().getDescription());
     }
 }

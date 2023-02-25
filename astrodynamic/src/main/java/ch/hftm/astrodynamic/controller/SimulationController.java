@@ -227,6 +227,11 @@ public class SimulationController extends BaseController{
         } catch (Exception ex) {
             showError(ex.toString());
         }
+
+        // if condition is met, show info to user
+        if (currentMission.isResolved()) {
+            showInfo(currentMission.getMetConditionInfo());
+        }
     }
 
     public void simulateSecond(ActionEvent e) {
