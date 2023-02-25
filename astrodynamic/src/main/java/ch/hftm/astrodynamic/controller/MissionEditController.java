@@ -25,6 +25,7 @@ import ch.hftm.astrodynamic.model.conditions.Depart;
 import ch.hftm.astrodynamic.model.conditions.HoldoutTime;
 import ch.hftm.astrodynamic.model.conditions.MaximumTime;
 import ch.hftm.astrodynamic.model.conditions.SetupHeavyLander;
+import ch.hftm.astrodynamic.model.conditions.SetupISS;
 import ch.hftm.astrodynamic.physics.Planetoid;
 import ch.hftm.astrodynamic.physics.Spaceship;
 import ch.hftm.astrodynamic.scalar.ScalarFactory;
@@ -220,6 +221,7 @@ public class MissionEditController extends BaseController{
         possibleConditions.add(Avoid.class);
         possibleConditions.add(Depart.class);
         possibleConditions.add(SetupHeavyLander.class);
+        possibleConditions.add(SetupISS.class);
 
         updateUnobservedListsFromObject();
     }
