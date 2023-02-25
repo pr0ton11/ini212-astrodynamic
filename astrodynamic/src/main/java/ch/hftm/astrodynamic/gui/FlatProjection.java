@@ -18,7 +18,7 @@ import javafx.scene.paint.Color;
  *  Rafael Stauffer, Marc Singer
  */
 
-// Projects 3d space to 2d space ortographic
+// Projects 3d space to 2d space ortographic from Z direction
 public class FlatProjection {
     static final double DEFAULT_ZOOM_FACTOR = 0.0000001;
     static final double DEFAULT_ENLARGE_FACTOR = 10.0;
