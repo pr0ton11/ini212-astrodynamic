@@ -193,10 +193,7 @@ public class MissionEditController extends BaseController{
         }
 
         spaceships.clear();
-        // load existing spaceships into gui list
-        for (Spaceship s: editedMission.getSpaceships()) {
-            spaceships.add(s);
-        }
+        // load efocusList
 
         possibleConditionRelationObjects.clear();
         possibleConditionRelationObjects.addAll(editedMission.getAllNamedAstronomicalObjects());

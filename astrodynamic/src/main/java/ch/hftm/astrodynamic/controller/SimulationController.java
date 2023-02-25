@@ -1,5 +1,9 @@
 package ch.hftm.astrodynamic.controller;
 
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ListCell;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -16,6 +20,7 @@ import ch.hftm.astrodynamic.model.Mission;
 import ch.hftm.astrodynamic.model.Simulation;
 import ch.hftm.astrodynamic.model.conditions.SetupHeavyLander;
 import ch.hftm.astrodynamic.physics.AstronomicalObject;
+import ch.hftm.astrodynamic.physics.BaseAstronomicalObject;
 import ch.hftm.astrodynamic.physics.Spaceship;
 import ch.hftm.astrodynamic.scalar.LengthScalar;
 import ch.hftm.astrodynamic.scalar.ScalarFactory;
@@ -25,6 +30,7 @@ import ch.hftm.astrodynamic.utils.Quad;
 import ch.hftm.astrodynamic.utils.Scalar;
 import ch.hftm.astrodynamic.utils.Unit;
 import ch.hftm.astrodynamic.utils.UnitConversionError;
+import ch.hftm.astrodynamic.scalar.*;
 import javafx.animation.AnimationTimer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -48,14 +54,22 @@ public class SimulationController extends BaseController{
     static final int DEFAULT_ZOOM_FACTOR = -5;
     static final double DEFAULT_ENLARGE_FACTOR = 10.0;
 
+    // time units for buttons
+    static final Scalar ONE_SECOND = new TimeScalar(1);
+    static final Scalar ONE_MINUTE = new TimeScalar(60);
+    static final Scalar ONE_HOUR = new TimeScalar(3600);
+    static final Scalar ONE_DAY = new TimeScalar(86400);
+
     @FXML
     Canvas orbitView;
 
     @FXML
     ComboBox<AstronomicalObject> focus;
+    ObservableList<AstronomicalObject> focusList;
 
     @FXML
     ComboBox<AstronomicalObject> reference;
+    ObservableList<AstronomicalObject> referenceList;
 
     @FXML
     Label zoomReadout;
@@ -85,6 +99,12 @@ public class SimulationController extends BaseController{
 
         initializeZoom();
         initializeEnlarge();
+        initializeComboboxes();
+
+        for (AstronomicalObject o: currentMission.getAstronomicalObjects()) {
+            focusList.add(o);
+            referenceList.add(o);
+        }
 
         // TODO thick labels and tick marks: https://docs.oracle.com/javase/8/javafx/api/javafx/scene/control/Slider.html
 
@@ -95,6 +115,42 @@ public class SimulationController extends BaseController{
         }
 
         //currentMission.start();
+    }
+
+    // focus and reference drop downs
+    private void initializeComboboxes() {
+        focusList = FXCollections.observableArrayList();
+        referenceList = FXCollections.observableArrayList();
+
+        focus.setCellFactory(param -> new ListCell<>() {
+            @Override
+            protected void updateItem(AstronomicalObject item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    BaseAstronomicalObject bao = (BaseAstronomicalObject)item;
+                    setText(bao.getName());
+                }
+            }
+        });
+        focus.setItems(focusList);
+
+        reference.setCellFactory(param -> new ListCell<>() {
+            @Override
+            protected void updateItem(AstronomicalObject item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    BaseAstronomicalObject bao = (BaseAstronomicalObject)item;
+                    setText(bao.getName());
+                }
+            }
+        });
+        reference.setItems(referenceList);
     }
 
     // set up zoom slider with listener on change
@@ -152,5 +208,54 @@ public class SimulationController extends BaseController{
     // enlargefactor is a 1:1 mapping of the slider, this method is here as a shim for future changes
     private Scalar calculateEnlargeFactor(double sliderValue) throws UnitConversionError {
         return new UnitlessScalar(new Quad(sliderValue));
+    }
+
+    // save mission to repository
+    public void saveMission(ActionEvent e) {
+        showError("Not implemented yet");
+    }
+
+    // copy save mission to repository
+    public void copyMission(ActionEvent e) {
+        showError("Not implemented yet");
+    }
+
+    private void simulate(Scalar totalTime) {
+        try {
+            currentMission.simulateInSteps(totalTime);
+            projection.draw();
+        } catch (Exception ex) {
+            showError(ex.toString());
+        }
+    }
+
+    public void simulateSecond(ActionEvent e) {
+        simulate(ONE_SECOND);
+    }
+
+    public void simulateMinute(ActionEvent e) {
+        simulate(ONE_MINUTE);
+    }
+
+    public void simulateHour(ActionEvent e) {
+        simulate(ONE_HOUR);
+    }
+
+    public void simulateDay(ActionEvent e) {
+        simulate(ONE_DAY);
+    }
+
+    public void focusChanged(ActionEvent e) {
+        try {
+            projection.setFocus(focus.getSelectionModel().getSelectedItem());
+            projection.draw();
+        } catch (Exception ex) {
+            showError(ex.toString());
+        }
+    }
+
+    public void referenceChanged(ActionEvent e) {
+        //reference.getSelectionModel().getSelectedItem();
+        //projection.draw();
     }
 }

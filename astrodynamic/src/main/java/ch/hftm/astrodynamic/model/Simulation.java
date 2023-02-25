@@ -6,7 +6,8 @@ package ch.hftm.astrodynamic.model;
  *  Rafael Stauffer, Marc Singer
  */
 
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
 
 import ch.hftm.astrodynamic.model.conditions.Condition;
 import ch.hftm.astrodynamic.physics.*;
@@ -17,7 +18,7 @@ import ch.hftm.astrodynamic.utils.*;
 
 public class Simulation {
 
-    static Scalar UPDATE_TIME_STEP = new TimeScalar(0.1); // we aim to update the simulation once each 0.1 seconds
+    static Scalar UPDATE_TIME_STEP = new TimeScalar(0.5); // we aim to update the simulation once each 0.5 seconds
 
     Scalar totalTime;
 
@@ -62,6 +63,15 @@ public class Simulation {
             s.setupSimulation(this);
     }
 
+    // slices simulation time into descrete steps for simulation
+    public void simulateInSteps(Scalar deltaTime) throws SimulationRuntimeError, UnitConversionError {
+        while (deltaTime.gt(UPDATE_TIME_STEP)) {
+            simulate(UPDATE_TIME_STEP);
+            deltaTime = deltaTime.subtract(UPDATE_TIME_STEP);
+        }
+        simulate(deltaTime);
+    }
+
     // runs all simulation steps according to time passed since last simulation step
     public void simulate(Scalar deltaTime) throws SimulationRuntimeError, UnitConversionError {
         // we can not guarantee correct scalar behaviour if not time
@@ -74,12 +84,31 @@ public class Simulation {
             throw new SimulationRuntimeError("deltaTime must be greater than zero");
         }
 
-        for (Planetoid p: planetoids) {
-                
+        // reference for more readable access
+        List<AstronomicalObject> objects = getAstronomicalObjects();
+
+        // calculate gravity, only calculate with partners we have not met yet
+        for (int i = 0; i < objects.size(); i++) {
+            for (int j = i + 1; j < objects.size(); j++) {
+                Vector force = objects.get(i).calculateGravitationalForce(objects.get(j));
+
+                Vector originalAcceleration = objects.get(i).calculateAccelerationFromForce(force);
+
+                // we calculated the force vector from earth so we need to invert the direction for moon
+                Vector partnerAcceleration = objects.get(j).calculateAccelerationFromForce(force.invert());
+
+                // add acceleration to the velocity
+                objects.get(i).applyAcceleration(originalAcceleration, deltaTime);
+                objects.get(j).applyAcceleration(partnerAcceleration, deltaTime);
+            }
         }
 
-
-
+        for (AstronomicalObject o: objects)
+        {
+            // move objects by adding velocity to position
+            o.applyVelocity(deltaTime);
+        }
+        
         totalTime = totalTime.add(deltaTime);
     }
 
@@ -89,6 +118,21 @@ public class Simulation {
 
     public Spaceship getPlayerControlledVessel() {
         return playerControlledVessel;
+    }
+
+    // get all objects with gravitational effects
+    public List<AstronomicalObject> getAstronomicalObjects() {
+        List<AstronomicalObject> objects = new ArrayList<>();
+        
+        for (Planetoid p: planetoids) {
+            objects.add(p);
+        }
+
+        for (Spaceship s: spaceships) {
+            objects.add(s);
+        }
+
+        return objects;
     }
 
     public BaseAstronomicalObject getAstronomicalObjectByName(String name) {

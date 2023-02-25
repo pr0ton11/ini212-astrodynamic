@@ -172,7 +172,7 @@ public abstract class BaseAstronomicalObject implements AstronomicalObject, Name
         Vector direction = getDirection(partner).normalize();
 
         // TODO: fix dimensional unit
-        Scalar velocity = new VelocityScalar(partner.getMass().getValue().multiply(distance.getValue()).multiply(ScalarFactory.gravitationalConstant().getValue()));
+        Scalar velocity = new VelocityScalar(partner.getMass().getValue().divide(distance.getValue()).multiply(ScalarFactory.gravitationalConstant().getValue()));
 
         // here we turn the velocity vector by 90° to the partner direction to gain an orbit
         // TODO: dot/cross product would be more stable/sane

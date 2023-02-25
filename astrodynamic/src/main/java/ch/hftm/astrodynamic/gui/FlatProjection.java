@@ -3,6 +3,7 @@ package ch.hftm.astrodynamic.gui;
 import ch.hftm.astrodynamic.model.Simulation;
 import ch.hftm.astrodynamic.physics.AstronomicalObject;
 import ch.hftm.astrodynamic.physics.Planetoid;
+import ch.hftm.astrodynamic.physics.Spaceship;
 import ch.hftm.astrodynamic.scalar.LengthScalar;
 import ch.hftm.astrodynamic.scalar.UnitlessScalar;
 import ch.hftm.astrodynamic.utils.Scalar;
@@ -24,6 +25,11 @@ public class FlatProjection {
 
     private static final int POSITION_WIDTH = 2;
     private static final Color POSITION_COLOR = Color.GREEN;
+    private static final Color SHIP_COLOR = Color.RED;
+
+    private static final Scalar MINIMUM_DIAMETER = new LengthScalar(1);
+    private static final Scalar MINIMUM_DIAMETER_TEXT_PLANETOID = new LengthScalar(40); // minimum screen size to show name
+    private static final Scalar MINIMUM_DIAMETER_TEXT_SHIP = new LengthScalar(4); // minimum screen size to show name
 
     private Simulation simulation;
 
@@ -83,12 +89,48 @@ public class FlatProjection {
             Scalar radius = p.getZeroElevation().multiply(enlargeObjectsFactor).multiply(zoomFactor);
             Scalar diameter = radius.multiply(new UnitlessScalar(2.0)); 
 
+            if (diameter.le(MINIMUM_DIAMETER)) {
+                diameter = MINIMUM_DIAMETER;
+            }
+
             System.out.println(p.getName() + " pos " + posX.toString() + ", " + posY.toString());
             System.out.println(p.getName() + " radius " + radius.toString());
 
             gc.strokeOval(posX.subtract(radius).getValue().doubleValue(), posY.subtract(radius).getValue().doubleValue(), diameter.getValue().doubleValue(), diameter.getValue().doubleValue());
 
             gc.stroke();
+
+            if (diameter.ge(MINIMUM_DIAMETER_TEXT_PLANETOID)) {
+                gc.fillText(p.getName(), posX.getValue().doubleValue(), posY.getValue().doubleValue());
+                gc.fill();
+            }
+        }
+
+        // TODO: REFACTOR THIS
+        gc.setStroke(Color.RED);
+
+        for (Spaceship s: simulation.getSpaceships()) {
+
+            Scalar posX = s.getPosition().getX().multiply(zoomFactor).subtract(focusX).add(canvasX);
+            Scalar posY = s.getPosition().getY().multiply(zoomFactor).subtract(focusY).add(canvasY);
+            Scalar radius = s.getZeroElevation().multiply(enlargeObjectsFactor).multiply(zoomFactor);
+            Scalar diameter = radius.multiply(new UnitlessScalar(2.0));
+
+            if (diameter.le(MINIMUM_DIAMETER)) {
+                diameter = MINIMUM_DIAMETER;
+            }
+
+            System.out.println(s.getName() + " pos " + posX.toString() + ", " + posY.toString());
+            System.out.println(s.getName() + " radius " + radius.toString());
+
+            gc.strokeOval(posX.subtract(radius).getValue().doubleValue(), posY.subtract(radius).getValue().doubleValue(), diameter.getValue().doubleValue(), diameter.getValue().doubleValue());
+
+            gc.stroke();
+
+            if (diameter.ge(MINIMUM_DIAMETER_TEXT_SHIP)) {
+                gc.fillText(s.getName(), posX.getValue().doubleValue(), posY.getValue().doubleValue());
+                gc.fill();
+            }
         }
     }
 
