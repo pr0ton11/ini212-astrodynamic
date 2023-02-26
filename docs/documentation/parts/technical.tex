@@ -10,6 +10,22 @@
 	\caption{Übersicht Aufbau Astrodynamic}
 \end{figure}
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=12cm]{res/AstrodynamicHighlevel.png}
+	\caption{Übersicht Physik-Klassen und -Interfaces}
+\end{figure}
+
+Das BaseAstronomicalObject bietet die Basis für die Physikberechnung. Spezifische Interfaces wie die Atmosphärendaten für die Planeten oder Drag-Berechnungen für die Raumschiffe werden in den jeweiligen Kindklassen implementiert.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=12cm]{res/AstrodynamicDimensions.png}
+	\caption{Übersicht Mathematische-Klassen und -Interfaces}
+\end{figure}
+
+Scalare und Vektoren verwenden die Quad-Klasse um exakte Werte zu speichern. Um die Dimensionsanalyse in den spezifischen Skalarimplementationen (nicht im Diagram aufgeführt) durchzuführen wird der Enum Unit verwendet.
+
 \subsection{Maven build}
 
 Um mittels Maven ein Build zu erzeugen kann der Befehl \textit{mvn clean package} verwendet werden.
