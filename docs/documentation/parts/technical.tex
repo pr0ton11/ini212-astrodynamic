@@ -152,11 +152,51 @@ Ebenfalls wurde eine mögliche Serialisierung ins JSON-Format vorbereitet. Dazu 
 \section{Exceptions}
 
 Mit dem \textit{UnitConversionError} im \textit{ch.hftm.astrodynamic.utils} Package haben wir unsere eigene Exception implemementiert.
-
 Diese Exception dient dazu, inkompatible Einheiten in den \textit{Scalar} Klassen abzufangen und zu handeln.
-
 Ebenfalls nutzen wir mit dem \textit{SimulationRuntimeError} eine weitere eigene Exception, welche für Fehler während der Simulation genutzt wird.
 
 \section{Logging}
 
+Wir nutzen unseren eigenen Logger, welchen wir innerhalb der Klasse \textit{Log} in \textit{ch.hftm.astrodynamic.utils} implementiert haben.
+Diese Klasse konfiguriert den Logger basierend auf Konfigurationswerten aus der Klasse \textit{ConfigRepository}.
+Um den Logger zu nutzen kann die Methode \textit{build()} verwendet werden, welche den konfigurierten Logger des Typs \textit{java.util.logging.Logger} zurückgibt.
 
+\subparagraph{Levels}
+
+Mittels dem Konfigurationswert \textit{LOG LEVEL} kann der Level des Log Outputs definiert werden.
+Die Standardkonfiguration für das Level ist auf \textit{INFO} gesetzt. Mit diesem Level werden alle Meldungen mit höherer Priorität als Info ausgegeben. 
+
+\subparagraph{File}
+
+Mittels dem Konfigurationswert \textit{LOG FILE} kann ein Log File definiert werden, in welchen die Logzeilen gespeichert werden.
+In der Standardkonfiguration wird das Logfile \textit{astrodynamic.log} verwendet.
+
+\section{Pakete}
+
+Wir strukturieren unser Projekt innerhalb verschiedenen Java Paketen:
+
+\begin{itemize}
+	\item controller; Enthält alle Controller für das Frontend
+	\item gui; Enthält Komponenten, welche im Frontend verwendet werden
+	\item model; Enthält Modelle für die Simulation
+	\begin{itemize}
+		\item conditions; Enthält Bedingungen für Missionen
+		\item planetoids; Enthält vordefinerte Planeten für Missionen
+		\item spaceships; Enthält vordefinierte Weltraumfahrzeuge für Missionen
+	\end{itemize}
+	\item physicts; Enthält Klassen für physikalische Objekte
+	\item scalar; Enthält Kinder-Klassen für Scalare (Werte mit zugewiesenen Einheiten)
+	\item utils; Enthält Hilfsklassen und Basisklassen
+	\item ressources; Enthält Ressourcen (z.B Bilder), welche in unserem Projekt verwendet werden 
+\end{itemize}
+
+Diese Pakete können einzeln oder ganz innerhalb des Projekts oder anderen Projekten importiert werden.
+
+\section{Singletons}
+
+Wir nutzen in unserem Projekt Singleton Klassen, um sicherzustellen, dass nur ein einzelnes statisches Element veränderbar ist.
+
+Ein Beispiel einer solchen Klasse ist das \textit{MissionRepository} aus dem Paket \textit{ch.hftm.astrodynamic.utils}.
+Die integrierte \textit{ObservabeList missions} muss für das gesamte Projekt während der Laufzeit einmalig sein. Damit wir keine Instanzen übergeben müssen, instanzieren wir diese Liste statisch.
+
+Während die Liste selbst statisch bleibt, kann das MissionRepository jederzeit instanziert werden.
