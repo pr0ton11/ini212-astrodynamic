@@ -144,6 +144,8 @@ public final class MissionRepository {
         tempMission.addCondition(new SetupHeavyLander(new LengthScalar(300000), tempMission.getAstronomicalObjectByName("Earth")));
         tempMission.addCondition(new SetupISS(new LengthScalar(500000), tempMission.getAstronomicalObjectByName("Earth")));
         tempMission.addCondition(new Approach(new LengthScalar(300), tempMission.getAstronomicalObjectByName("ISS")));
+
+        tempMission.setPlayerControlledVessel((Spaceship)tempMission.getAstronomicalObjectByName("Heavy Lander"));
     }
     
 }
