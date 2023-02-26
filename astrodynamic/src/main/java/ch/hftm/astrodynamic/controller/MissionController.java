@@ -135,7 +135,7 @@ public class MissionController extends BaseController{
     void startSimulation(ActionEvent e) {
         Mission selectedMission = getSelectedMission();
 
-        showSceneOnNewStage("Simulation - " + selectedMission.getName(), true, "view/SimulationView.fxml");
+        showSceneOnNewStage("Simulation - " + selectedMission.getName(), false, "view/SimulationView.fxml");
     }
 
     // user clicked delete mission, ask him if he is sure, if yes delete mission from repository
@@ -163,6 +163,13 @@ public class MissionController extends BaseController{
     // user clicked copy button, copy selected mission in repository, open mission editor
     @FXML
     void copyMission(ActionEvent e) {
-        showError("Error copy mission.\nNot implemented!");
+        showError("Not implemented");
+        return;
+
+        /*
+        Mission clonedMission = MissionRepository.cloneMission();
+        MissionRepository.setActiveMission(clonedMission);
+        showSceneOnNewStage("Mission Editor - " + MissionRepository.getActiveMission().getName(), false, "view/MissionEditView.fxml");
+        */
     }
 }
