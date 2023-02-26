@@ -1,5 +1,9 @@
 package ch.hftm.astrodynamic.utils;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
@@ -24,12 +28,15 @@ import ch.hftm.astrodynamic.scalar.LengthScalar;
  */
 
  // Singleton class containing all the Missions
-public final class MissionRepository {
+public final class MissionRepository implements Serializable {
+    
+    private static final long serialVersionUID = 1L;
+
     private static MissionRepository instance;  // Single instance of the mission repository
 
     private MissionRepository() {}  // Constructor
 
-    private ObservableList<Mission> missions = FXCollections.observableArrayList();  // List of missions
+    private transient ObservableList<Mission> missions = FXCollections.observableArrayList();  // List of missions
     private Mission activeMission;  // Current active mission
 
     // Retrieving and working with the singleton class, used primarly internally
@@ -147,5 +154,31 @@ public final class MissionRepository {
 
         tempMission.setPlayerControlledVessel((Spaceship)tempMission.getAstronomicalObjectByName("Heavy Lander"));
     }
+
+    // Custom serializer for this class
+    // Used to serialize a JavaFX ObservableList
+    private void writeObject(ObjectOutputStream outputStream) throws IOException {
+        // Use default serialization for the serializable objects
+        outputStream.defaultWriteObject();
+        // Add the observable list as array to the outputStream
+        outputStream.writeObject(missions.toArray());
+    }
     
+    // Custom deserializer for this class
+    // Used to deserialize a JavaFX ObservableList
+    private void readObject(ObjectInputStream inputStream) throws ClassNotFoundException, IOException {
+        // Use default deserialization for the deserializable objects
+        inputStream.defaultReadObject();
+        // Extract the raw missions from inputStream
+        Object[] rawMissions = (Object[])inputStream.readObject();
+        // Reinitialize mission
+        missions = FXCollections.observableArrayList();
+        // Add the missions
+        for (Object mission : rawMissions) {
+            // Cast object to mission
+            missions.add((Mission) mission);
+        }
+        
+    }
+
 }

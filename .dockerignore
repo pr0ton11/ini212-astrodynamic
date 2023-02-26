@@ -2,5 +2,7 @@
 target/
 # Log files
 *.log
+# Serializer binary files
+*.bin
 # Unit tests
 MissionRepositorySerializationTest.json
