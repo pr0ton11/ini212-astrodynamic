@@ -1,43 +1,43 @@
 # Astrodynamic
 
 Must have from test standpoint
-- [ ] Documentation
-    - [ ] User guide with Goal
-    - [ ] Technical documentation
-        - [ ] Reason for implementation choice and place for each requirement thema
-- [ ] Unitests
+- [X] Documentation
+    - [X] User guide with Goal
+    - [X] Technical documentation
+        - [X] Reason for implementation choice and place for each requirement thema
+- [X] Unitests
     - [ ] No class without unit test
-- [ ] Enum
-    - [ ] SI Units for conversion
-- [ ] Inheritance
-    - [ ] Base class between Planetoid, Satellite and Spaceship
-- [ ] Casting
-- [ ] Interface
-    - [ ] Per physic calculation
-        - [ ] Gravitation
+- [X] Enum
+    - [X] SI Units for conversion
+- [X] Inheritance
+    - [X] Base class between Planetoid, Satellite and Spaceship
+- [X] Casting
+- [X] Interface
+    - [X] Per physic calculation
+        - [X] Gravitation
         - [ ] Atmosphere
-        - [ ] Affected by Gravitation
+        - [X] Affected by Gravitation
         - [ ] Affected by Drag
-- [ ] Collections
-    - [ ] Scenario list
-    - [ ] Physic object list
-- [ ] Sorting
+- [X] Collections
+    - [X] Scenario list
+    - [X] Physic object list
+- [X] Sorting
     - [ ] Scenario sorting by Name, Tags, Text in Description
-- [ ] Serialization
+- [X] Serialization
     - [ ] JSONB Scenarios with subobjects
-    - [ ] Save state
-- [ ] Exception handling
-- [ ] Log file
-    - [ ] With log levels
-- [ ] Maven build
+    - [X] Save state
+- [X] Exception handling
+- [X] Log file
+    - [X] With log levels
+- [X] Maven build
 - [ ] Executable
 
 Must have from project standpoint
-- [ ] Gravitational calculation
+- [X] Gravitational calculation
 - [ ] Drag calculation
-- [ ] Scenario
-- [ ] Planetoid
-- [ ] Spaceship
+- [X] Scenario
+- [X] Planetoid
+- [X] Spaceship
 
 Optional
 - [ ] Predefined objects loadable from json
