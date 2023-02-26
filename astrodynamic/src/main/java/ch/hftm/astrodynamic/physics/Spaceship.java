@@ -23,14 +23,12 @@ public class Spaceship extends BaseAstronomicalObject implements Drag {
 
     @Override
     public Scalar getDragCoefficient(Vector directionThroughMedium) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     // returns frontal area in m² according to the direction vector
     @Override
     public Scalar getFrontArea(Vector directionThroughMedium) {
-        // TODO Auto-generated method stub
         return null;
     }
 

@@ -19,6 +19,7 @@ import ch.hftm.astrodynamic.utils.*;
 
 // Base to fill computational methods, abstract to force use of specific child classes
 public abstract class BaseAstronomicalObject implements AstronomicalObject, Named {
+
     private Scalar zeroPointHeight;
     private Scalar mass;
     private Vector position;
@@ -224,4 +225,5 @@ public abstract class BaseAstronomicalObject implements AstronomicalObject, Name
     public void setZeroElevation(Scalar zeroElevation) {
         zeroPointHeight = zeroElevation;
     }
+    
 }

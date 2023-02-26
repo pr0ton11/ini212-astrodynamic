@@ -1,5 +1,9 @@
 package ch.hftm.astrodynamic.gui;
 
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+
 import ch.hftm.astrodynamic.model.Simulation;
 import ch.hftm.astrodynamic.physics.AstronomicalObject;
 import ch.hftm.astrodynamic.physics.Planetoid;
@@ -8,9 +12,6 @@ import ch.hftm.astrodynamic.scalar.LengthScalar;
 import ch.hftm.astrodynamic.scalar.UnitlessScalar;
 import ch.hftm.astrodynamic.utils.Scalar;
 import ch.hftm.astrodynamic.utils.UnitConversionError;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 
 /*
  *  Project Astrodynamic
@@ -20,6 +21,7 @@ import javafx.scene.paint.Color;
 
 // Projects 3d space to 2d space ortographic from Z direction
 public class FlatProjection {
+    
     static final double DEFAULT_ZOOM_FACTOR = 0.0000001;
     static final double DEFAULT_ENLARGE_FACTOR = 10.0;
 

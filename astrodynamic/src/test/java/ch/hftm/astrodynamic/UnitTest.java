@@ -18,6 +18,7 @@ import ch.hftm.astrodynamic.utils.Scalar;
 
  // Tests for the SI classes
 public class UnitTest {
+    
     // test addition
     @Test
     public void TestAddition() throws UnitConversionError {
@@ -241,4 +242,5 @@ public class UnitTest {
         Assert.assertEquals(7.5, svR.getValue().doubleValue(), 0.0);
         Assert.assertEquals(Unit.UNITLESS, svR.getUnit());
     }
+    
 }

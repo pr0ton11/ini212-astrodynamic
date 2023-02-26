@@ -13,10 +13,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 
-import java.util.logging.Logger;
-
 import ch.hftm.astrodynamic.model.*;
-import ch.hftm.astrodynamic.utils.Log;
 import ch.hftm.astrodynamic.utils.MissionRepository;
 
 /*
@@ -27,8 +24,6 @@ import ch.hftm.astrodynamic.utils.MissionRepository;
 
 // Controller for overview list of missions
 public class MissionController extends BaseController{
-
-    private Logger log = Log.build();
 
     @FXML
     TextField searchField;

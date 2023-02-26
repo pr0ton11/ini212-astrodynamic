@@ -1,11 +1,5 @@
 package ch.hftm.astrodynamic.utils;
 
-/*
- *  Project Astrodynamic
- *  HFTM BBIN21.2a
- *  Rafael Stauffer, Marc Singer
- */
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -13,6 +7,12 @@ import java.math.BigDecimal;
 import com.epam.deltix.dfp.Decimal64;
 import com.epam.deltix.dfpmath.Decimal64Math;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+/*
+ *  Project Astrodynamic
+ *  HFTM BBIN21.2a
+ *  Rafael Stauffer, Marc Singer
+ */
 
 // Class Quad abstracts Decimal64
 public class Quad implements Comparable<Quad>, Serializable {

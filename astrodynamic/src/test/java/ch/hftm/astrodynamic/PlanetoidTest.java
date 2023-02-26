@@ -173,7 +173,6 @@ public class PlanetoidTest {
         Planetoid moon = new Planetoid(new LengthScalar(0), new MassScalar(new Quad(7.33).multiply(new Quad(10).pow(22))), new BaseVector(new Quad(3.84).multiply(new Quad(10).pow(8)), new Quad(), new Quad(), Unit.LENGTH), new BaseVector(Unit.ANGLE), new BaseVector(Unit.VELOCITY), new BaseVector(Unit.VELOCITY));
 
         Vector gravitationalForce = moon.calculateGravitationalForce(earth);
-
         Vector gravitationalAcceleration = moon.calculateAccelerationFromForce(gravitationalForce);
 
     }

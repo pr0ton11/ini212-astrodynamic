@@ -2,6 +2,11 @@ package ch.hftm.astrodynamic.model.planetoids;
 
 import java.util.logging.Logger;
 
+import ch.hftm.astrodynamic.physics.*;
+import ch.hftm.astrodynamic.scalar.LengthScalar;
+import ch.hftm.astrodynamic.scalar.MassScalar;
+import ch.hftm.astrodynamic.scalar.UnitlessScalar;
+import ch.hftm.astrodynamic.utils.*;
 import ch.hftm.astrodynamic.model.Simulation;
 
 /*
@@ -9,12 +14,6 @@ import ch.hftm.astrodynamic.model.Simulation;
  *  HFTM BBIN21.2a
  *  Rafael Stauffer, Marc Singer
  */
-
-import ch.hftm.astrodynamic.physics.*;
-import ch.hftm.astrodynamic.scalar.LengthScalar;
-import ch.hftm.astrodynamic.scalar.MassScalar;
-import ch.hftm.astrodynamic.scalar.UnitlessScalar;
-import ch.hftm.astrodynamic.utils.*;
 
 /* planet earth 
 * mass: 5.97219e+24 kg

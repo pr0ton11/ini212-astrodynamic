@@ -1,41 +1,24 @@
 package ch.hftm.astrodynamic.controller;
 
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListCell;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.image.Image;
-import javafx.scene.input.MouseDragEvent;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Sphere;
+import javafx.event.ActionEvent;
+
 import ch.hftm.astrodynamic.gui.FlatProjection;
-import ch.hftm.astrodynamic.gui.GroundTrack;
 import ch.hftm.astrodynamic.model.Mission;
-import ch.hftm.astrodynamic.model.Simulation;
-import ch.hftm.astrodynamic.model.conditions.SetupHeavyLander;
 import ch.hftm.astrodynamic.physics.AstronomicalObject;
 import ch.hftm.astrodynamic.physics.BaseAstronomicalObject;
-import ch.hftm.astrodynamic.physics.Spaceship;
-import ch.hftm.astrodynamic.scalar.LengthScalar;
-import ch.hftm.astrodynamic.scalar.ScalarFactory;
-import ch.hftm.astrodynamic.scalar.UnitlessScalar;
 import ch.hftm.astrodynamic.utils.MissionRepository;
 import ch.hftm.astrodynamic.utils.Quad;
 import ch.hftm.astrodynamic.utils.Scalar;
-import ch.hftm.astrodynamic.utils.Unit;
 import ch.hftm.astrodynamic.utils.UnitConversionError;
 import ch.hftm.astrodynamic.scalar.*;
-import javafx.animation.AnimationTimer;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.stage.Stage;
 
 /*
  *  Project Astrodynamic
@@ -45,6 +28,7 @@ import javafx.stage.Stage;
 
 // Running simulation information
 public class SimulationController extends BaseController{
+    
     private static final int MIN_ZOOM = -12;
     private static final int MAX_ZOOM = 0;
 

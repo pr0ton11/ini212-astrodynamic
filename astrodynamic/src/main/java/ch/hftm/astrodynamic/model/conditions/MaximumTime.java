@@ -2,7 +2,6 @@ package ch.hftm.astrodynamic.model.conditions;
 
 import ch.hftm.astrodynamic.model.EndType;
 import ch.hftm.astrodynamic.scalar.TimeScalar;
-import ch.hftm.astrodynamic.utils.Scalar;
 
 /*
  *  Project Astrodynamic

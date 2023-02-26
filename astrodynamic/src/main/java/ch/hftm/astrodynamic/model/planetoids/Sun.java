@@ -1,6 +1,11 @@
 package ch.hftm.astrodynamic.model.planetoids;
 
 import ch.hftm.astrodynamic.model.Simulation;
+import ch.hftm.astrodynamic.physics.*;
+import ch.hftm.astrodynamic.scalar.LengthScalar;
+import ch.hftm.astrodynamic.scalar.MassScalar;
+import ch.hftm.astrodynamic.scalar.UnitlessScalar;
+import ch.hftm.astrodynamic.utils.*;
 
 /*
  *  Project Astrodynamic
@@ -8,11 +13,6 @@ import ch.hftm.astrodynamic.model.Simulation;
  *  Rafael Stauffer, Marc Singer
  */
 
-import ch.hftm.astrodynamic.physics.*;
-import ch.hftm.astrodynamic.scalar.LengthScalar;
-import ch.hftm.astrodynamic.scalar.MassScalar;
-import ch.hftm.astrodynamic.scalar.UnitlessScalar;
-import ch.hftm.astrodynamic.utils.*;
 
 /* the sun
 * mass: 5.97219e+24 kg

@@ -3,7 +3,6 @@ package ch.hftm.astrodynamic.controller;
 import java.io.IOException;
 import java.util.Optional;
 
-import ch.hftm.astrodynamic.MainApp;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -12,6 +11,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
+
+import ch.hftm.astrodynamic.MainApp;
 
 /*
  *  Project Astrodynamic

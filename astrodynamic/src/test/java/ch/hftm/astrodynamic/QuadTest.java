@@ -3,11 +3,6 @@ package ch.hftm.astrodynamic;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import ch.hftm.astrodynamic.utils.Quad;

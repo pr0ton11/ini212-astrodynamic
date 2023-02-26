@@ -4,9 +4,14 @@ import ch.hftm.astrodynamic.physics.Spaceship;
 import ch.hftm.astrodynamic.scalar.LengthScalar;
 import ch.hftm.astrodynamic.scalar.MassScalar;
 import ch.hftm.astrodynamic.utils.BaseVector;
-import ch.hftm.astrodynamic.utils.Scalar;
 import ch.hftm.astrodynamic.utils.Unit;
-import ch.hftm.astrodynamic.utils.Vector;
+
+/*
+ *  Project Astrodynamic
+ *  HFTM BBIN21.2a
+ *  Rafael Stauffer, Marc Singer
+ */
+
 
 // heavy lander is a 15 ton 2m radius ship
 public class HeavyLander extends Spaceship {

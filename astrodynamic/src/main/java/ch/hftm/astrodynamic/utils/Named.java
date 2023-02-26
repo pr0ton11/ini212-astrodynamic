@@ -8,8 +8,10 @@ package ch.hftm.astrodynamic.utils;
 
 // named thing with description, for gui things like missions, parameters, and such
 public interface Named {
+
     String getName();
     String getDescription();
     void setName(String name);
     void setDescription(String description);
+    
 }
