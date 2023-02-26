@@ -36,7 +36,7 @@ public final class MissionRepository implements Serializable {
 
     private MissionRepository() {}  // Constructor
 
-    private ObservableList<Mission> missions = FXCollections.observableArrayList();  // List of missions
+    private transient ObservableList<Mission> missions = FXCollections.observableArrayList();  // List of missions
     private Mission activeMission;  // Current active mission
 
     // Retrieving and working with the singleton class, used primarly internally
@@ -169,11 +169,14 @@ public final class MissionRepository implements Serializable {
         inputStream.defaultReadObject();
         // Extract the raw missions from inputStream
         Object[] rawMissions = (Object[])inputStream.readObject();
-        // Add all the missions
+        // Reinitialize mission
+        missions = FXCollections.observableArrayList();
+        // Add the missions
         for (Object mission : rawMissions) {
             // Cast object to mission
-            addMission((Mission) mission);
+            missions.add((Mission) mission);
         }
+        
     }
 
 }
