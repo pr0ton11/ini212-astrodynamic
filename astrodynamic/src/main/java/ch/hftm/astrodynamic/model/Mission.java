@@ -1,14 +1,18 @@
 package ch.hftm.astrodynamic.model;
 
+import java.io.Serializable;
+
 import ch.hftm.astrodynamic.model.planetoids.Earth;
 import ch.hftm.astrodynamic.model.planetoids.Moon;
 import ch.hftm.astrodynamic.model.planetoids.Sun;
 import ch.hftm.astrodynamic.physics.Spaceship;
 import ch.hftm.astrodynamic.utils.Named;
 
-public class Mission extends Simulation implements Named {
+public class Mission extends Simulation implements Named, Serializable {
     String name;
     String description; // in html
+
+    private static final long serialVersionUID = 1L;
 
     public Mission() {
         this("", "");

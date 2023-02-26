@@ -1,6 +1,9 @@
 # Unit tests
 MissionRepositorySerializationTest.json
 
+# Serializer binary files
+*.bin
+
 # Compiled class file
 *.class
 

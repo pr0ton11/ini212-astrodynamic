@@ -1,5 +1,10 @@
 package ch.hftm.astrodynamic.utils;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.ObjectInputStream.GetField;
 import java.nio.file.Paths;
 import java.util.logging.Logger;
 
@@ -117,6 +122,55 @@ public class Serializer {
             log.severe(ex.toString());
             return "";
         }
+    }
+
+    // Serializes the Mission Repository to a file
+    public static void toFile(String path) {
+        try {
+            // Create streams
+            FileOutputStream fileStream = new FileOutputStream(path);
+            ObjectOutputStream objectStream = new ObjectOutputStream(fileStream);
+            // Write object to streams
+            objectStream.writeObject(MissionRepository.getInstance());
+            // Close streams
+            objectStream.close();
+            fileStream.close();
+        } catch(Exception ex) {
+            log.severe(String.format("Error: Conversion of  MissionRepository to file %s", path));
+            log.severe(ex.toString());
+        }
+    }
+
+    // Desirializes the MissionRepository from a file
+    public static void fromFile(String path) {
+        try {
+            // Create streams
+            FileInputStream fileStream = new FileInputStream(path);
+            ObjectInputStream objectStream = new ObjectInputStream(fileStream);
+            // Override current instance from MissionRepository with casted object from file
+            MissionRepository.overrideInstance((MissionRepository)objectStream.readObject());
+            // Close streams
+            objectStream.close();
+            fileStream.close();
+        } catch(Exception ex) {
+            log.severe(String.format("Error: Conversion of file %s to MissionRepository", path));
+            log.severe(ex.toString());
+        }
+    }
+
+    // Loads the state from the specified state path
+    public static void load() {
+        fromFile(getFilePath());
+    }
+
+    // Saves the state to the specified state path
+    public static void save() {
+        toFile(getFilePath());
+    }
+
+    // Gets the file path for the state from configuration
+    public static String getFilePath() {
+        return ConfigRepository.get("state_path");
     }
 
 }
