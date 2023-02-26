@@ -56,16 +56,6 @@ public class VectorTest {
     }
 
     @Test
-    public void TestVectorMultiplication() throws UnitConversionError {
-        Vector v1 = new BaseVector(1, 2, -3);
-        Vector v2 = new BaseVector(3, 4, -1.5);
-        Vector vExpected = new BaseVector(3, 8, 4.5);
-
-        Assert.assertEquals(vExpected, v1.multiply(v2));
-        Assert.assertEquals(vExpected, v2.multiply(v1));
-    }
-
-    @Test
     public void TestScalarMultiplication() throws UnitConversionError {
         Vector v1 = new BaseVector(1, 2.5, -4);
         Scalar s1 = new UnitlessScalar(3);
@@ -74,17 +64,6 @@ public class VectorTest {
 
         Assert.assertEquals(vExpected, v1.multiply(s1));
         // There is no Scalar.multiply(Vector) method at the moment
-    }
-
-    @Test
-    public void TestVectorDivision() throws UnitConversionError {
-        Vector v1 = new BaseVector(1, 2, -10);
-        Vector v2 = new BaseVector(4, 4, -2);
-        Vector vExpected1 = new BaseVector(0.25, 0.5, 5);
-        Vector vExpected2 = new BaseVector(4.0, 2.0, 0.2);
-
-        Assert.assertEquals(vExpected1, v1.divide(v2));
-        Assert.assertEquals(vExpected2, v2.divide(v1));
     }
 
     @Test

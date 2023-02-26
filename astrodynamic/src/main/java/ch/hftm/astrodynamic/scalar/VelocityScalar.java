@@ -39,13 +39,13 @@ public class VelocityScalar extends BaseScalar {
         Quad value = getValue().multiply(scalar.getValue());
         switch (scalar.getUnit()) {
             case MASS:
-                return new ForceScalar(value);
+                return new ForceScalar(value); // velocity * mass = force
             case UNITLESS:
                 return new VelocityScalar(value);
             case TIME:
-                return new LengthScalar(value);
+                return new LengthScalar(value); // velocity * time = length (distance)
             case ANGLE:
-                return new VelocityScalar(value);
+                return new VelocityScalar(value); // velocity * angle = velocity, intermediate for rotational calculations
             default:
                 throw new UnitConversionError(String.format("Multiplication between %s and %s not possible in %s", getUnit().toString(), scalar.getUnit().toString(), this.getClass().getSimpleName()));
         }

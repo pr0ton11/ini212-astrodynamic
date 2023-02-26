@@ -1,5 +1,7 @@
 package ch.hftm.astrodynamic.utils;
 
+import java.util.logging.Logger;
+
 import java.lang.Math;
 
 import ch.hftm.astrodynamic.scalar.AngleScalar;
@@ -11,8 +13,7 @@ import ch.hftm.astrodynamic.scalar.ScalarFactory;
  *  Rafael Stauffer, Marc Singer
  */
 
-
-//
+ // implements basic functionality for vectors
 public class BaseVector implements Vector, Cloneable {
     private Quad x;
     private Quad y;
@@ -20,62 +21,7 @@ public class BaseVector implements Vector, Cloneable {
     private Quad length;
     private Unit unit;
 
-    @Override
-    public boolean equals(Object arg0) {
-        if (arg0 instanceof Vector) {
-            Vector ov = (Vector)arg0;
-            return ((ov.getX().equals(this.getX())) && (ov.getY().equals(this.getY())) && (ov.getZ().equals(this.getZ())) && (ov.getUnit() == this.getUnit()));
-        }
-        return false;
-    }
-
-    public BaseVector clone() {
-        return new BaseVector(this);
-    }
-
-    public Scalar getX() {
-        try {
-            return ScalarFactory.create(x, unit);
-        } catch (UnitConversionError e) {
-            assert 1 == 2; // very serious error
-        }
-        return null;
-    }
-
-    public Scalar getY() {
-        try {
-            return ScalarFactory.create(y, unit);
-        } catch (UnitConversionError e) {
-            assert 1 == 2; // very serious error
-        }
-        return null;
-    }
-
-    public Scalar getZ() {
-        try {
-            return ScalarFactory.create(z, unit);
-        } catch (UnitConversionError e) {
-            assert 1 == 2; // very serious error
-        }
-        return null;
-    }
-
-    public Scalar getLength() {
-        try {
-            return ScalarFactory.create(length, unit);
-        } catch (UnitConversionError e) {
-            assert 1 == 2; // very serious error
-        }
-        return null;
-    }
-
-    private void calculateLength() {
-        Quad qX = getX().getValue().pow(2);
-        Quad qY = getY().getValue().pow(2);
-        Quad qZ = getZ().getValue().pow(2);
-
-        this.length = qX.add(qY).add(qZ).sqrt();
-    }
+    private static Logger logger = Log.build();
 
     // unitless zero vector
     public BaseVector() {
@@ -156,42 +102,95 @@ public class BaseVector implements Vector, Cloneable {
         calculateLength();
     }
 
+    @Override
+    public boolean equals(Object arg0) {
+        if (arg0 instanceof Vector) {
+            Vector ov = (Vector)arg0;
+            // vecotrs are equal if all three dimensions (x, y, z) are equal and the unit is equal
+            return ((ov.getX().equals(this.getX())) && (ov.getY().equals(this.getY())) && (ov.getZ().equals(this.getZ())) && (ov.getUnit() == this.getUnit()));
+        }
+        return false;
+    }
+
+    public BaseVector clone() {
+        return new BaseVector(this);
+    }
+
+    public Scalar getX() {
+        try {
+            return ScalarFactory.create(x, unit);
+        } catch (UnitConversionError e) {
+            logger.severe(String.format("Could not get scalar from %s .", this.toString()));
+        }
+        return null;
+    }
+
+    public Scalar getY() {
+        try {
+            return ScalarFactory.create(y, unit);
+        } catch (UnitConversionError e) {
+            logger.severe(String.format("Could not get scalar from %s .", this.toString()));
+        }
+        return null;
+    }
+
+    public Scalar getZ() {
+        try {
+            return ScalarFactory.create(z, unit);
+        } catch (UnitConversionError e) {
+            logger.severe(String.format("Could not get scalar from %s .", this.toString()));
+        }
+        return null;
+    }
+
+    public Scalar getLength() {
+        try {
+            return ScalarFactory.create(length, unit);
+        } catch (UnitConversionError e) {
+            logger.severe(String.format("Could not get scalar from %s .", this.toString()));
+        }
+        return null;
+    }
+
+    // magnitude from taking the root of ( x² + y² + z² )
+    private void calculateLength() {
+        Quad qX = getX().getValue().pow(2);
+        Quad qY = getY().getValue().pow(2);
+        Quad qZ = getZ().getValue().pow(2);
+
+        this.length = qX.add(qY).add(qZ).sqrt();
+    }
+
     public Unit getUnit() {
         return unit;
     }
 
+    // addition (x1 + x2, y1 + y2, z1 + z2)
     public Vector add(Vector vector) throws UnitConversionError {
         return new BaseVector(getX().add(vector.getX()), getY().add(vector.getY()), getZ().add(vector.getZ()));
     }
 
+    // subtraction (x1 - x2, y1 - y2, z1 - z2)
     public Vector subtract(Vector vector) throws UnitConversionError {
         return new BaseVector(getX().subtract(vector.getX()), getY().subtract(vector.getY()), getZ().subtract(vector.getZ()));
     }
 
-    public Vector multiply(Vector vector) throws UnitConversionError {
-        return new BaseVector(getX().multiply(vector.getX()), getY().multiply(vector.getY()), getZ().multiply(vector.getZ()));
-    }
-
+    // multiplication with a scalar (x * s, y * s, z * s), scales the vector magnitude, direction stays the same
     public Vector multiply(Scalar value) throws UnitConversionError {
         return new BaseVector(getX().multiply(value), getY().multiply(value), getZ().multiply(value));
     }
 
-    public Vector divide(Vector vector) throws UnitConversionError {
-        return new BaseVector(getX().divide(vector.getX()), getY().divide(vector.getY()), getZ().divide(vector.getZ()));
-    }
-
+    // division with a scalar (x / s, y / s, z / s), scales the vector magnitude, direction stays the same
     public Vector divide(Scalar value) throws UnitConversionError {
         return new BaseVector(getX().divide(value), getY().divide(value), getZ().divide(value));
     }
 
+    // make a unit vector with magnitude (length) 1.0 out of this, direction stays the same
     public Vector normalize() throws UnitConversionError {
         return new BaseVector(divide(getLength()));
     }
-    
-    public Vector percentage() throws UnitConversionError {
-    	return new BaseVector(divide(this.getX().add(this.getY()).add(this.getZ())));
-    }
 
+    // roatate the vector around the z axis
     public Vector rotateZ(AngleScalar rotation) throws UnitConversionError {
         Scalar sinR = new AngleScalar(Math.sin(rotation.getValue().doubleValue()));
         Scalar cosR = new AngleScalar(Math.cos(rotation.getValue().doubleValue()));
@@ -202,6 +201,7 @@ public class BaseVector implements Vector, Cloneable {
         );
     }
 
+    // rotate the vector around the y axis
     public Vector rotateY(AngleScalar rotation) throws UnitConversionError {
         Scalar sinR = new AngleScalar(Math.sin(rotation.getValue().doubleValue()));
         Scalar cosR = new AngleScalar(Math.cos(rotation.getValue().doubleValue()));
@@ -212,6 +212,7 @@ public class BaseVector implements Vector, Cloneable {
         );
     }
 
+    // rotate the vector around the x axis
     public Vector rotateX(AngleScalar rotation) throws UnitConversionError {
         Scalar sinR = new AngleScalar(Math.sin(rotation.getValue().doubleValue()));
         Scalar cosR = new AngleScalar(Math.cos(rotation.getValue().doubleValue()));
@@ -222,6 +223,7 @@ public class BaseVector implements Vector, Cloneable {
         );
     }
 
+    // human readable string with class name, dimensions and unit
     public String toString() {
         return String.format("<Vector %s (%s, %s, %s, %s)>", this.getClass().getSimpleName(), getX().getValue().toString(), getY().getValue().toString(), getZ().getValue().toString(), getUnit().toString());
     }

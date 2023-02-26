@@ -38,11 +38,19 @@ public class DistanceContstraint extends Condition {
         super();
         // if we could set something before super we would not need this reimplementation of the description
         StringBuilder descriptionTextBuilder = new StringBuilder();
-        descriptionTextBuilder.append(String.format(
-            "Altitude of %s over %s results in ",
-            altitudeGate.toFittedString(),
-            referenceObjectName
-        ));
+        
+        descriptionTextBuilder.append("Distance of ");
+        descriptionTextBuilder.append(altitudeGate.toFittedString());
+
+        if (checkForGreater) {
+            descriptionTextBuilder.append("or more ");
+        } else {
+            descriptionTextBuilder.append("or less ");
+        }
+
+        descriptionTextBuilder.append("to ");
+        descriptionTextBuilder.append(referenceObjectName);
+        descriptionTextBuilder.append(" results in ");
 
         if (ending == EndType.SUCCESS)
             descriptionTextBuilder.append("victory");

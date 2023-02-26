@@ -52,7 +52,7 @@ public class ForceScalar extends BaseScalar {
             case FORCE:
                 return new UnitlessScalar(value);
             case MASS:
-                return new AccelerationScalar(value);
+                return new AccelerationScalar(value); // force divided by mass is acceleration
             default:
                 throw new UnitConversionError(String.format("Division between %s and %s not possible in %s", getUnit().toString(), scalar.getUnit().toString(), this.getClass().getSimpleName()));
         }

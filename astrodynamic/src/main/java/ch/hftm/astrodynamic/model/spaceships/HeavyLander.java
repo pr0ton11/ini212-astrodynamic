@@ -8,11 +8,12 @@ import ch.hftm.astrodynamic.utils.Scalar;
 import ch.hftm.astrodynamic.utils.Unit;
 import ch.hftm.astrodynamic.utils.Vector;
 
+// heavy lander is a 15 ton 2m radius ship
 public class HeavyLander extends Spaceship {
 
     public HeavyLander() {
         super(
-            new LengthScalar(), 
+            new LengthScalar(2), 
             new MassScalar(15000), 
             new BaseVector(Unit.LENGTH),
             new BaseVector(Unit.ANGLE), 

@@ -6,7 +6,8 @@ package ch.hftm.astrodynamic.model;
  *  Rafael Stauffer, Marc Singer
  */
 
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -19,14 +20,18 @@ import ch.hftm.astrodynamic.utils.*;
 
 public class Simulation {
 
-    static Scalar UPDATE_TIME_STEP = new TimeScalar(0.1); // we aim to update the simulation once each 0.1 seconds
+    static Scalar UPDATE_TIME_STEP = new TimeScalar(0.5); // we aim to update the simulation once each 0.5 seconds
 
     Scalar totalTime;
 
     Spaceship playerControlledVessel; // this is a reference to the controlled vessel, vessel must also be present in spaceships list
+    Planetoid referencePlanetoid; // this is a reference, it is used as frame of reference for calculations in gui
     List<Planetoid> planetoids;
     List<Spaceship> spaceships;
     List<Condition> conditions;
+
+    boolean conditionMet;
+    Condition metCondition; // we only track the first condition that is met, after that the simulation should end
 
     public Simulation() {
         // ArrayLists instead of LinkedLists because number of list manipulations are low but access high
@@ -63,8 +68,23 @@ public class Simulation {
             s.setupSimulation(this);
     }
 
+    // slices simulation time into descrete steps for simulation
+    public void simulateInSteps(Scalar deltaTime) throws SimulationRuntimeError, UnitConversionError {
+        while (deltaTime.gt(UPDATE_TIME_STEP)) {
+            simulate(UPDATE_TIME_STEP);
+            deltaTime = deltaTime.subtract(UPDATE_TIME_STEP);
+        }
+        simulate(deltaTime);
+    }
+
     // runs all simulation steps according to time passed since last simulation step
     public void simulate(Scalar deltaTime) throws SimulationRuntimeError, UnitConversionError {
+
+        // simulation ended because of a condition?
+        if (isResolved()) {
+            return;
+        }
+
         // we can not guarantee correct scalar behaviour if not time
         if (deltaTime.getUnit() != Unit.TIME) {
             throw new UnitConversionError("deltaTime must have unit time");
@@ -75,12 +95,33 @@ public class Simulation {
             throw new SimulationRuntimeError("deltaTime must be greater than zero");
         }
 
-        for (Planetoid p: planetoids) {
-                
+        // reference for more readable access
+        List<AstronomicalObject> objects = getAstronomicalObjects();
+
+        // calculate gravity, only calculate with partners we have not met yet
+        for (int i = 0; i < objects.size(); i++) {
+            for (int j = i + 1; j < objects.size(); j++) {
+                Vector force = objects.get(i).calculateGravitationalForce(objects.get(j));
+
+                Vector originalAcceleration = objects.get(i).calculateAccelerationFromForce(force);
+
+                // we calculated the force vector from earth so we need to invert the direction for moon
+                Vector partnerAcceleration = objects.get(j).calculateAccelerationFromForce(force.invert());
+
+                // add acceleration to the velocity
+                objects.get(i).applyAcceleration(originalAcceleration, deltaTime);
+                objects.get(j).applyAcceleration(partnerAcceleration, deltaTime);
+            }
         }
 
+        for (AstronomicalObject o: objects)
+        {
+            // move objects by adding velocity to position
+            o.applyVelocity(deltaTime);
+        }
 
-
+        checkConditions();
+        
         totalTime = totalTime.add(deltaTime);
     }
 
@@ -90,6 +131,21 @@ public class Simulation {
 
     public Spaceship getPlayerControlledVessel() {
         return playerControlledVessel;
+    }
+
+    // get all objects with gravitational effects
+    public List<AstronomicalObject> getAstronomicalObjects() {
+        List<AstronomicalObject> objects = new ArrayList<>();
+        
+        for (Planetoid p: planetoids) {
+            objects.add(p);
+        }
+
+        for (Spaceship s: spaceships) {
+            objects.add(s);
+        }
+
+        return objects;
     }
 
     public BaseAstronomicalObject getAstronomicalObjectByName(String name) {
@@ -186,5 +242,51 @@ public class Simulation {
         }
 
         return names;
+    }
+
+    public Planetoid getReferencePlanetoid() {
+        return referencePlanetoid;
+    }
+
+    public void setReferencePlanetoid(Planetoid planetoid) {
+        referencePlanetoid = planetoid;
+    }
+
+    public void setPlayerControlledVessel(Spaceship spaceship) {
+        playerControlledVessel = spaceship;
+    }
+
+    public List<Planetoid> getPlanetoids() {
+        return planetoids;
+    }
+
+    public List<Spaceship> getSpaceships() {
+        return spaceships;
+    }
+
+    // check conditons, if one is satisfied we set condtionsMet and reference it
+    private void checkConditions() {
+        for (Condition c: conditions) {
+            if (c.conditionMet(this)) {
+                conditionMet = true;
+                metCondition = c;
+            }
+        }
+    }
+
+    // have we resolved the simulation by satisfying a condition
+    public boolean isResolved() {
+        return conditionMet;
+    }
+
+    public Condition getMetCondition() {
+        return metCondition;
+    }
+
+    public String getMetConditionInfo() {
+        if (!isResolved()) {
+            return "";
+        }
+        return String.format("%s: %s", getMetCondition().getEndType().toString(), getMetCondition().getDescription());
     }
 }

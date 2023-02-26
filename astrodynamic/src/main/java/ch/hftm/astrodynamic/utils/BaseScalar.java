@@ -1,5 +1,6 @@
 package ch.hftm.astrodynamic.utils;
 
+import java.util.logging.Logger;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import ch.hftm.astrodynamic.scalar.ScalarFactory;
@@ -13,6 +14,8 @@ import ch.hftm.astrodynamic.scalar.ScalarFactory;
  // Converter for SI units, base is abstract to force use of specific implementations
 public abstract class BaseScalar implements Scalar {
 
+    private static Logger logger = Log.build();
+
     private Quad value;  // Number to be stored in this object
     private Unit unit; // Unit to be stored in this object
 
@@ -20,6 +23,7 @@ public abstract class BaseScalar implements Scalar {
     public boolean equals(Object arg0) {
         if (arg0 instanceof Scalar) {
             Scalar os = (Scalar)arg0;
+            // a scalar is equal if the unit and the value is equal
             return ((getUnit() == os.getUnit()) && (getValue().equals(os.getValue())));
         }
         return false;
@@ -147,7 +151,7 @@ public abstract class BaseScalar implements Scalar {
         try {
             return ScalarFactory.create(value.negate(), this.getUnit());
         } catch (UnitConversionError e) {
-            assert 1 == 2; // Very serious error
+            logger.severe(String.format("Could not calculate negation of scalar %s .", this.toString()));
         }
         return null;
     }
@@ -157,7 +161,7 @@ public abstract class BaseScalar implements Scalar {
         try {
             return ScalarFactory.create(value.pow(exp), this.getUnit());
         } catch (UnitConversionError e) {
-            assert 1 == 2; // Very serious error
+            logger.severe(String.format("Could not calculate exponent of scalar %s .", this.toString()));
         }
         return null;
     }
@@ -169,28 +173,38 @@ public abstract class BaseScalar implements Scalar {
     // Mathematical comperators
     public boolean gt(Scalar comperator) {
         if (!unitMatches(comperator))
-            assert 1 == 2; // dont do this
+        {
+            logger.warning(String.format("Comparing scalars of unequal dimensional units. %s to %s.", this.toString(), comperator.toString()));
+        }
         return getValue().gt(comperator.getValue());
     }
     public boolean ge(Scalar comperator) {
         if (!unitMatches(comperator))
-            assert 1 == 2; // dont do this
+        {
+            logger.warning(String.format("Comparing scalars of unequal dimensional units. %s to %s.", this.toString(), comperator.toString()));
+        }
         return getValue().ge(comperator.getValue());
     }
     public boolean lt(Scalar comperator) {
         if (!unitMatches(comperator))
-            assert 1 == 2; // dont do this
+        {
+            logger.warning(String.format("Comparing scalars of unequal dimensional units. %s to %s.", this.toString(), comperator.toString()));
+        }
         return getValue().lt(comperator.getValue());
     }
     public boolean le(Scalar comperator) {
         if (!unitMatches(comperator))
-            assert 1 == 2; // dont do this
+        {
+            logger.warning(String.format("Comparing scalars of unequal dimensional units. %s to %s.", this.toString(), comperator.toString()));
+        }
         return getValue().le(comperator.getValue());
     }
 
     public boolean almostEquals(Scalar comperator, Quad delta) {
         if (!unitMatches(comperator))
-            assert 1 == 2; // dont do this
+        {
+            logger.warning(String.format("Comparing scalars of unequal dimensional units. %s to %s.", this.toString(), comperator.toString()));
+        }
         return this.getValue().almostEquals(comperator.getValue(), delta);
     }
 }

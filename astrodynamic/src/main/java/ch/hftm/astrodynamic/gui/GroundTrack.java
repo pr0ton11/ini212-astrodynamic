@@ -10,6 +10,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/*
+ *  Project Astrodynamic
+ *  HFTM BBIN21.2a
+ *  Rafael Stauffer, Marc Singer
+ */
+
 // provides ground track of spaceship above map of planet
 public class GroundTrack {
 

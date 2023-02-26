@@ -13,6 +13,7 @@ import ch.hftm.astrodynamic.model.Simulation;
 import ch.hftm.astrodynamic.physics.*;
 import ch.hftm.astrodynamic.scalar.LengthScalar;
 import ch.hftm.astrodynamic.scalar.MassScalar;
+import ch.hftm.astrodynamic.scalar.UnitlessScalar;
 import ch.hftm.astrodynamic.utils.*;
 
 /* planet earth 
@@ -31,7 +32,10 @@ public class Earth extends Planetoid {
             new BaseVector(Unit.LENGTH), 
             new BaseVector(Unit.ANGLE), 
             new BaseVector(Unit.VELOCITY), 
-            new BaseVector(Unit.ANGULAR_VELOCITY)
+            new BaseVector(Unit.ANGULAR_VELOCITY),
+            new LengthScalar(new Quad(6.0, 5)), // 600 km start of exosphere, exosphere expands to 200'000 km but too weak influence to calculate
+            AtmosphereModel.QUADRATIC_FALLOFF,
+            new UnitlessScalar(0.21)
             );
         setName("Earth");
         setDescription("Our home");

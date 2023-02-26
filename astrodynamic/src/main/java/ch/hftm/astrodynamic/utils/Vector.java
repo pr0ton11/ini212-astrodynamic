@@ -9,6 +9,7 @@ import ch.hftm.astrodynamic.scalar.UnitlessScalar;
  *  Rafael Stauffer, Marc Singer
  */
 
+ // Vector interface, see BaseVector for implementation
 public interface Vector {
 
     Scalar getX();
@@ -25,17 +26,11 @@ public interface Vector {
 
     Vector subtract(Vector vector) throws UnitConversionError;
 
-    Vector multiply(Vector vector) throws UnitConversionError;
-
     Vector multiply(Scalar value) throws UnitConversionError;
-
-    Vector divide(Vector vector) throws UnitConversionError;
 
     Vector divide(Scalar value) throws UnitConversionError;
 
     Vector normalize() throws UnitConversionError;
-    
-    Vector percentage() throws UnitConversionError;
 
     Vector rotateZ(AngleScalar rotation) throws UnitConversionError;
 
@@ -43,14 +38,17 @@ public interface Vector {
 
     Vector rotateX(AngleScalar rotation) throws UnitConversionError;
 
+    // rotate on z axis, default implementation to allow double as parameter
     default Vector rotateZ(double rotationRadians) throws UnitConversionError {
         return this.rotateZ(new AngleScalar(rotationRadians));
     }
 
+    // rotate on y axis, default implementation to allow double as parameter
     default Vector rotateY(double rotationRadians) throws UnitConversionError {
         return this.rotateY(new AngleScalar(rotationRadians));
     }
 
+    // rotate on x axis, default implementation to allow double as parameter
     default Vector rotateX(double rotationRadians) throws UnitConversionError {
         return this.rotateX(new AngleScalar(rotationRadians));
     }
