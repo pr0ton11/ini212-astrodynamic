@@ -178,7 +178,7 @@ public class Serializer {
 
     // Saves the state to the specified state path
     public static void save() {
-        log.info(String.format("Saving state to file %s", getFilePath());
+        log.info(String.format("Saving state to file %s", getFilePath()));
         toFile(getFilePath());
         log.fine("Sucessfully saved state to file");
     }
