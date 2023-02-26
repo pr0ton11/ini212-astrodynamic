@@ -208,6 +208,10 @@ public class MissionEditController extends BaseController{
         });
         playerSpaceship.setItems(spaceships);
 
+        if (editedMission.getPlayerControlledVessel() != null) {
+            playerSpaceship.setValue(editedMission.getPlayerControlledVessel()); // TODO: fix this non working
+        }
+
         updateUnobservedListsFromObject();
     }
 

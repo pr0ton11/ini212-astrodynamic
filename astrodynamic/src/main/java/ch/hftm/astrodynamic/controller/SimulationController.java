@@ -135,7 +135,7 @@ public class SimulationController extends BaseController{
         // TODO thick labels and tick marks: https://docs.oracle.com/javase/8/javafx/api/javafx/scene/control/Slider.html
 
         if (currentMission.getPlayerControlledVessel() != null) {
-            focus.setValue(currentMission.getPlayerControlledVessel());
+            focus.setValue(currentMission.getPlayerControlledVessel());  // TODO: fix this non working
         }
 
         try {
