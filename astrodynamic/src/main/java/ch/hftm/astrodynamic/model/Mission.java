@@ -1,5 +1,7 @@
 package ch.hftm.astrodynamic.model;
 
+import java.io.Serializable;
+
 import ch.hftm.astrodynamic.model.planetoids.Earth;
 import ch.hftm.astrodynamic.model.planetoids.Moon;
 import ch.hftm.astrodynamic.model.planetoids.Sun;

@@ -14,6 +14,10 @@ import ch.hftm.astrodynamic.utils.UnitConversionError;
 
 public class MassScalar extends BaseScalar {
 
+    public MassScalar() {
+        super(Unit.MASS);
+    }
+
     public MassScalar(Scalar scalar) {
         super(scalar, Unit.MASS);
     }
@@ -35,9 +39,9 @@ public class MassScalar extends BaseScalar {
         Quad multiplicationResult = getValue().multiply(scalar.getValue());
         switch (scalar.getUnit()) {
             case VELOCITY:
-                return new ForceScalar(multiplicationResult);
+                return new ForceScalar(multiplicationResult); // mass * velocity = force
             case MASS:
-                return new CubicMassScalar(multiplicationResult);
+                return new CubicMassScalar(multiplicationResult); // mass * mass = cubic mass (mass²)
             case UNITLESS:
                 return new MassScalar(multiplicationResult);
             default:

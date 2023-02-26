@@ -14,6 +14,10 @@ import ch.hftm.astrodynamic.utils.UnitConversionError;
 
 public class AccelerationScalar extends BaseScalar {
 
+    public AccelerationScalar() {
+        super(Unit.ACCELERATION);
+    }
+
     public AccelerationScalar(Scalar scalar) {
         super(scalar, Unit.ACCELERATION);
     }
@@ -35,9 +39,9 @@ public class AccelerationScalar extends BaseScalar {
         Quad value = getValue().multiply(scalar.getValue());
         switch (scalar.getUnit()) {
             case UNITLESS:
-                return new AccelerationScalar(value);
+                return new AccelerationScalar(value); // acceleration * unitless = acceleration
             case TIME:
-                return new VelocityScalar(value);
+                return new VelocityScalar(value); // acceleration * time = velocity
             default:
                 throw new UnitConversionError(String.format("Multiplication between %s and %s not possible in %s", getUnit().toString(), scalar.getUnit().toString(), this.getClass().getSimpleName()));
         }

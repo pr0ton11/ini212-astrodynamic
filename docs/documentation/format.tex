@@ -1,5 +1,7 @@
 \hypersetup{
-	hidelinks=true
+	hidelinks=true,
+	colorlinks,
+	allcolors=Blue
 }
 
 \pagestyle{fancy}
@@ -19,3 +21,7 @@
 
 \newcommand{\docname}[1]{\renewcommand{\gdocname}{#1}}
 \newcommand{\gdocname}{DOCNAME REQUIRED!}
+
+\newcommand{\warnlabel}[1]{\fbox{\color{YellowOrange}\textbf{#1}}\\}
+
+\newcommand{\unimplemented}{\warnlabel{Feature eingeplant aber unimplementiert in aktueller Version}}

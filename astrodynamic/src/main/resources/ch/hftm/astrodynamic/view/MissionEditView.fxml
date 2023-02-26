@@ -5,18 +5,23 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.web.HTMLEditor?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="799.0" prefWidth="634.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.hftm.astrodynamic.controller.MissionEditController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="763.0" prefWidth="634.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.hftm.astrodynamic.controller.MissionEditController">
    <children>
       <Label text="Mission name" />
       <TextField fx:id="missionName" />
       <Label text="Description" />
       <HTMLEditor fx:id="missionDescription" htmlText="&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable=&quot;true&quot;&gt;&lt;/body&gt;&lt;/html&gt;" prefHeight="357.0" prefWidth="1192.0" />
-      <Label text="Player Spaceship" />
-      <ComboBox prefWidth="150.0" />
+      <HBox prefHeight="48.0" prefWidth="634.0">
+         <children>
+            <Label text="Player Spaceship" />
+            <ComboBox fx:id="playerSpaceship" prefWidth="150.0" />
+         </children>
+      </HBox>
       <Label text="Condition" />
       <Label text="Add new Condition" />
       <HBox prefHeight="36.0" prefWidth="634.0">
@@ -31,5 +36,21 @@
       </HBox>
       <Label text="Conditions" />
       <ListView fx:id="missionConditions" prefHeight="200.0" prefWidth="200.0" />
+      <Label text="Planetoids" />
+      <ListView fx:id="missionPlanetoids" prefHeight="200.0" prefWidth="200.0" />
+      <HBox prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#deletePlanetoid" text="Delete" />
+            <Button mnemonicParsing="false" onAction="#editPlanetoid" text="Edit" />
+            <Button mnemonicParsing="false" onAction="#newPlanetoid" text="New" />
+         </children>
+      </HBox>
+      <Label text="Spaceships" />
+      <ListView fx:id="missionSpaceships" prefHeight="200.0" prefWidth="200.0" />
+      <BorderPane prefHeight="31.0" prefWidth="634.0">
+         <right>
+            <Button mnemonicParsing="false" onAction="#saveMission" text="Save" BorderPane.alignment="CENTER" />
+         </right>
+      </BorderPane>
    </children>
 </VBox>

@@ -9,18 +9,24 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
-import javafx.stage.Stage;
 
-import java.io.File;
 import java.util.logging.Logger;
 
 import ch.hftm.astrodynamic.model.*;
 import ch.hftm.astrodynamic.utils.Log;
+import ch.hftm.astrodynamic.utils.MissionRepository;
+import ch.hftm.astrodynamic.utils.Serializer;
 
+/*
+ *  Project Astrodynamic
+ *  HFTM BBIN21.2a
+ *  Rafael Stauffer, Marc Singer
+ */
+
+// Controller for overview list of missions
 public class MissionController extends BaseController{
 
     private Logger log = Log.build();
@@ -46,20 +52,19 @@ public class MissionController extends BaseController{
     @FXML
     VBox missionData;
 
-    ObservableList<Mission> missions;
-    FilteredList<Mission> filteredMissions;
+    ObservableList<Mission> missions; // get from MissionRepository DAO
+    FilteredList<Mission> filteredMissions; // for searchField filtering
 
     public MissionController() {
         super();
     }
 
     @Override
-    protected Stage getCurrentStage() {
-        return null;
-    }
-
-    @Override
     public void initialize(){
+
+        Serializer.load(); // load data from disk if existing
+
+        // mission list shows mission name
         missionList.setCellFactory(param -> new ListCell<Mission>() {
             @Override
             protected void updateItem(Mission item, boolean empty) {
@@ -75,19 +80,16 @@ public class MissionController extends BaseController{
 
         missionData.setVisible(false); // hide mission data if no mission is selected
 
-        initializeTestdata();
-    }
+        missions = MissionRepository.getObservableMissions();
 
-    // test data, missions would be stored on disk
-    private void initializeTestdata() {
-        missions = FXCollections.observableArrayList();
-        missions.add(new Mission("Driving Miss Daisy", "<h1>Driving Miss Daisy</h1><br>A bunch of scientists want to travel to the ISS.<br>You'll be the driver.<br><img src=\"https://www.nasa.gov/sites/default/files/styles/full_width/public/thumbnails/image/progress_1_29_tianzhou_4_depating_from_tiangong.jpg?itok=sqE2bAY_\" width=300px height=200px>"));
-        missions.add(new Mission("New Dawn", "<h1>New Dawn</h1><br>We picked a suitable landingspot on Ganymede.<br>Bring a flag.<br><img src=\"https://www.nasa.gov/sites/default/files/thumbnails/image/e1_-_pia24682_-_juno_ganymede_sru_-_darkside.png\" alt=\"Ganymede landing spot\" width=200px height=200px>"));
-        missions.add(new Mission("In the Well", "<h1>In the Well</h1><br>The jovian ammonia harvesting station lost its engines.<br>Evacuate the personel before it drifts into Jupiter.<br><img src=\"https://www.nasa.gov/sites/default/files/thumbnails/image/hotspot_cover_1280.jpg\" width=400px height=200px>"));
-        
+        // adding testmissions if no mission is loaded
+        if (missions.size() < 1) {
+            //showInfo("No missions found, added test missions to list.");
+            MissionRepository.addTestMissions();
+        }
+
         filteredMissions = new FilteredList<>(missions);
-
-        missionList.setItems(filteredMissions);
+        missionList.setItems(filteredMissions); // show filtered missions in list
     }
 
     // user searches mission in top search bar
@@ -99,36 +101,81 @@ public class MissionController extends BaseController{
         }));
     }
 
+    // empty search field
     @FXML
     void clearSearch(ActionEvent e) {
         searchField.setText("");
         missionList.setItems(filteredMissions);
     }
 
-    // 
-    @FXML
-    void missionSelected(MouseEvent e) {
-        missionData.setVisible(true);
-
-        Mission selectedMission = missionList.getSelectionModel().getSelectedItem();
-        missionDescription.getEngine().loadContent(selectedMission.getDescription());
+    // selected mission from mission list
+    Mission getSelectedMission() {
+        return missionList.getSelectionModel().getSelectedItem();
     }
 
-    // user clicked edit button
+    // fired when user clicks on mission in list, sets active mission in repository and shows description
+    @FXML
+    void missionSelected(MouseEvent e) {
+        Mission selectedMission = getSelectedMission();
+        if (selectedMission != null) {
+            missionData.setVisible(true);
+            missionDescription.getEngine().loadContent(selectedMission.getDescription());
+            MissionRepository.setActiveMission(selectedMission);
+        } else {
+            missionData.setVisible(false);
+        }
+    }
+
+    // user clicked edit button, open mission editor
     @FXML
     void startEditor(ActionEvent e) {
-        Mission selectedMission = missionList.getSelectionModel().getSelectedItem();
-
-        File f = new File("view/MissionEditView.fxml");
-        log.info(f.getAbsolutePath());
-
+        Mission selectedMission = getSelectedMission();
         showSceneOnNewStage("Mission Editor - " + selectedMission.getName(), true, "view/MissionEditView.fxml");
     }
 
-    // user clicked simulate button
+    // user clicked simulate button, open simulation window
     @FXML
     void startSimulation(ActionEvent e) {
-        Mission selectedMission = missionList.getSelectionModel().getSelectedItem();
-        showError("Error starting simulation of mission " + selectedMission.getName() + ".\nNot implemented!");
+        Mission selectedMission = getSelectedMission();
+
+        showSceneOnNewStage("Simulation - " + selectedMission.getName(), false, "view/SimulationView.fxml");
+    }
+
+    // user clicked delete mission, ask him if he is sure, if yes delete mission from repository
+    @FXML
+    void deleteMission(ActionEvent e) {
+        Mission selectedMission = getSelectedMission();
+
+        if (selectedMission != null) {
+            if (askYesNo(String.format("Do you really want to delete mission '%s'?", selectedMission.getName()))) {
+                MissionRepository.deleteMission(selectedMission);
+                Serializer.save();
+                missionData.setVisible(false);
+            }
+        }
+    }
+
+    // user clicked new mission, add new mission to repository, open mission editor
+    @FXML
+    void newMission(ActionEvent e) {
+        Mission newMission = new Mission("","");
+        MissionRepository.addMission(newMission);
+        MissionRepository.setActiveMission(newMission);
+        showSceneOnNewStage("Mission Editor - New mission", false, "view/MissionEditView.fxml");
+    }
+
+    // user clicked copy button, copy selected mission in repository, open mission editor
+    @FXML
+    void copyMission(ActionEvent e) {
+        showError("Not implemented");
+        return;
+
+        /*
+        Mission clonedMission = MissionRepository.cloneMission();
+        clonedMission.setName(clonedMission.getName() + " kopie");
+        MissionRepository.addMission(clonedMission);
+        MissionRepository.setActiveMission(clonedMission);
+        showSceneOnNewStage("Mission Editor - " + MissionRepository.getActiveMission().getName(), false, "view/MissionEditView.fxml");
+        */
     }
 }

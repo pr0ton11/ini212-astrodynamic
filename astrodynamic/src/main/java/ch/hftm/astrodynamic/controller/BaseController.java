@@ -4,25 +4,42 @@ import java.io.IOException;
 import java.util.Optional;
 
 import ch.hftm.astrodynamic.MainApp;
+import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
-// base controller implements reused methods
+/*
+ *  Project Astrodynamic
+ *  HFTM BBIN21.2a
+ *  Rafael Stauffer, Marc Singer
+ */
+
+// base controller implements reused window methods
 public abstract class BaseController {
 
     // used to setup javaFX window
     public abstract void initialize();
 
-    protected abstract Stage getCurrentStage();
+    protected Stage getCurrentStage(Event e) {
+        return (Stage)((Node)e.getSource()).getScene().getWindow();
+    }
 
     // just show an error alert with errorMsg
     protected void showError(String errorMsg) {
         Alert alrt = new Alert(AlertType.ERROR);
         alrt.setContentText(errorMsg);
+        alrt.show();
+    }
+
+    // just show an information
+    protected void showInfo(String infoMsg) {
+        Alert alrt = new Alert(AlertType.INFORMATION);
+        alrt.setContentText(infoMsg);
         alrt.show();
     }
 

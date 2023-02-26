@@ -1,0 +1,8 @@
+# Target folder, might be here because local builds
+target/
+# Log files
+*.log
+# Serializer binary files
+*.bin
+# Unit tests
+MissionRepositorySerializationTest.json
