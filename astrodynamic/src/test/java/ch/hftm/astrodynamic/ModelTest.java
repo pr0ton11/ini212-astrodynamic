@@ -23,7 +23,6 @@ import ch.hftm.astrodynamic.scalar.ScalarFactory;
 import ch.hftm.astrodynamic.scalar.VelocityScalar;
  
  public class ModelTest {
-    @Ignore
     @Test
     public void TestEarthMoonOrbit() throws UnitConversionError{
         Planetoid earth = new Earth();

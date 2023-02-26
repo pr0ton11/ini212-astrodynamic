@@ -8,4 +8,83 @@
 
 \section{Themenumsetzung}
 
-\subsection{Writeyourtitlehere}
+\subsection{Unit Tests}
+
+Unsere Unit Tests befinden sich im Ordner \textit{"src/test/java/ch/hftm/astrodynamic"} und sind nach Anwendungskomponenten gegliedert:
+
+\begin{itemize}
+	\item DAO (Data Access Object); Testet den Zugriff und die Fuktionalität des zentrale MissionRepositorys (in welchem alle Missionen und deren Kindobjekte gespeichert sind)
+	\item Model; Testet die pedefinierten Modelle (z.B Mond, Erde, Sonne) welche mit der Software mitgeliefert werden
+	\item Planetoid; Testet die Funktionalität der Planetoiden (also planetenähnlichen Objekten)
+	\item Quad; Testet die Implementation und Abstraktion unseres Quad Datentyps, welcher für alle Berechnungen innerhalb des Projekts verwendet wird
+	\item Scalar; Testet die Richtigkeit von Scalar basierten Verrechnungen
+	\item SimulationTest; Testet die Simulation der einzelnen Objekte im Sonnensystem
+	\item Unit; Testet die verschiedenen Scalar Physik-Einheiten und deren Verrechnungen
+	\item Vector; Testet die Vektoren und deren Verrechnungen
+\end{itemize}
+
+Wir haben uns primär dafür entschieden, die Business-Logik (primär die Simulation) zu testen, da die Erfolg unseres Projekts primär von der Korrektheit der Simulation abhängig ist.
+
+\subparagraph{Unit Tests ausführen}
+
+Zunächst müssen wir uns ins \textit{astrodynamics} Verzeichnis bewegen in welchem ebenfalls die Datei \textit{pom.xml} gespeichert ist.
+Anschliessend können wir die Unit-Tests mit einem einfachen \textit{"mvn clean test"} ausführen.
+
+\subsection{Enumeration}
+
+Unser wichtigster Einsatz von Enum (Enumeration) findet in der Klasse \textit{Unit} statt. Diese Klasse wird dazu genutzt, SI Einheiten, welche in unserem Projekt verwendet werden, darzustellen:
+
+\begin{lstlisting}
+	// Contains all physical units as enum
+	public enum Unit {
+		TIME, // Seconds (s)
+		LENGTH, // Meters (m)
+		MASS, // Kilogram (kg)
+		CURRENT, // Ampere (A)
+		TEMPERATURE, // Kelvin (K)
+		MOLECULES, // Mol (mol)
+		LUNINOSITY, // Candela (cd)
+		// Extensions (Implicit)
+		VOLUME,  // m ^ 3
+		AREA, // m ^ 2
+		FORCE, // N
+		ACCELERATION, // m/s ^ 2
+		VELOCITY, // m/s
+		ANGLE, // radian
+		ANGULAR_VELOCITY, // radian/second
+		ANGULAR_ACCELERATION, // radian/second^2
+		// kg ^ 2 imaginary unit for gravitational calculations
+		CUBIC_MASS, 
+		// kg ^ 2 / m ^ 2 imaginary unit for gravitational calculations
+		M2_DIV_L2,
+		// N * m ^ 2 * kg ^ 2 gravitational constant
+		//  (s ^ -2 * m ^ 3 * kg ^ - 1) 
+		F_L2_Mn2,
+		// Unitless for scalars without unit
+		UNITLESS
+	}
+\end{lstlisting}
+
+Wir nutzen dieses Enum in allen Skalaren und in diversen Vektoren, um die Einheiten der Werte darzustellen. z.B nutzt die Klasse \textit{LengthScalar}, welche eine Länge speichert, den Wert \textit{LENGTH}.
+
+In den Kommentaren der Klasse werden die genauen Einheiten explizit definiert. Dies hilft bei den Umrechnungen der Werte z.B zwischen verschiedenen Zeiteinheiten (z.B zwischen Stunden, Tagen oder Wochen).
+
+\section{Vererbung}
+
+Wir nutzen Vererbung in allen unseren Klassen. Spezifisch hervorheben möchten wir in diesem Fall die \textit{Scalar} Klassen im Package \textit{ch.hftm.astrodynamic.scalar}, welche allesamt von der Klasse \textit{BaseScalar} im Package \textit{ch.hftm.astrodynamic.utils} erben.
+
+Die einzelnen \textit{Scalar} Klassen stellen jeweils einen spezialisierten Scalar im Projekt dar. z.B werden Längen mittels dem \textit{LengthScalar} dargestellt.
+Die Einheiten der jeweiligen Klassen werden in der Kind-Klasse innerhalb des Konstruktors statisch gesetzt und dem Eltern-Konstruktor des \textit{BaseScalar} übergeben und gespeichert.
+
+\section{Casting}
+
+Casting wird in einzelnen Fällen innerhalb der Controller verwendet, um z.B einen Double zu einem Integer zu Runden.
+
+\section{Interfaces}
+
+Interfaces werden in unserem Projekt häufig verwendet. Vorwiegend haben wir mittels Interfaces generalisierte Klassen (und deren Vererbungen) implemtiert.
+
+Als Beispiel dient hier das Interface \textit{Scalar} aus dem Package \textit{ch.hftm.astrodynamics.utils}, welches z.B für generalisierte Operationen innerhalb aller Klassen verwendet wird. Mit diesem Interface können wir sicherstellen, dass alle \textit{Scalar} Klassen verglichen oder berechnet werden können.
+
+Ebenfalls ist in diesem Interface eine Implementation für die Funktion \textit{toFittedString()} bereits vorgegeben (und muss aus diesem Grund nicht erneut implementiert werden).
+
