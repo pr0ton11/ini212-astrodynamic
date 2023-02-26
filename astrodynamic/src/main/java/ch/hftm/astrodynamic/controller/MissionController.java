@@ -168,6 +168,8 @@ public class MissionController extends BaseController{
 
         /*
         Mission clonedMission = MissionRepository.cloneMission();
+        clonedMission.setName(clonedMission.getName() + " kopie");
+        MissionRepository.addMission(clonedMission);
         MissionRepository.setActiveMission(clonedMission);
         showSceneOnNewStage("Mission Editor - " + MissionRepository.getActiveMission().getName(), false, "view/MissionEditView.fxml");
         */

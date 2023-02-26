@@ -25,7 +25,6 @@ import ch.hftm.astrodynamic.scalar.LengthScalar;
 
  // Singleton class containing all the Missions
 public final class MissionRepository {
-    
     private static MissionRepository instance;  // Single instance of the mission repository
 
     private MissionRepository() {}  // Constructor

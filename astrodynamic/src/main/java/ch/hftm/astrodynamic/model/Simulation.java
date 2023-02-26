@@ -120,6 +120,10 @@ public class Simulation {
             o.applyVelocity(deltaTime);
         }
 
+        for (Spaceship s: spaceships) {
+            s.update(deltaTime); // update internal systems, apply manuevers
+        }
+
         checkConditions();
         
         totalTime = totalTime.add(deltaTime);
