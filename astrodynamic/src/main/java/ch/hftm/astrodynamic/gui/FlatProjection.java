@@ -61,8 +61,6 @@ public class FlatProjection {
         canvasX = new LengthScalar(canvas.getWidth()/2.0);
         canvasY = new LengthScalar(canvas.getHeight()/2.0);
 
-        System.out.println("canvas middle " + canvasX.toString() + ", " + canvasY.toString());
-
         focus = simulation.getAstronomicalObjectByName("Earth");
     }
 
@@ -76,8 +74,6 @@ public class FlatProjection {
             focusX = focus.getPosition().getX().multiply(zoomFactor);
             focusY = focus.getPosition().getY().multiply(zoomFactor);
         }
-
-        System.out.println("Focus " + focusX.toString() + ", " + focusY.toString());
 
         gc.setStroke(POSITION_COLOR);
         gc.setLineWidth(POSITION_WIDTH);
@@ -96,9 +92,6 @@ public class FlatProjection {
             if (diameter.le(MINIMUM_DIAMETER)) {
                 diameter = MINIMUM_DIAMETER;
             }
-
-            System.out.println(p.getName() + " pos " + posX.toString() + ", " + posY.toString());
-            System.out.println(p.getName() + " radius " + radius.toString());
 
             gc.strokeOval(posX.subtract(radius).getValue().doubleValue(), posY.subtract(radius).getValue().doubleValue(), diameter.getValue().doubleValue(), diameter.getValue().doubleValue());
 
@@ -123,9 +116,6 @@ public class FlatProjection {
             if (diameter.le(MINIMUM_DIAMETER)) {
                 diameter = MINIMUM_DIAMETER;
             }
-
-            System.out.println(s.getName() + " pos " + posX.toString() + ", " + posY.toString());
-            System.out.println(s.getName() + " radius " + radius.toString());
 
             gc.strokeOval(posX.subtract(radius).getValue().doubleValue(), posY.subtract(radius).getValue().doubleValue(), diameter.getValue().doubleValue(), diameter.getValue().doubleValue());
 
