@@ -82,8 +82,9 @@ public class FlatProjection {
         gc.setStroke(POSITION_COLOR);
         gc.setLineWidth(POSITION_WIDTH);
 
-        gc.strokeOval(canvasX.getValue().doubleValue() - 1, canvasY.getValue().doubleValue() - 1, 2, 2);
-        gc.stroke();
+        // testpoint to mark middle of canvas
+        //gc.strokeOval(canvasX.getValue().doubleValue() - 1, canvasY.getValue().doubleValue() - 1, 2, 2);
+        //gc.stroke();
 
         for (Planetoid p: simulation.getPlanetoids()) {
 

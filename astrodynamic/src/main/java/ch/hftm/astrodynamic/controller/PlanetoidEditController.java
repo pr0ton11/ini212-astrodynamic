@@ -20,6 +20,7 @@ import ch.hftm.astrodynamic.utils.Log;
 import ch.hftm.astrodynamic.utils.MissionRepository;
 import ch.hftm.astrodynamic.utils.Quad;
 import ch.hftm.astrodynamic.utils.Scalar;
+import ch.hftm.astrodynamic.utils.Serializer;
 import ch.hftm.astrodynamic.utils.Unit;
 import ch.hftm.astrodynamic.utils.UnitConversionError;
 import ch.hftm.astrodynamic.utils.Vector;
@@ -299,6 +300,7 @@ public class PlanetoidEditController extends BaseController{
     void okClicked(ActionEvent e) {
         try {
             moveDataFromGuiToObject();
+            Serializer.save();
             getCurrentStage(e).close();
         } catch (UnitConversionError | NumberFormatException ex) {
             showError("Can not save planetoid!\n"+ex.toString());

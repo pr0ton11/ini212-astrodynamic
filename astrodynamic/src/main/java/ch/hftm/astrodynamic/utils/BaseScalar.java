@@ -1,5 +1,6 @@
 package ch.hftm.astrodynamic.utils;
 
+import java.io.Serializable;
 import java.util.logging.Logger;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -13,9 +14,11 @@ import ch.hftm.astrodynamic.scalar.ScalarFactory;
  */
 
  // Converter for SI units, base is abstract to force use of specific implementations
-public abstract class BaseScalar implements Scalar {
+public abstract class BaseScalar implements Scalar, Serializable {
 
-    private static Logger logger = Log.build();
+    private static final long serialVersionUID = 1L;
+
+    private static transient Logger logger = Log.build();
 
     private Quad value;  // Number to be stored in this object
     private Unit unit; // Unit to be stored in this object

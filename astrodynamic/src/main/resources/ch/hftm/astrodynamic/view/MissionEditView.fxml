@@ -19,7 +19,7 @@
       <HBox prefHeight="48.0" prefWidth="634.0">
          <children>
             <Label text="Player Spaceship" />
-            <ComboBox prefWidth="150.0" />
+            <ComboBox fx:id="playerSpaceship" prefWidth="150.0" />
          </children>
       </HBox>
       <Label text="Condition" />

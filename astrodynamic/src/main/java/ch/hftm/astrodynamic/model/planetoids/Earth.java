@@ -22,7 +22,7 @@ import ch.hftm.astrodynamic.model.Simulation;
 */
 public class Earth extends Planetoid {
 
-    private static Logger log = Log.build();
+    private static transient Logger log = Log.build();
 
     public Earth() {
         super(

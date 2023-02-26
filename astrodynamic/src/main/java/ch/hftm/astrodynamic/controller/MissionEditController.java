@@ -38,6 +38,7 @@ import ch.hftm.astrodynamic.utils.MissionRepository;
 import ch.hftm.astrodynamic.utils.Named;
 import ch.hftm.astrodynamic.utils.Quad;
 import ch.hftm.astrodynamic.utils.Scalar;
+import ch.hftm.astrodynamic.utils.Serializer;
 import ch.hftm.astrodynamic.utils.BaseVector;
 import ch.hftm.astrodynamic.utils.Unit;
 
@@ -75,6 +76,9 @@ public class MissionEditController extends BaseController{
 
     @FXML
     ComboBox<Named> newConditionObject;
+
+    @FXML
+    ComboBox<Spaceship> playerSpaceship;
 
     ObservableList<Class> possibleConditions;
 
@@ -189,6 +193,27 @@ public class MissionEditController extends BaseController{
             }
         });
         missionSpaceships.setItems(spaceships);
+
+        // player spaceship has the same observable list as the mission spaceship list
+        playerSpaceship.setCellFactory(param -> new ListCell<>() {
+            @Override
+            protected void updateItem(Spaceship item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getName());
+                }
+            }
+        });
+        playerSpaceship.setItems(spaceships);
+
+        if (editedMission.getPlayerControlledVessel() != null) {
+            playerSpaceship.setValue(editedMission.getPlayerControlledVessel()); // TODO: fix this non working
+        }
+
+        updateUnobservedListsFromObject();
     }
 
     // planetoid and spaceship changes are unobservable from gui, refresh them here
@@ -200,7 +225,9 @@ public class MissionEditController extends BaseController{
         }
 
         spaceships.clear();
-        // load efocusList
+        for (Spaceship s: editedMission.getSpaceships()) {
+            spaceships.add(s);
+        }
 
         possibleConditionRelationObjects.clear();
         possibleConditionRelationObjects.addAll(editedMission.getAllNamedAstronomicalObjects());
@@ -395,6 +422,7 @@ public class MissionEditController extends BaseController{
     @FXML
     void saveMission(ActionEvent e) {
         fieldsToMissionData();
+        Serializer.save();
         getCurrentStage(e).close();
     }
 
@@ -451,5 +479,11 @@ public class MissionEditController extends BaseController{
         editedMission.setReferencePlanetoid(tempPlanetoid);
 
         showSceneOnNewStage("Planetoid Editor - " + tempPlanetoid.getName(), false, "view/PlanetoidEditView.fxml");
+    }
+
+    // user has chosen a spaceship for the player in the dropdown, set in mission
+    @FXML
+    void setPlayerSpaceship(ActionEvent e) {
+        editedMission.setPlayerControlledVessel(playerSpaceship.getSelectionModel().getSelectedItem());
     }
 }

@@ -17,7 +17,7 @@ import ch.hftm.astrodynamic.utils.Vector;
 // adds a heavy lander to the simulation on add
 public class SetupHeavyLander extends Condition {
 
-    private Logger log = Log.build();
+    private transient Logger log = Log.build();
 
     String landerName;
     Scalar distance;

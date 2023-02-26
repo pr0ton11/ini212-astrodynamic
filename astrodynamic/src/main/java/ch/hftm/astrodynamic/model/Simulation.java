@@ -1,6 +1,7 @@
 package ch.hftm.astrodynamic.model;
 
 import java.util.List;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -17,7 +18,7 @@ import ch.hftm.astrodynamic.utils.*;
  */
 
 
-public class Simulation {
+public class Simulation implements Serializable {
 
     static Scalar UPDATE_TIME_STEP = new TimeScalar(0.5); // we aim to update the simulation once each 0.5 seconds
 
@@ -96,6 +97,10 @@ public class Simulation {
         {
             // move objects by adding velocity to position
             o.applyVelocity(deltaTime);
+        }
+
+        for (Spaceship s: spaceships) {
+            s.update(deltaTime); // update internal systems, apply manuevers
         }
 
         checkConditions();

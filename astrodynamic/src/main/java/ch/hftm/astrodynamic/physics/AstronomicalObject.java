@@ -1,6 +1,8 @@
 
 package ch.hftm.astrodynamic.physics;
 
+import java.io.Serializable;
+
 import ch.hftm.astrodynamic.utils.*;
 
 /*

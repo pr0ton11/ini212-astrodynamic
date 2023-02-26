@@ -1,23 +1,25 @@
 package ch.hftm.astrodynamic.controller;
 
+import javafx.fxml.FXML;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListCell;
-import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.event.ActionEvent;
 
 import ch.hftm.astrodynamic.gui.FlatProjection;
 import ch.hftm.astrodynamic.model.Mission;
 import ch.hftm.astrodynamic.physics.AstronomicalObject;
 import ch.hftm.astrodynamic.physics.BaseAstronomicalObject;
-import ch.hftm.astrodynamic.utils.MissionRepository;
-import ch.hftm.astrodynamic.utils.Quad;
-import ch.hftm.astrodynamic.utils.Scalar;
-import ch.hftm.astrodynamic.utils.UnitConversionError;
+import ch.hftm.astrodynamic.physics.Spaceship;
+import ch.hftm.astrodynamic.utils.*;
 import ch.hftm.astrodynamic.scalar.*;
 
 /*
@@ -67,6 +69,28 @@ public class SimulationController extends BaseController{
     @FXML
     Slider enlargeSlider;
 
+    @FXML
+    AnchorPane shipController;
+
+    @FXML
+    Canvas burnCanvas;
+    GraphicsContext burnContext;
+
+    @FXML
+    Label distanceToReference;
+
+    @FXML
+    Label velocityToReference;
+
+    @FXML
+    Label remainingDeltaV;
+
+    @FXML
+    Label maneuverDeltaV;
+
+    @FXML
+    Label maneuverTime;
+
     FlatProjection projection;
 
     Mission currentMission;
@@ -77,9 +101,10 @@ public class SimulationController extends BaseController{
 
     @Override
     public void initialize(){
-        
         currentMission = MissionRepository.getActiveMission();
         projection = new FlatProjection(orbitView, currentMission);
+
+        burnContext = burnCanvas.getGraphicsContext2D();
 
         initializeZoom();
         initializeEnlarge();
@@ -92,11 +117,18 @@ public class SimulationController extends BaseController{
 
         // TODO thick labels and tick marks: https://docs.oracle.com/javase/8/javafx/api/javafx/scene/control/Slider.html
 
+        if (currentMission.getPlayerControlledVessel() != null) {
+            focus.setValue(currentMission.getPlayerControlledVessel());
+            projection.setFocus(currentMission.getPlayerControlledVessel());
+        }
+
         try {
             projection.draw();
         } catch (UnitConversionError e) {
             showError(e.toString());
         }
+
+        updateSpaceshipInfo();
 
         //currentMission.start();
     }
@@ -196,7 +228,8 @@ public class SimulationController extends BaseController{
 
     // save mission to repository
     public void saveMission(ActionEvent e) {
-        showError("Not implemented yet");
+        Serializer.save();
+        showInfo("Simulationszustand gespeichert");
     }
 
     // copy save mission to repository
@@ -208,6 +241,7 @@ public class SimulationController extends BaseController{
         try {
             currentMission.simulateInSteps(totalTime);
             projection.draw();
+            updateSpaceshipInfo();
         } catch (Exception ex) {
             showError(ex.toString());
         }
@@ -238,13 +272,135 @@ public class SimulationController extends BaseController{
         try {
             projection.setFocus(focus.getSelectionModel().getSelectedItem());
             projection.draw();
+            updateSpaceshipInfo();
         } catch (Exception ex) {
             showError(ex.toString());
         }
     }
 
     public void referenceChanged(ActionEvent e) {
-        //reference.getSelectionModel().getSelectedItem();
-        //projection.draw();
+        try {
+            //projection.draw(); // not relevant at the moment because we do not mark the reference on the map
+            updateSpaceshipInfo();
+        } catch (Exception ex) {
+            showError(ex.toString());
+        }
+    }
+
+    // user clicked on burn canvas
+    public void burnCanvasClicked(MouseEvent e) {
+        AstronomicalObject focusObject = focus.getSelectionModel().getSelectedItem();
+
+        if (!(focusObject instanceof Spaceship)) {
+            return;
+        }
+
+        Spaceship ship = (Spaceship)focusObject;
+
+        try {
+            Scalar diffX = new UnitlessScalar(e.getX() - burnCanvas.getWidth()/2).divide(new UnitlessScalar(burnCanvas.getWidth()/2)); // calculate relative click position to middle of canvas to get direction
+            Scalar diffY = new UnitlessScalar(e.getY() - burnCanvas.getHeight()/2).divide(new UnitlessScalar(burnCanvas.getHeight()/2));
+            Vector burnVector = new BaseVector(diffX, diffY, new UnitlessScalar());
+
+            burnVector = burnVector.multiply(ship.getDeltaV()); // multiply direction with total deltaV available
+
+            ship.setBurn(burnVector);
+
+            updateSpaceshipInfo();
+        } catch (UnitConversionError ex) {
+            showError(ex.toString());
+        }
+    }
+
+    // updates reference and maneuver data if we have ship selected, else hides element because unused
+    private void updateSpaceshipInfo() {
+        AstronomicalObject focusObject = focus.getSelectionModel().getSelectedItem();
+
+        if (focusObject == null) {
+            shipController.setVisible(false);
+            return;
+        }
+
+        if (focusObject instanceof Spaceship) {
+            shipController.setVisible(true);
+            updateReferenceData();
+            drawBurnCanvas();
+        } else {
+            shipController.setVisible(false);
+        }
+    }
+
+    // ship reference data panel update, shows reference info and maneuver info
+    private void updateReferenceData() {
+        AstronomicalObject focusObject = focus.getSelectionModel().getSelectedItem();
+        AstronomicalObject referenceObject = reference.getSelectionModel().getSelectedItem();
+
+        distanceToReference.setText("");
+        velocityToReference.setText("");
+        remainingDeltaV.setText("");
+        maneuverDeltaV.setText("");
+        maneuverTime.setText("");
+
+        Spaceship ship = (Spaceship)focusObject;
+        remainingDeltaV.setText(ship.getDeltaV().toFittedString());
+
+        if (ship.isManeuvering()) {
+            maneuverDeltaV.setText(ship.getBurn().getLength().toFittedString());
+
+            try {
+                maneuverTime.setText(new TimeScalar(ship.getBurn().getLength().divide(new UnitlessScalar(ship.getAcceleration()))).toFittedString());
+            } catch (Exception e) {
+
+            }
+        }
+
+        if (referenceObject == null) {
+            return;
+        }
+
+        if (focusObject == referenceObject) {
+            return;
+        }
+
+        try {
+            Scalar distance = focusObject.getDistance(referenceObject);
+            distanceToReference.setText(distance.toFittedString());
+
+            velocityToReference.setText(focusObject.getVelocity().subtract(referenceObject.getVelocity()).getLength().toFittedString());
+        } catch (UnitConversionError e) {
+
+        }
+    }
+
+    // draw the burn canvas which visualizes the remaining burn with direction to deltaV
+    private void drawBurnCanvas() {
+        burnContext.clearRect(0, 0, burnCanvas.getWidth(), burnCanvas.getHeight());
+
+        burnContext.setStroke(Color.BLACK);
+        burnContext.strokeOval(0, 0, burnCanvas.getWidth(), burnCanvas.getHeight());
+        burnContext.stroke();
+
+        AstronomicalObject focusObject = focus.getSelectionModel().getSelectedItem();
+
+        Spaceship ship = (Spaceship)focusObject;
+
+        if (ship.isManeuvering()) {
+            try {
+                Vector burnVector = ship.getBurn().divide(ship.getDeltaV()); // get -1.0 to 1.0 values of direction
+
+                double pointX = burnCanvas.getWidth()/2 + (burnCanvas.getWidth()/2) * burnVector.getX().getValue().doubleValue(); // calculate point on burn canvas
+                double pointY = burnCanvas.getHeight()/2 + (burnCanvas.getHeight()/2) * burnVector.getY().getValue().doubleValue();
+
+                burnContext.setStroke(Color.RED);
+                burnContext.strokeLine(burnCanvas.getWidth()/2, burnCanvas.getHeight()/2, pointX, pointY);
+                burnContext.stroke();
+            } catch (UnitConversionError ex) {
+
+            }
+        }
+
+        burnContext.setStroke(Color.BLUE);
+        burnContext.strokeOval(burnCanvas.getWidth()/2-1, burnCanvas.getHeight()/2-1, 2, 2);
+        burnContext.stroke();
     }
 }

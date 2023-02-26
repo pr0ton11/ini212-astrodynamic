@@ -156,6 +156,8 @@ public final class MissionRepository implements Serializable {
         // Sort the test missions
         sort();
 
+        tempMission.setPlayerControlledVessel((Spaceship)tempMission.getAstronomicalObjectByName("Heavy Lander"));
+
     }
 
     // Sorts the MissionRepository alphabetically

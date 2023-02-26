@@ -1,7 +1,7 @@
 package ch.hftm.astrodynamic.utils;
 
 import java.util.logging.Logger;
-
+import java.io.Serializable;
 import java.lang.Math;
 
 import ch.hftm.astrodynamic.scalar.AngleScalar;
@@ -14,14 +14,17 @@ import ch.hftm.astrodynamic.scalar.ScalarFactory;
  */
 
  // implements basic functionality for vectors
-public class BaseVector implements Vector, Cloneable {
+public class BaseVector implements Vector, Cloneable, Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private Quad x;
     private Quad y;
     private Quad z;
     private Quad length;
     private Unit unit;
 
-    private static Logger logger = Log.build();
+    private static transient Logger logger = Log.build();
 
     // unitless zero vector
     public BaseVector() {

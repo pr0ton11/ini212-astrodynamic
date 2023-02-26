@@ -15,6 +15,7 @@ import javafx.event.ActionEvent;
 
 import ch.hftm.astrodynamic.model.*;
 import ch.hftm.astrodynamic.utils.MissionRepository;
+import ch.hftm.astrodynamic.utils.Serializer;
 
 /*
  *  Project Astrodynamic
@@ -55,6 +56,8 @@ public class MissionController extends BaseController{
 
     @Override
     public void initialize(){
+
+        Serializer.load(); // load data from disk if existing
 
         // mission list shows mission name
         missionList.setCellFactory(param -> new ListCell<Mission>() {
@@ -130,7 +133,7 @@ public class MissionController extends BaseController{
     void startSimulation(ActionEvent e) {
         Mission selectedMission = getSelectedMission();
 
-        showSceneOnNewStage("Simulation - " + selectedMission.getName(), true, "view/SimulationView.fxml");
+        showSceneOnNewStage("Simulation - " + selectedMission.getName(), false, "view/SimulationView.fxml");
     }
 
     // user clicked delete mission, ask him if he is sure, if yes delete mission from repository
@@ -141,6 +144,7 @@ public class MissionController extends BaseController{
         if (selectedMission != null) {
             if (askYesNo(String.format("Do you really want to delete mission '%s'?", selectedMission.getName()))) {
                 MissionRepository.deleteMission(selectedMission);
+                Serializer.save();
                 missionData.setVisible(false);
             }
         }
@@ -158,6 +162,15 @@ public class MissionController extends BaseController{
     // user clicked copy button, copy selected mission in repository, open mission editor
     @FXML
     void copyMission(ActionEvent e) {
-        showError("Error copy mission.\nNot implemented!");
+        showError("Not implemented");
+        return;
+
+        /*
+        Mission clonedMission = MissionRepository.cloneMission();
+        clonedMission.setName(clonedMission.getName() + " kopie");
+        MissionRepository.addMission(clonedMission);
+        MissionRepository.setActiveMission(clonedMission);
+        showSceneOnNewStage("Mission Editor - " + MissionRepository.getActiveMission().getName(), false, "view/MissionEditView.fxml");
+        */
     }
 }

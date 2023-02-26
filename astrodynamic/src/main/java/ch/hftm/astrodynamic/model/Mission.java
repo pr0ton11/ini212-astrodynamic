@@ -19,8 +19,6 @@ public class Mission extends Simulation implements Named, Serializable {
     String name;
     String description; // in html
 
-    private static final long serialVersionUID = 1L;
-
     public Mission() {
         this("", "");
     }
