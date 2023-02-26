@@ -1,6 +1,8 @@
 
 package ch.hftm.astrodynamic.physics;
 
+import java.io.Serializable;
+
 import ch.hftm.astrodynamic.utils.*;
 
 /*
@@ -10,7 +12,7 @@ import ch.hftm.astrodynamic.utils.*;
  */
 
 // Base attributes to define atronomical object with gravity
-public interface AstronomicalObject {
+public interface AstronomicalObject extends Serializable {
     Scalar getMass();
     Vector getPosition();
     Vector getVelocity();

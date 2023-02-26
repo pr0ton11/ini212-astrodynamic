@@ -38,6 +38,7 @@ import ch.hftm.astrodynamic.utils.MissionRepository;
 import ch.hftm.astrodynamic.utils.Named;
 import ch.hftm.astrodynamic.utils.Quad;
 import ch.hftm.astrodynamic.utils.Scalar;
+import ch.hftm.astrodynamic.utils.Serializer;
 import ch.hftm.astrodynamic.utils.BaseVector;
 import ch.hftm.astrodynamic.utils.Unit;
 
@@ -421,6 +422,7 @@ public class MissionEditController extends BaseController{
     @FXML
     void saveMission(ActionEvent e) {
         fieldsToMissionData();
+        Serializer.save();
         getCurrentStage(e).close();
     }
 

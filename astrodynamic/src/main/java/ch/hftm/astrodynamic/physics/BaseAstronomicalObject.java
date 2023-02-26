@@ -19,6 +19,9 @@ import ch.hftm.astrodynamic.utils.*;
 
 // Base to fill computational methods, abstract to force use of specific child classes
 public abstract class BaseAstronomicalObject implements AstronomicalObject, Named {
+
+    private static final long serialVersionUID = 1L;
+
     private Scalar zeroPointHeight;
     private Scalar mass;
     private Vector position;
@@ -172,7 +175,8 @@ public abstract class BaseAstronomicalObject implements AstronomicalObject, Name
         Vector direction = getDirection(partner).normalize();
 
         // TODO: fix dimensional unit
-        Scalar velocity = new VelocityScalar(partner.getMass().getValue().divide(distance.getValue()).multiply(ScalarFactory.gravitationalConstant().getValue()));
+        // v = sqrt((G*M)/r)
+        Scalar velocity = new VelocityScalar(partner.getMass().getValue().multiply(ScalarFactory.gravitationalConstant().getValue()).divide(distance.getValue()).sqrt());
 
         // here we turn the velocity vector by 90° to the partner direction to gain an orbit
         // TODO: dot/cross product would be more stable/sane

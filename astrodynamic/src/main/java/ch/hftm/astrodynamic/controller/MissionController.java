@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 import ch.hftm.astrodynamic.model.*;
 import ch.hftm.astrodynamic.utils.Log;
 import ch.hftm.astrodynamic.utils.MissionRepository;
+import ch.hftm.astrodynamic.utils.Serializer;
 
 /*
  *  Project Astrodynamic
@@ -60,6 +61,8 @@ public class MissionController extends BaseController{
 
     @Override
     public void initialize(){
+
+        Serializer.load(); // load data from disk if existing
 
         // mission list shows mission name
         missionList.setCellFactory(param -> new ListCell<Mission>() {
@@ -146,6 +149,7 @@ public class MissionController extends BaseController{
         if (selectedMission != null) {
             if (askYesNo(String.format("Do you really want to delete mission '%s'?", selectedMission.getName()))) {
                 MissionRepository.deleteMission(selectedMission);
+                Serializer.save();
                 missionData.setVisible(false);
             }
         }

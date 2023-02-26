@@ -30,6 +30,7 @@ import ch.hftm.astrodynamic.utils.BaseVector;
 import ch.hftm.astrodynamic.utils.MissionRepository;
 import ch.hftm.astrodynamic.utils.Quad;
 import ch.hftm.astrodynamic.utils.Scalar;
+import ch.hftm.astrodynamic.utils.Serializer;
 import ch.hftm.astrodynamic.utils.Unit;
 import ch.hftm.astrodynamic.utils.UnitConversionError;
 import ch.hftm.astrodynamic.utils.Vector;
@@ -244,7 +245,7 @@ public class SimulationController extends BaseController{
 
     // save mission to repository
     public void saveMission(ActionEvent e) {
-        showError("Not implemented yet");
+        Serializer.save();
     }
 
     // copy save mission to repository

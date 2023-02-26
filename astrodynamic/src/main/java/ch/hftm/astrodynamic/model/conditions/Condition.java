@@ -1,5 +1,7 @@
 package ch.hftm.astrodynamic.model.conditions;
 
+import java.io.Serializable;
+
 import ch.hftm.astrodynamic.model.EndCondition;
 import ch.hftm.astrodynamic.model.Mission;
 import ch.hftm.astrodynamic.model.Setup;
@@ -13,7 +15,9 @@ import ch.hftm.astrodynamic.utils.Named;
  */
 
 // condition needs naming for gui, end conditions to check for its win/loss and setup to create the scenario to check against
-public abstract class Condition implements Named, EndCondition, Setup {
+public abstract class Condition implements Named, EndCondition, Setup, Serializable {
+    private static final long serialVersionUID = 1L;
+    
     String name;
     String description;
     
