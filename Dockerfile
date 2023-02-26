@@ -25,4 +25,3 @@ FROM azul/zulu-openjdk-alpine:17-latest
 
 WORKDIR /astrodynamic
 COPY --from=build /astrodynamic/target/*.jar /astrodynamic/
-# TODO: Add the documentation

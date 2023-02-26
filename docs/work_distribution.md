@@ -10,17 +10,18 @@ While implementing a specific feature the corresponding unit tests and technical
 
 - [X] Project structure
 - [X] Reference comment file
-- [ ] **SI units Enum and Conversion in Utils**
-- [ ] Exceptions
-- [ ] Log file
-  - [ ] logger class
-- [ ] argument handling
-- [ ] Serialization
-  - [ ] JSON
-- [ ] Maven build / docker file
-- [ ] Documentation
+- [X] **SI units Enum and Conversion in Utils**
+- [X] Exceptions
+- [X] Log file
+  - [X] logger class
+- [X] argument handling
+- [X] Serialization
+  - [X] Binary / Object
+  - [ ] ~~JSON~~
+- [X] Maven build / docker file
+- [X] Documentation
   - [ ] Code / UML
-  - [ ] Solution description own points
+  - [X] Solution description own points
 
 ### Rafael
 
@@ -57,9 +58,7 @@ While implementing a specific feature the corresponding unit tests and technical
 
 ### Marc
 
-- [ ] Serialization
-  - [ ] Binary / Object
-- [ ] Performance
+- [ ] ~~Performance~~
 - [ ] ~~Sockets~~
 
 ### Rafael

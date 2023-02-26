@@ -2,9 +2,28 @@
 
 \section{Applikationsdokumentation}
 
+\subsection{Diagramme}
+
 \subsection{Maven build}
 
-\subsection{Diagramme}
+Um mittels Maven ein Build zu erzeugen kann der Befehl \textit{mvn clean package} verwendet werden.
+
+Dieser Befehl testet das gesamte Softwareprojekt und erzeugt anschliessend im Ordner \textit{target} ein neues Java Executable (JAR File).
+
+Wir haben ebenfalls einen Docker Container vorbereitet, mit welchem das Build automatisiert werden kann.
+
+Dieser nutzt das Zulu OpenJDK, um unser Projekt vollständig zu bauen und zu testen:
+
+\begin{lstlisting}
+
+	# Docker build
+	$ docker build -t astrodynamic/build .
+	$ docker run --name astrodynamic -v ./:/astrodynamic astrodynamic/build
+	# Das Java Executable erscheint im selben Ordner
+	
+\end{lstlisting}
+
+Mit Docker können wir das Projekt überall mit wenig Aufwand und ohne grossen Installationsaufwand neu bauen.
 
 \section{Themenumsetzung}
 
@@ -87,4 +106,57 @@ Interfaces werden in unserem Projekt häufig verwendet. Vorwiegend haben wir mit
 Als Beispiel dient hier das Interface \textit{Scalar} aus dem Package \textit{ch.hftm.astrodynamics.utils}, welches z.B für generalisierte Operationen innerhalb aller Klassen verwendet wird. Mit diesem Interface können wir sicherstellen, dass alle \textit{Scalar} Klassen verglichen oder berechnet werden können.
 
 Ebenfalls ist in diesem Interface eine Implementation für die Funktion \textit{toFittedString()} bereits vorgegeben (und muss aus diesem Grund nicht erneut implementiert werden).
+
+\section{Abstrakte Klassen}
+
+Wir nutzen Abstrakte Klassen unter anderem für unseren \textit{BaseController} im Paket \textit{ch.hftm.astrodynamic.controller} welcher grundlegende Funktionalität für unsere Controller bereitstellt.
+
+Dieser Controller dient als Elternklasse für unsere \textit{Controller} Klassen, wird aber selbst niemals instanziert (daher ist er als Abstract definiert).
+
+Wir verwenden abstrakte Klassen ebenfalls für die \textit{Condition} Klasse für die Mission aus demselben Grund.
+
+\section{Collection}
+
+Der wichtigste Einsatz von Collections in unserem Projekt ist die \textit{ObservableList} innerhalb unseres MissionRepositories.
+Dieser Typ der Collection stammt aus dem JavaFX Paket und bietet der Frontend-Anwendung die Möglichkeit, den Inhalt der Liste konstant zu überwachen und Änderungen im UI umgehend darzustellen.
+
+
+\subparagraph{Sortierung}
+
+Wir sortieren die \textit{ObservableList} innerhalb der Funktion \textit{sort()} innerhalb unserer Klasse \textit{MissionRepository} alphabetisch nach Namen der Mission:
+
+
+\begin{lstlisting}
+	// Sorts the MissionRepository alphabetically
+	public static void sort() {
+		// Create a comparator for name based sorting 
+		Comparator<Mission> byName = (Mission a, Mission b) ->
+		a.getName().compareTo(b.getName());
+		// Sort the Mission Repository based on names
+		getInstance().missions.sort(byName);
+	}
+\end{lstlisting}
+
+Der Name ist ebenfalls der Primärschlüssel, welcher für die Missionen innerhalb der Funktion \textit{getMissionByName} verwendet wird.
+
+\section{Serialisierung}
+
+Serialisierung wird in unserem Projekt zur Speicherung der Klasse \textit{MissionRepository}, welche den kompletten Status unserer Anwendung enthält verwendet.
+
+Die Klasse \textit{Serializer} ist für die Serialisierung des \textit{MissionRepository} zuständig.
+Aktuell wird die Serialisierbarkeit unserer Klassen mittels dem Interface \textit{Serializable} gewährleistet.
+Dies ist insbesondere für die Komplexen Datentypen, welche für \textit{Quad} und \textit{ObservableList} verwendet werden, wichtig.
+
+Ebenfalls wurde eine mögliche Serialisierung ins JSON-Format vorbereitet. Dazu verwenden wir die Bibliothek \textit{Jackson}, welche ebenfalls in diversen Java Web Bibliotheken verwendet wird und als performant gilt.
+
+\section{Exceptions}
+
+Mit dem \textit{UnitConversionError} im \textit{ch.hftm.astrodynamic.utils} Package haben wir unsere eigene Exception implemementiert.
+
+Diese Exception dient dazu, inkompatible Einheiten in den \textit{Scalar} Klassen abzufangen und zu handeln.
+
+Ebenfalls nutzen wir mit dem \textit{SimulationRuntimeError} eine weitere eigene Exception, welche für Fehler während der Simulation genutzt wird.
+
+\section{Logging}
+
 

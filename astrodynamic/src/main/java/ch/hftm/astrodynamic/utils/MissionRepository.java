@@ -1,6 +1,7 @@
 package ch.hftm.astrodynamic.utils;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.NoSuchElementException;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -134,6 +135,18 @@ public final class MissionRepository {
         tempMission.addCondition(new SetupHeavyLander(new LengthScalar(300000), tempMission.getAstronomicalObjectByName("Earth")));
         tempMission.addCondition(new SetupISS(new LengthScalar(500000), tempMission.getAstronomicalObjectByName("Earth")));
         tempMission.addCondition(new Approach(new LengthScalar(300), tempMission.getAstronomicalObjectByName("ISS")));
+
+        // Sort the test missions
+        sort();
+
+    }
+
+    // Sorts the MissionRepository alphabetically
+    public static void sort() {
+        // Create a comparator for name based sorting 
+        Comparator<Mission> byName = (Mission a, Mission b) -> a.getName().compareTo(b.getName());
+        // Sort the Mission Repository based on names
+        getInstance().missions.sort(byName);
     }
     
 }
