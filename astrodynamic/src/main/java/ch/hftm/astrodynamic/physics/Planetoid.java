@@ -1,6 +1,8 @@
 
 package ch.hftm.astrodynamic.physics;
 
+import java.io.Serializable;
+
 import ch.hftm.astrodynamic.scalar.LengthScalar;
 import ch.hftm.astrodynamic.scalar.UnitlessScalar;
 
@@ -13,7 +15,9 @@ import ch.hftm.astrodynamic.utils.*;
  */
 
 // Can be a planet, moon or asteroid, shape is a sphere
-public class Planetoid extends BaseAstronomicalObject implements Atmosphere {
+public class Planetoid extends BaseAstronomicalObject implements Atmosphere, Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     Scalar atmosphereHeight;
     AtmosphereModel atmosphereModel;

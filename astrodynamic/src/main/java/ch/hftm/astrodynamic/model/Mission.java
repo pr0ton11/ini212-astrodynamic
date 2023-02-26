@@ -8,11 +8,9 @@ import ch.hftm.astrodynamic.model.planetoids.Sun;
 import ch.hftm.astrodynamic.physics.Spaceship;
 import ch.hftm.astrodynamic.utils.Named;
 
-public class Mission extends Simulation implements Named, Serializable {
+public class Mission extends Simulation implements Named {
     String name;
     String description; // in html
-
-    private static final long serialVersionUID = 1L;
 
     public Mission() {
         this("", "");

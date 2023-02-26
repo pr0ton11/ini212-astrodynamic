@@ -1,5 +1,7 @@
 package ch.hftm.astrodynamic.physics;
 
+import java.io.Serializable;
+
 import ch.hftm.astrodynamic.utils.*;
 
 /*
@@ -9,7 +11,9 @@ import ch.hftm.astrodynamic.utils.*;
  */
 
 // Spaceship encapsulates all controllable astronomical objects without atmosphere but with drag calculation
-public class Spaceship extends BaseAstronomicalObject implements Drag {
+public class Spaceship extends BaseAstronomicalObject implements Drag, Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private static Quad MINIMUM_DENSITY = new Quad(1.0, -11); // minimum density before calculation rounds of to zero
 

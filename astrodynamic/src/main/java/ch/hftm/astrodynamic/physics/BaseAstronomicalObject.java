@@ -32,6 +32,11 @@ public abstract class BaseAstronomicalObject implements AstronomicalObject, Name
     private String name;
     private String description;
 
+    // empty constructor for serialization
+    public BaseAstronomicalObject() {
+
+    }
+
     public BaseAstronomicalObject(double zeroPointHeight, double mass, Vector position, Vector rotation, Vector velocity, Vector rotationalVelocity) {
         this(new LengthScalar(zeroPointHeight), new MassScalar(mass), position, rotation, velocity, rotationalVelocity);
     }

@@ -7,6 +7,7 @@ package ch.hftm.astrodynamic.model;
  */
 
 import java.util.List;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,7 +19,9 @@ import ch.hftm.astrodynamic.scalar.TimeScalar;
 import ch.hftm.astrodynamic.scalar.UnitlessScalar;
 import ch.hftm.astrodynamic.utils.*;
 
-public class Simulation {
+public class Simulation implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     static Scalar UPDATE_TIME_STEP = new TimeScalar(0.5); // we aim to update the simulation once each 0.5 seconds
 

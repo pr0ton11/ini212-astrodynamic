@@ -12,7 +12,7 @@ import ch.hftm.astrodynamic.utils.*;
  */
 
 // Base attributes to define atronomical object with gravity
-public interface AstronomicalObject extends Serializable {
+public interface AstronomicalObject {
     Scalar getMass();
     Vector getPosition();
     Vector getVelocity();

@@ -1,5 +1,7 @@
 package ch.hftm.astrodynamic.utils;
 
+import java.io.Serializable;
+
 import ch.hftm.astrodynamic.scalar.ScalarFactory;
 import ch.hftm.astrodynamic.scalar.ScalarFactory.FittedValue;
 
@@ -9,7 +11,7 @@ import ch.hftm.astrodynamic.scalar.ScalarFactory.FittedValue;
  *  Rafael Stauffer, Marc Singer
  */
 
-public interface Scalar {
+public interface Scalar extends Serializable {
     Unit getUnit();
     Quad getValue();
 

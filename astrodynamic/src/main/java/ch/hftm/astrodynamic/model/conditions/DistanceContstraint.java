@@ -27,7 +27,7 @@ import ch.hftm.astrodynamic.utils.UnitConversionError;
 // can be a win or loss condition triggered by elapsed mission time
 public class DistanceContstraint extends Condition {
 
-    private Logger log = Log.build();
+    private transient Logger log = Log.build();
 
     Scalar altitudeGate;
     boolean checkForGreater;

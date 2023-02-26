@@ -1,5 +1,7 @@
 package ch.hftm.astrodynamic.utils;
 
+import java.io.Serializable;
+
 import ch.hftm.astrodynamic.scalar.AngleScalar;
 import ch.hftm.astrodynamic.scalar.UnitlessScalar;
 
