@@ -12,7 +12,7 @@ public class ISS extends Spaceship {
 
     public ISS() {
         super(
-            new LengthScalar(), 
+            new LengthScalar(15), 
             new MassScalar(45000), 
             new BaseVector(Unit.LENGTH),
             new BaseVector(Unit.ANGLE), 

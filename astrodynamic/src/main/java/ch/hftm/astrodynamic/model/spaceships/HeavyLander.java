@@ -12,7 +12,7 @@ public class HeavyLander extends Spaceship {
 
     public HeavyLander() {
         super(
-            new LengthScalar(), 
+            new LengthScalar(2), 
             new MassScalar(15000), 
             new BaseVector(Unit.LENGTH),
             new BaseVector(Unit.ANGLE), 
