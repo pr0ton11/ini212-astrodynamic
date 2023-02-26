@@ -28,12 +28,18 @@ import ch.hftm.astrodynamic.model.conditions.SetupHeavyLander;
 import ch.hftm.astrodynamic.model.conditions.SetupISS;
 import ch.hftm.astrodynamic.physics.Planetoid;
 import ch.hftm.astrodynamic.physics.Spaceship;
+import ch.hftm.astrodynamic.physics.AtmosphereModel;
 import ch.hftm.astrodynamic.scalar.ScalarFactory;
+import ch.hftm.astrodynamic.scalar.LengthScalar;
+import ch.hftm.astrodynamic.scalar.MassScalar;
+import ch.hftm.astrodynamic.scalar.UnitlessScalar;
 import ch.hftm.astrodynamic.utils.Log;
 import ch.hftm.astrodynamic.utils.MissionRepository;
 import ch.hftm.astrodynamic.utils.Named;
 import ch.hftm.astrodynamic.utils.Quad;
 import ch.hftm.astrodynamic.utils.Scalar;
+import ch.hftm.astrodynamic.utils.BaseVector;
+import ch.hftm.astrodynamic.utils.Unit;
 
 /*
  *  Project Astrodynamic
@@ -411,6 +417,7 @@ public class MissionEditController extends BaseController{
         showSceneOnNewStage("Planetoid Editor - " + missionPlanetoids.getSelectionModel().getSelectedItem().getName(), false, "view/PlanetoidEditView.fxml");
     }
 
+    // usr clicked delete planetoids: if we have one selected ask yes/no and delete if clicked yes
     @FXML
     void deletePlanetoid(ActionEvent e) {
         if (!checkPlanetoidSelected()) return;
@@ -422,8 +429,27 @@ public class MissionEditController extends BaseController{
         }
     }
 
+    // add new planetoid: create new planetoid to set as reference for editing
     @FXML
     void newPlanetoid(ActionEvent e) {
-        showError("Not implemented yet");
+
+        Planetoid tempPlanetoid = new Planetoid(
+            new LengthScalar(new Quad(1.0, 0)),
+            new MassScalar(new Quad(1.0, 0)), 
+            new BaseVector(Unit.LENGTH), 
+            new BaseVector(Unit.ANGLE), 
+            new BaseVector(Unit.VELOCITY), 
+            new BaseVector(Unit.ANGULAR_VELOCITY),
+            new LengthScalar(new Quad(1.0, 0)),
+            AtmosphereModel.QUADRATIC_FALLOFF,
+            new UnitlessScalar(0.0)
+        );
+
+        tempPlanetoid.setName("New Planetoid");
+
+        editedMission.addPlanetoid(tempPlanetoid);
+        editedMission.setReferencePlanetoid(tempPlanetoid);
+
+        showSceneOnNewStage("Planetoid Editor - " + tempPlanetoid.getName(), false, "view/PlanetoidEditView.fxml");
     }
 }
