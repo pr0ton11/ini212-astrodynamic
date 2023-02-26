@@ -10,8 +10,11 @@ import javafx.collections.ObservableList;
 
 import ch.hftm.astrodynamic.model.Mission;
 import ch.hftm.astrodynamic.model.conditions.Approach;
+import ch.hftm.astrodynamic.model.conditions.Condition;
 import ch.hftm.astrodynamic.model.conditions.SetupHeavyLander;
 import ch.hftm.astrodynamic.model.conditions.SetupISS;
+import ch.hftm.astrodynamic.physics.Planetoid;
+import ch.hftm.astrodynamic.physics.Spaceship;
 import ch.hftm.astrodynamic.scalar.LengthScalar;
 
 /*
@@ -109,7 +112,15 @@ public final class MissionRepository {
     // Returns the reference to the new mission
     public static Mission cloneMission() throws NoSuchElementException {
         if (getInstance().activeMission != null) {
-            return Serializer.deserializeMission(Serializer.serializeMission(getActiveMission()));
+            Mission clonedMission = new Mission();
+            clonedMission.setName(getInstance().activeMission.getName());
+            clonedMission.setDescription(getInstance().activeMission.getDescription());
+            getInstance().activeMission.getPlanetoids().forEach((Planetoid p) -> clonedMission.addPlanetoid(p));
+            getInstance().activeMission.getSpaceships().forEach((Spaceship s) -> clonedMission.addSpaceship(s));
+            getInstance().activeMission.getConditions().forEach((Condition c) -> clonedMission.addCondition(c));
+            // Can not clone any further because fields are not accessible
+            // Or in case of the elapsed simulation time, this does not make sense for a mission that we would certainly change
+            return clonedMission;
         }
         throw new NoSuchElementException();
     }
