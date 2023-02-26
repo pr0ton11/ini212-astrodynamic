@@ -13,10 +13,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 
-import java.util.logging.Logger;
-
 import ch.hftm.astrodynamic.model.*;
-import ch.hftm.astrodynamic.utils.Log;
 import ch.hftm.astrodynamic.utils.MissionRepository;
 import ch.hftm.astrodynamic.utils.Serializer;
 
@@ -28,8 +25,6 @@ import ch.hftm.astrodynamic.utils.Serializer;
 
 // Controller for overview list of missions
 public class MissionController extends BaseController{
-
-    private Logger log = Log.build();
 
     @FXML
     TextField searchField;
@@ -167,15 +162,10 @@ public class MissionController extends BaseController{
     // user clicked copy button, copy selected mission in repository, open mission editor
     @FXML
     void copyMission(ActionEvent e) {
-        showError("Not implemented");
-        return;
-
-        /*
         Mission clonedMission = MissionRepository.cloneMission();
         clonedMission.setName(clonedMission.getName() + " kopie");
         MissionRepository.addMission(clonedMission);
         MissionRepository.setActiveMission(clonedMission);
         showSceneOnNewStage("Mission Editor - " + MissionRepository.getActiveMission().getName(), false, "view/MissionEditView.fxml");
-        */
     }
 }

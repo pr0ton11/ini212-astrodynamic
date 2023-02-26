@@ -2,6 +2,7 @@ package ch.hftm.astrodynamic.utils;
 
 import java.io.Serializable;
 import java.util.logging.Logger;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import ch.hftm.astrodynamic.scalar.ScalarFactory;

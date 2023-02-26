@@ -12,6 +12,7 @@ import ch.hftm.astrodynamic.utils.*;
 
 // calculates density and oxygen content of atmosphere
 public interface Atmosphere {
+
     // density in kg/m^3, absolute position
     Scalar getDensity(Vector position);
 
@@ -40,4 +41,5 @@ public interface Atmosphere {
     default void setOxygenFactor(double oxygenFactor) {
         setOxygenFactor(new UnitlessScalar(oxygenFactor));
     }
+    
 }

@@ -13,6 +13,7 @@ import ch.hftm.astrodynamic.scalar.UnitlessScalar;
 import ch.hftm.astrodynamic.utils.*;
 
 public class VectorTest {
+    
     @Test
     public void TestInitialization() throws UnitConversionError {
         Vector vDouble = new BaseVector(1.0, 2.0, 3.5);
@@ -76,4 +77,5 @@ public class VectorTest {
         Assert.assertEquals(vExpected, v1.divide(s1));
         // There is no Scalar.multiply(Vector) method at the moment
     }
+
 }

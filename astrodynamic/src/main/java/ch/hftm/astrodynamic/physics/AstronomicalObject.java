@@ -13,6 +13,7 @@ import ch.hftm.astrodynamic.utils.*;
 
 // Base attributes to define atronomical object with gravity
 public interface AstronomicalObject {
+
     Scalar getMass();
     Vector getPosition();
     Vector getVelocity();
@@ -63,4 +64,5 @@ public interface AstronomicalObject {
 
     // returns -1.0 to 1.0 to denote the difference to the position and rotation
     double getGroundtrackFactorY(AstronomicalObject partner);
+    
 }

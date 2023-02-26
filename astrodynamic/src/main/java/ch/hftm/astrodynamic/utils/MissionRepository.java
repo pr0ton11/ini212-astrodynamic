@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.NoSuchElementException;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -152,7 +153,19 @@ public final class MissionRepository implements Serializable {
         tempMission.addCondition(new SetupISS(new LengthScalar(500000), tempMission.getAstronomicalObjectByName("Earth")));
         tempMission.addCondition(new Approach(new LengthScalar(300), tempMission.getAstronomicalObjectByName("ISS")));
 
+        // Sort the test missions
+        sort();
+
         tempMission.setPlayerControlledVessel((Spaceship)tempMission.getAstronomicalObjectByName("Heavy Lander"));
+
+    }
+
+    // Sorts the MissionRepository alphabetically
+    public static void sort() {
+        // Create a comparator for name based sorting 
+        Comparator<Mission> byName = (Mission a, Mission b) -> a.getName().compareTo(b.getName());
+        // Sort the Mission Repository based on names
+        getInstance().missions.sort(byName);
     }
 
     // Custom serializer for this class

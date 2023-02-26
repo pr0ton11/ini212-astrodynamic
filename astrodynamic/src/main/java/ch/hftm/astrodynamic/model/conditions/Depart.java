@@ -3,7 +3,6 @@ package ch.hftm.astrodynamic.model.conditions;
 import ch.hftm.astrodynamic.model.EndType;
 import ch.hftm.astrodynamic.scalar.LengthScalar;
 import ch.hftm.astrodynamic.utils.Named;
-import ch.hftm.astrodynamic.utils.Scalar;
 
 /*
  *  Project Astrodynamic

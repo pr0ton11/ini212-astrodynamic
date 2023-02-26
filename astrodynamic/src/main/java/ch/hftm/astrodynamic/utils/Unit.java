@@ -6,7 +6,7 @@ package ch.hftm.astrodynamic.utils;
  *  Rafael Stauffer, Marc Singer
  */
 
-// Contains all physical units as enum, we somehow ended up with dimensional analysis?
+// Contains all physical units as enum
 public enum Unit {
     TIME, // Seconds (s)
     LENGTH, // Meters (m)

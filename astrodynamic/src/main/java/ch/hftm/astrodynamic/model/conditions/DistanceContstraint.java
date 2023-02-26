@@ -2,20 +2,13 @@ package ch.hftm.astrodynamic.model.conditions;
 
 import java.util.logging.Logger;
 
-import com.epam.deltix.dfp.Decimal;
-
 import ch.hftm.astrodynamic.model.EndType;
 import ch.hftm.astrodynamic.model.Simulation;
-import ch.hftm.astrodynamic.physics.AstronomicalObject;
 import ch.hftm.astrodynamic.physics.BaseAstronomicalObject;
-import ch.hftm.astrodynamic.physics.Planetoid;
 import ch.hftm.astrodynamic.physics.Spaceship;
-import ch.hftm.astrodynamic.scalar.LengthScalar;
-import ch.hftm.astrodynamic.scalar.ScalarFactory;
 import ch.hftm.astrodynamic.utils.Log;
 import ch.hftm.astrodynamic.utils.Named;
 import ch.hftm.astrodynamic.utils.Scalar;
-import ch.hftm.astrodynamic.utils.Unit;
 import ch.hftm.astrodynamic.utils.UnitConversionError;
 
 /*

@@ -4,16 +4,16 @@ import java.util.logging.Logger;
 
 import ch.hftm.astrodynamic.model.Simulation;
 
+import ch.hftm.astrodynamic.physics.*;
+import ch.hftm.astrodynamic.scalar.LengthScalar;
+import ch.hftm.astrodynamic.scalar.MassScalar;
+import ch.hftm.astrodynamic.utils.*;
+
 /*
  *  Project Astrodynamic
  *  HFTM BBIN21.2a
  *  Rafael Stauffer, Marc Singer
  */
-
-import ch.hftm.astrodynamic.physics.*;
-import ch.hftm.astrodynamic.scalar.LengthScalar;
-import ch.hftm.astrodynamic.scalar.MassScalar;
-import ch.hftm.astrodynamic.utils.*;
 
 /* planetoid moon (luna) 
 * mass: 7.34767309e+22 kg

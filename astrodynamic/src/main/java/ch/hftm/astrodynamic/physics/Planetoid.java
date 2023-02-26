@@ -86,4 +86,5 @@ public class Planetoid extends BaseAstronomicalObject implements Atmosphere, Ser
     public void setOxygenFactor(Scalar oxygenFactor) {
         this.atmosphereOxygenFactor = oxygenFactor;
     }
+    
 }

@@ -233,4 +233,5 @@ public abstract class BaseAstronomicalObject implements AstronomicalObject, Name
     public void setZeroElevation(Scalar zeroElevation) {
         zeroPointHeight = zeroElevation;
     }
+    
 }

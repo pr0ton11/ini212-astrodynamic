@@ -5,10 +5,17 @@ import java.io.Serializable;
 import ch.hftm.astrodynamic.model.planetoids.Earth;
 import ch.hftm.astrodynamic.model.planetoids.Moon;
 import ch.hftm.astrodynamic.model.planetoids.Sun;
-import ch.hftm.astrodynamic.physics.Spaceship;
 import ch.hftm.astrodynamic.utils.Named;
 
-public class Mission extends Simulation implements Named {
+/*
+ *  Project Astrodynamic
+ *  HFTM BBIN21.2a
+ *  Rafael Stauffer, Marc Singer
+ */
+
+
+public class Mission extends Simulation implements Named, Serializable {
+
     String name;
     String description; // in html
 
@@ -45,4 +52,5 @@ public class Mission extends Simulation implements Named {
     public void setDescription(String description) {
         this.description = description;
     }
+    
 }

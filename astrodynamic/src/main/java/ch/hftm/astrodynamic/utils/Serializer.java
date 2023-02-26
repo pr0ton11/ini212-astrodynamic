@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.ObjectInputStream.GetField;
 import java.nio.file.Paths;
 import java.util.logging.Logger;
 
@@ -167,8 +166,10 @@ public class Serializer {
         // Check if file exists before loading
         File stateFile = new File(getFilePath());
         if (stateFile.exists()) {
+            log.info("Found state file to load");
             // Load the file from configuration path
             fromFile(getFilePath());
+            log.fine("Loaded state file");
         } else {
             // Just info log that we did not find an existing state
             log.info(String.format("Did not find existing state file %s to load", getFilePath()));
@@ -177,7 +178,9 @@ public class Serializer {
 
     // Saves the state to the specified state path
     public static void save() {
+        log.info(String.format("Saving state to file %s", getFilePath()));
         toFile(getFilePath());
+        log.fine("Sucessfully saved state to file");
     }
 
     // Gets the file path for the state from configuration

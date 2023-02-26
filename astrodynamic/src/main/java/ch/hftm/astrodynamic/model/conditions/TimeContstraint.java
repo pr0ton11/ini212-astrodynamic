@@ -12,6 +12,7 @@ import ch.hftm.astrodynamic.utils.Scalar;
 
 // can be a win or loss condition triggered by elapsed mission time
 public class TimeContstraint extends Condition {
+
     Scalar timeGate;
     EndType ending;
 
@@ -37,4 +38,5 @@ public class TimeContstraint extends Condition {
     public EndType getEndType() {
         return ending;
     }
+    
 }

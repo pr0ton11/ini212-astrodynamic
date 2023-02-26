@@ -10,8 +10,10 @@ import java.io.Serializable;
 
 // named thing with description, for gui things like missions, parameters, and such
 public interface Named extends Serializable {
+    
     String getName();
     String getDescription();
     void setName(String name);
     void setDescription(String description);
+    
 }

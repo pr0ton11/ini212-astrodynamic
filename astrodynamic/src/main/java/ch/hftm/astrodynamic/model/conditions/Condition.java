@@ -3,7 +3,6 @@ package ch.hftm.astrodynamic.model.conditions;
 import java.io.Serializable;
 
 import ch.hftm.astrodynamic.model.EndCondition;
-import ch.hftm.astrodynamic.model.Mission;
 import ch.hftm.astrodynamic.model.Setup;
 import ch.hftm.astrodynamic.model.Simulation;
 import ch.hftm.astrodynamic.utils.Named;

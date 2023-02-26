@@ -7,14 +7,10 @@ import ch.hftm.astrodynamic.model.Simulation;
 import ch.hftm.astrodynamic.model.spaceships.HeavyLander;
 import ch.hftm.astrodynamic.physics.BaseAstronomicalObject;
 import ch.hftm.astrodynamic.scalar.LengthScalar;
-import ch.hftm.astrodynamic.scalar.ScalarFactory;
-import ch.hftm.astrodynamic.scalar.VelocityScalar;
-import ch.hftm.astrodynamic.scalar.ScalarFactory.FittedValue;
 import ch.hftm.astrodynamic.utils.BaseVector;
 import ch.hftm.astrodynamic.utils.Log;
 import ch.hftm.astrodynamic.utils.Named;
 import ch.hftm.astrodynamic.utils.Scalar;
-import ch.hftm.astrodynamic.utils.Unit;
 import ch.hftm.astrodynamic.utils.UnitConversionError;
 import ch.hftm.astrodynamic.utils.Vector;
 

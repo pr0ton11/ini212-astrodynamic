@@ -1,11 +1,5 @@
 package ch.hftm.astrodynamic.model;
 
-/*
- *  Project Astrodynamic
- *  HFTM BBIN21.2a
- *  Rafael Stauffer, Marc Singer
- */
-
 import java.util.List;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,14 +8,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import ch.hftm.astrodynamic.model.conditions.Condition;
 import ch.hftm.astrodynamic.physics.*;
-import ch.hftm.astrodynamic.scalar.ScalarFactory;
 import ch.hftm.astrodynamic.scalar.TimeScalar;
-import ch.hftm.astrodynamic.scalar.UnitlessScalar;
 import ch.hftm.astrodynamic.utils.*;
 
-public class Simulation implements Serializable {
+/*
+ *  Project Astrodynamic
+ *  HFTM BBIN21.2a
+ *  Rafael Stauffer, Marc Singer
+ */
 
-    private static final long serialVersionUID = 1L;
+
+public class Simulation implements Serializable {
 
     static Scalar UPDATE_TIME_STEP = new TimeScalar(0.5); // we aim to update the simulation once each 0.5 seconds
 
@@ -43,27 +40,6 @@ public class Simulation implements Serializable {
         conditions = new ArrayList<>();
         totalTime = new TimeScalar(new Quad());
     }
-
-    /*public void run() {
-        Scalar lastTime = ScalarFactory.createFromCurrentMillis();
-        Scalar currentTime = new TimeScalar(0);
-        while (!this.isInterrupted()) {
-            currentTime = ScalarFactory.createFromCurrentMillis();
-            try {
-                simulate(currentTime.subtract(lastTime));
-            } catch (Exception e) {
-                System.out.println(e.toString());
-            }
-            lastTime = currentTime;
-
-            try {
-                long sleeptime = Long.getLong(UPDATE_TIME_STEP.subtract(ScalarFactory.createFromCurrentMillis().subtract(currentTime)).multiply(new UnitlessScalar(1000000)).getValue().doubleValue().toString());
-                Thread.sleep(sleeptime);
-            } catch (Exception e) {
-                System.out.println(e.toString());
-            }
-        }
-    }*/
 
     // runs once at start of simulation to allow mission to setup
     private void setup() {
