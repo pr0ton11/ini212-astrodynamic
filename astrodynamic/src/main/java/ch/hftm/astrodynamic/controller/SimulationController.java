@@ -361,6 +361,12 @@ public class SimulationController extends BaseController{
 
         if (ship.isManeuvering()) {
             maneuverDeltaV.setText(ship.getBurn().getLength().toFittedString());
+
+            try {
+                maneuverTime.setText(new TimeScalar(ship.getBurn().getLength().divide(new UnitlessScalar(ship.getAcceleration()))).toFittedString());
+            } catch (Exception e) {
+
+            }
         }
 
         if (referenceObject == null) {
