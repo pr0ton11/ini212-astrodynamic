@@ -162,15 +162,10 @@ public class MissionController extends BaseController{
     // user clicked copy button, copy selected mission in repository, open mission editor
     @FXML
     void copyMission(ActionEvent e) {
-        showError("Not implemented");
-        return;
-
-        /*
         Mission clonedMission = MissionRepository.cloneMission();
         clonedMission.setName(clonedMission.getName() + " kopie");
         MissionRepository.addMission(clonedMission);
         MissionRepository.setActiveMission(clonedMission);
         showSceneOnNewStage("Mission Editor - " + MissionRepository.getActiveMission().getName(), false, "view/MissionEditView.fxml");
-        */
     }
 }
