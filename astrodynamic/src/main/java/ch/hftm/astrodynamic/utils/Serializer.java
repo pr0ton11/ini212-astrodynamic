@@ -40,7 +40,7 @@ public class Serializer {
     }
 
     // Loads the MissionRepository Object from a path
-    public static void fromFile(String path) {
+    public static void fromJsonFile(String path) {
         // Configure the object mapper, if not initialized
         configureObjectMapper();
         try {
@@ -55,7 +55,7 @@ public class Serializer {
     }
 
     // Writes the MissionRepository Object to a path
-    public static void toFile(String path) {
+    public static void toJsonFile(String path) {
         // Configure the object mapper, if not initialized
         configureObjectMapper();
         try {
@@ -94,7 +94,7 @@ public class Serializer {
     }
 
     // Deserializes mission from a json string
-    public static Mission deserializeMission(String element) {
+    public static Mission deserializeMissionToJson(String element) {
         // Configure the object mapper, if not initialized
         configureObjectMapper();
         try {
@@ -107,7 +107,7 @@ public class Serializer {
     }
 
     // Serializes a mission as a json string
-    public static String serializeMission(Mission mission) {
+    public static String serializeMissionFromJson(Mission mission) {
         // Configure the object mapper, if not initialized
         configureObjectMapper();
         try {
