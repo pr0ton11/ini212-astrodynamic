@@ -10,6 +10,10 @@ import ch.hftm.astrodynamic.utils.*;
 
 public class ForceScalar extends BaseScalar {
 
+    public ForceScalar() {
+        super(Unit.FORCE);
+    }
+
     public ForceScalar(Scalar scalar) {
         super(scalar, Unit.FORCE);
     }

@@ -14,6 +14,10 @@ import ch.hftm.astrodynamic.utils.UnitConversionError;
 
 public class MassScalar extends BaseScalar {
 
+    public MassScalar() {
+        super(Unit.MASS);
+    }
+
     public MassScalar(Scalar scalar) {
         super(scalar, Unit.MASS);
     }

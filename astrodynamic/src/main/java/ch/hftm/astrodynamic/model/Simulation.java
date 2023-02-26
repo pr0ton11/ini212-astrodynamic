@@ -9,6 +9,8 @@ package ch.hftm.astrodynamic.model;
 import java.util.List;
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import ch.hftm.astrodynamic.model.conditions.Condition;
 import ch.hftm.astrodynamic.physics.*;
 import ch.hftm.astrodynamic.scalar.ScalarFactory;
@@ -180,6 +182,7 @@ public class Simulation {
         return false;
     }
 
+    @JsonIgnore
     public List<Named> getAllNamedAstronomicalObjects() {
         List<Named> namedObjects = new ArrayList<>();
         
@@ -230,6 +233,7 @@ public class Simulation {
     }
 
     // returns names of planetoids for the ground track gui
+    @JsonIgnore
     public List<String> getPlanetoidNames() {
         List<String> names = new ArrayList<>();
 

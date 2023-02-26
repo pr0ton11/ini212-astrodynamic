@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 // For reference see https://github.com/epam/DFP
 import com.epam.deltix.dfp.Decimal64;
 import com.epam.deltix.dfpmath.Decimal64Math;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 // Class Quad abstracts Decimal64
 public class Quad implements Comparable<Quad>, Serializable {
@@ -71,6 +72,7 @@ public class Quad implements Comparable<Quad>, Serializable {
 
     // Getter for Decimal64
     // This is used internally in the class to assign a value from another quad
+    @JsonIgnore
     public Decimal64 getAsDecimal64() {
         return this.num;
     }
@@ -129,15 +131,19 @@ public class Quad implements Comparable<Quad>, Serializable {
     }
 
     // Comparator functions
+    @JsonIgnore
     public boolean isNaN() {
         return num.isNaN() || num.isInfinity();
     }
+    @JsonIgnore
     public boolean isZero() {
         return num.isZero();
     }
+    @JsonIgnore
     public boolean isInfinity() {
         return num.isInfinity();
     }
+    @JsonIgnore
     public boolean isNegativeInfinity() {
         return num.isNegativeInfinity();
     }
@@ -179,7 +185,13 @@ public class Quad implements Comparable<Quad>, Serializable {
     public static Quad NEGINFINITY = new Quad(Decimal64.NEGATIVE_INFINITY);
     public static Quad GRAVITATIONAL_CONSTANT = new Quad(6.67430, -11); // accordint to nist
 
+    // Parses a Decimal 64 to a string
     public String toString() {
         return Decimal64.toScientificString(num);
+    }
+
+    // Parses a string to a Decimal64
+    public static Quad fromString(String element) {
+        return new Quad(Decimal64.parse(element));
     }
 }

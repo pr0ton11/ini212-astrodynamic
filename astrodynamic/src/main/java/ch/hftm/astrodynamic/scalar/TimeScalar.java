@@ -13,6 +13,10 @@ import ch.hftm.astrodynamic.utils.Unit;
 
 public class TimeScalar extends BaseScalar {
 
+    public TimeScalar() {
+        super(Unit.TIME);
+    }
+
     public TimeScalar(Scalar scalar) {
         super(scalar, Unit.TIME);
     }

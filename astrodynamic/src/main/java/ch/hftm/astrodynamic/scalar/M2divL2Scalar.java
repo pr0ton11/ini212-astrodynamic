@@ -15,6 +15,10 @@ import ch.hftm.astrodynamic.utils.UnitConversionError;
  // Scalar for intermediate calculation, Mass²/Area
 public class M2divL2Scalar extends BaseScalar {
 
+    public M2divL2Scalar() {
+        super(Unit.M2_DIV_L2);
+    }
+
     public M2divL2Scalar(Scalar scalar) {
         super(scalar, Unit.M2_DIV_L2);
     }

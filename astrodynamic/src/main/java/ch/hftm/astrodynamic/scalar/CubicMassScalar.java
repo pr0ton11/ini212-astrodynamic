@@ -14,6 +14,10 @@ import ch.hftm.astrodynamic.utils.UnitConversionError;
 
 public class CubicMassScalar extends BaseScalar {
 
+    public CubicMassScalar() {
+        super(Unit.CUBIC_MASS);
+    }
+
     public CubicMassScalar(Scalar scalar) {
         super(scalar, Unit.CUBIC_MASS);
     }

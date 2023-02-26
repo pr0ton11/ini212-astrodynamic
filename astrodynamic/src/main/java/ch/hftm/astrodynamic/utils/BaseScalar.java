@@ -1,6 +1,7 @@
 package ch.hftm.astrodynamic.utils;
 
 import java.util.logging.Logger;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import ch.hftm.astrodynamic.scalar.ScalarFactory;
 
@@ -31,6 +32,12 @@ public abstract class BaseScalar implements Scalar {
     // Constructor for scalar
     public BaseScalar(Scalar scalar, Unit unit) {
         this.value = scalar.getValue();
+        this.unit = unit;
+    }
+
+    // Constructor for scalar
+    public BaseScalar(Unit unit) {
+        this.value = new Quad();
         this.unit = unit;
     }
 
@@ -134,6 +141,7 @@ public abstract class BaseScalar implements Scalar {
     }
 
     // Function to detemine if this object is unitless
+    @JsonIgnore
     public boolean isUnitless() {
         return this.getUnit() == Unit.UNITLESS;
     }

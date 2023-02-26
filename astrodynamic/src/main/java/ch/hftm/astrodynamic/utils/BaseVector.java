@@ -1,4 +1,3 @@
-
 package ch.hftm.astrodynamic.utils;
 
 import java.util.logging.Logger;
