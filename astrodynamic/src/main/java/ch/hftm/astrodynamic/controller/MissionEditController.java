@@ -76,6 +76,9 @@ public class MissionEditController extends BaseController{
     @FXML
     ComboBox<Named> newConditionObject;
 
+    @FXML
+    ComboBox<Spaceship> playerSpaceship;
+
     ObservableList<Class> possibleConditions;
 
     ObservableList<Condition> conditions;
@@ -189,6 +192,23 @@ public class MissionEditController extends BaseController{
             }
         });
         missionSpaceships.setItems(spaceships);
+
+        // player spaceship has the same observable list as the mission spaceship list
+        playerSpaceship.setCellFactory(param -> new ListCell<>() {
+            @Override
+            protected void updateItem(Spaceship item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getName());
+                }
+            }
+        });
+        playerSpaceship.setItems(spaceships);
+
+        updateUnobservedListsFromObject();
     }
 
     // planetoid and spaceship changes are unobservable from gui, refresh them here
@@ -200,7 +220,9 @@ public class MissionEditController extends BaseController{
         }
 
         spaceships.clear();
-        // load efocusList
+        for (Spaceship s: editedMission.getSpaceships()) {
+            spaceships.add(s);
+        }
 
         possibleConditionRelationObjects.clear();
         possibleConditionRelationObjects.addAll(editedMission.getAllNamedAstronomicalObjects());
@@ -451,5 +473,11 @@ public class MissionEditController extends BaseController{
         editedMission.setReferencePlanetoid(tempPlanetoid);
 
         showSceneOnNewStage("Planetoid Editor - " + tempPlanetoid.getName(), false, "view/PlanetoidEditView.fxml");
+    }
+
+    // user has chosen a spaceship for the player in the dropdown, set in mission
+    @FXML
+    void setPlayerSpaceship(ActionEvent e) {
+        editedMission.setPlayerControlledVessel(playerSpaceship.getSelectionModel().getSelectedItem());
     }
 }

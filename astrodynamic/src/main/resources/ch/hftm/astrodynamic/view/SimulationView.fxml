@@ -88,6 +88,8 @@
             <Label fx:id="remainingDeltaV" layoutX="281.0" layoutY="329.0" text="Label" />
             <Label layoutX="13.0" layoutY="351.0" text="Maneuver delta V" />
             <Label fx:id="maneuverDeltaV" layoutX="281.0" layoutY="351.0" text="Label" />
+            <Label layoutX="13.0" layoutY="375.0" text="Maneuver time" />
+            <Label fx:id="maneuverTime" layoutX="281.0" layoutY="375.0" text="Label" />
          </children>
       </AnchorPane>
    </children>

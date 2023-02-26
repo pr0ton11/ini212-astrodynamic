@@ -105,6 +105,9 @@ public class SimulationController extends BaseController{
     @FXML
     Label maneuverDeltaV;
 
+    @FXML
+    Label maneuverTime;
+
     FlatProjection projection;
 
     Mission currentMission;
@@ -131,11 +134,17 @@ public class SimulationController extends BaseController{
 
         // TODO thick labels and tick marks: https://docs.oracle.com/javase/8/javafx/api/javafx/scene/control/Slider.html
 
+        if (currentMission.getPlayerControlledVessel() != null) {
+            focus.setValue(currentMission.getPlayerControlledVessel());
+        }
+
         try {
             projection.draw();
         } catch (UnitConversionError e) {
             showError(e.toString());
         }
+
+        updateSpaceshipInfo();
 
         //currentMission.start();
     }
@@ -318,6 +327,7 @@ public class SimulationController extends BaseController{
         }
     }
 
+    // updates reference and maneuver data if we have ship selected, else hides element because unused
     private void updateSpaceshipInfo() {
         AstronomicalObject focusObject = focus.getSelectionModel().getSelectedItem();
 
@@ -335,6 +345,7 @@ public class SimulationController extends BaseController{
         }
     }
 
+    // ship reference data panel update, shows reference info and maneuver info
     private void updateReferenceData() {
         AstronomicalObject focusObject = focus.getSelectionModel().getSelectedItem();
         AstronomicalObject referenceObject = reference.getSelectionModel().getSelectedItem();
@@ -343,6 +354,7 @@ public class SimulationController extends BaseController{
         velocityToReference.setText("");
         remainingDeltaV.setText("");
         maneuverDeltaV.setText("");
+        maneuverTime.setText("");
 
         Spaceship ship = (Spaceship)focusObject;
         remainingDeltaV.setText(ship.getDeltaV().toFittedString());
@@ -369,6 +381,7 @@ public class SimulationController extends BaseController{
         }
     }
 
+    // draw the burn canvas which visualizes the remaining burn with direction to deltaV
     private void drawBurnCanvas() {
         burnContext.clearRect(0, 0, burnCanvas.getWidth(), burnCanvas.getHeight());
 
