@@ -8,6 +8,7 @@ import ch.hftm.astrodynamic.utils.Scalar;
 import ch.hftm.astrodynamic.utils.Unit;
 import ch.hftm.astrodynamic.utils.Vector;
 
+// iss is a 45 ton 15m radius ship
 public class ISS extends Spaceship {
 
     public ISS() {
