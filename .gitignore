@@ -5,6 +5,9 @@ docs/documentation/documentation.pdf
 # Unit test files
 MissionRepositorySerializationTest.json
 
+# Serializer binary files
+*.bin
+
 # Compiled class file
 *.class
 

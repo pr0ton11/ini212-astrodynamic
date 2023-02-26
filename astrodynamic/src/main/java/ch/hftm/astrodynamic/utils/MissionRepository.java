@@ -1,5 +1,9 @@
 package ch.hftm.astrodynamic.utils;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
@@ -11,8 +15,11 @@ import javafx.collections.ObservableList;
 
 import ch.hftm.astrodynamic.model.Mission;
 import ch.hftm.astrodynamic.model.conditions.Approach;
+import ch.hftm.astrodynamic.model.conditions.Condition;
 import ch.hftm.astrodynamic.model.conditions.SetupHeavyLander;
 import ch.hftm.astrodynamic.model.conditions.SetupISS;
+import ch.hftm.astrodynamic.physics.Planetoid;
+import ch.hftm.astrodynamic.physics.Spaceship;
 import ch.hftm.astrodynamic.scalar.LengthScalar;
 
 /*
@@ -22,13 +29,15 @@ import ch.hftm.astrodynamic.scalar.LengthScalar;
  */
 
  // Singleton class containing all the Missions
-public final class MissionRepository {
+public final class MissionRepository implements Serializable {
     
+    private static final long serialVersionUID = 1L;
+
     private static MissionRepository instance;  // Single instance of the mission repository
 
     private MissionRepository() {}  // Constructor
 
-    private ObservableList<Mission> missions = FXCollections.observableArrayList();  // List of missions
+    private transient ObservableList<Mission> missions = FXCollections.observableArrayList();  // List of missions
     private Mission activeMission;  // Current active mission
 
     // Retrieving and working with the singleton class, used primarly internally
@@ -110,7 +119,15 @@ public final class MissionRepository {
     // Returns the reference to the new mission
     public static Mission cloneMission() throws NoSuchElementException {
         if (getInstance().activeMission != null) {
-            return Serializer.deserializeMission(Serializer.serializeMission(getActiveMission()));
+            Mission clonedMission = new Mission();
+            clonedMission.setName(getInstance().activeMission.getName());
+            clonedMission.setDescription(getInstance().activeMission.getDescription());
+            getInstance().activeMission.getPlanetoids().forEach((Planetoid p) -> clonedMission.addPlanetoid(p));
+            getInstance().activeMission.getSpaceships().forEach((Spaceship s) -> clonedMission.addSpaceship(s));
+            getInstance().activeMission.getConditions().forEach((Condition c) -> clonedMission.addCondition(c));
+            // Can not clone any further because fields are not accessible
+            // Or in case of the elapsed simulation time, this does not make sense for a mission that we would certainly change
+            return clonedMission;
         }
         throw new NoSuchElementException();
     }
@@ -148,5 +165,31 @@ public final class MissionRepository {
         // Sort the Mission Repository based on names
         getInstance().missions.sort(byName);
     }
+
+    // Custom serializer for this class
+    // Used to serialize a JavaFX ObservableList
+    private void writeObject(ObjectOutputStream outputStream) throws IOException {
+        // Use default serialization for the serializable objects
+        outputStream.defaultWriteObject();
+        // Add the observable list as array to the outputStream
+        outputStream.writeObject(missions.toArray());
+    }
     
+    // Custom deserializer for this class
+    // Used to deserialize a JavaFX ObservableList
+    private void readObject(ObjectInputStream inputStream) throws ClassNotFoundException, IOException {
+        // Use default deserialization for the deserializable objects
+        inputStream.defaultReadObject();
+        // Extract the raw missions from inputStream
+        Object[] rawMissions = (Object[])inputStream.readObject();
+        // Reinitialize mission
+        missions = FXCollections.observableArrayList();
+        // Add the missions
+        for (Object mission : rawMissions) {
+            // Cast object to mission
+            missions.add((Mission) mission);
+        }
+        
+    }
+
 }

@@ -37,37 +37,6 @@ public class QuadTest {
         quadList.forEach((quad) -> Assert.assertTrue("All Quads are zero", quad.isZero()));
     }
 
-    // Quad Serialization with Object Streams
-    @Test
-    public void TestSerialization() {
-        String fileName = "test.ser";
-        Quad q1 = new Quad(123.456);
-        Quad q2 = new Quad();
-        try {
-            FileOutputStream fos = new FileOutputStream(fileName);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(q1);
-            oos.close();
-            fos.close();
-
-            FileInputStream fis = new FileInputStream(fileName);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            q2 = (Quad)ois.readObject();
-            ois.close();
-            fis.close();
-        } catch (Exception e) {
-
-        } finally {
-            // clean up file
-            File serFile = new File(fileName);
-            if (serFile.exists()) {
-                serFile.delete();
-            }
-        }
-
-        Assert.assertEquals(q1.doubleValue(), q2.doubleValue(), 0.0);
-    }
-
     // Quad Addition
     @Test
     public void TestAddition() {

@@ -178,6 +178,7 @@ public class ConfigRepository {
 
     public static void defaults() {
         add("log_file", "astrodynamic.log");
+        add("state_path", "state.bin");
     }
 
 }
