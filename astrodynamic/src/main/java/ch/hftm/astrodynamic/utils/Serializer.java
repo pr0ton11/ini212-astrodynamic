@@ -1,5 +1,6 @@
 package ch.hftm.astrodynamic.utils;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -138,6 +139,7 @@ public class Serializer {
         } catch(Exception ex) {
             log.severe(String.format("Error: Conversion of  MissionRepository to file %s", path));
             log.severe(ex.toString());
+            ex.printStackTrace();
         }
     }
 
@@ -155,12 +157,22 @@ public class Serializer {
         } catch(Exception ex) {
             log.severe(String.format("Error: Conversion of file %s to MissionRepository", path));
             log.severe(ex.toString());
+            ex.printStackTrace();
         }
     }
 
     // Loads the state from the specified state path
+    // This is called from the entrypoint
     public static void load() {
-        fromFile(getFilePath());
+        // Check if file exists before loading
+        File stateFile = new File(getFilePath());
+        if (stateFile.exists()) {
+            // Load the file from configuration path
+            fromFile(getFilePath());
+        } else {
+            // Just info log that we did not find an existing state
+            log.info(String.format("Did not find existing state file %s to load", getFilePath()));
+        }
     }
 
     // Saves the state to the specified state path
