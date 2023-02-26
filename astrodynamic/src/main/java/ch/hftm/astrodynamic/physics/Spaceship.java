@@ -103,9 +103,8 @@ public class Spaceship extends BaseAstronomicalObject implements Drag {
             burn = burn.normalize().multiply(deltaV); // scaled to available budged
         }
 
-        deltaV = deltaV.subtract(burn.getLength()); // subract burn from deltaV budget
-
         if (burn.getLength().le(maxVelocity)) { // we have less burn todo than we could achieve
+            deltaV = deltaV.subtract(burn.getLength()); // subract burn from deltaV budget
             setVelocity(getVelocity().add(burn)); // add burn to our velocity
             maneuvering = false; // we finished the maneuver
             return;
@@ -114,5 +113,6 @@ public class Spaceship extends BaseAstronomicalObject implements Drag {
         Vector partialBurn = burn.normalize().multiply(maxVelocity); // scale burn direction with maximum achievable delta V in timeframe
         setVelocity(getVelocity().add(partialBurn));
         burn = burn.subtract(partialBurn); // reduce burn
+        deltaV = deltaV.subtract(partialBurn.getLength()); // subract burn from deltaV budget
     }
 }

@@ -99,6 +99,12 @@ public class SimulationController extends BaseController{
     @FXML
     Label velocityToReference;
 
+    @FXML
+    Label remainingDeltaV;
+
+    @FXML
+    Label maneuverDeltaV;
+
     FlatProjection projection;
 
     Mission currentMission;
@@ -298,13 +304,15 @@ public class SimulationController extends BaseController{
         Spaceship ship = (Spaceship)focusObject;
 
         try {
-            Scalar diffX = new VelocityScalar(e.getX() - burnCanvas.getWidth()/2); // calculate relative click position to middle of canvas to get direction
-            Scalar diffY = new VelocityScalar(e.getY() - burnCanvas.getHeight()/2);
-            Vector burnVector = new BaseVector(diffX, diffY, new VelocityScalar()).normalize().multiply(ship.getDeltaV()); // multiply normalized direction with total deltaV available
+            Scalar diffX = new UnitlessScalar(e.getX() - burnCanvas.getWidth()/2).divide(new UnitlessScalar(burnCanvas.getWidth()/2)); // calculate relative click position to middle of canvas to get direction
+            Scalar diffY = new UnitlessScalar(e.getY() - burnCanvas.getHeight()/2).divide(new UnitlessScalar(burnCanvas.getHeight()/2));
+            Vector burnVector = new BaseVector(diffX, diffY, new UnitlessScalar());
+
+            burnVector = burnVector.multiply(ship.getDeltaV()); // multiply direction with total deltaV available
 
             ship.setBurn(burnVector);
 
-            drawBurnCanvas();
+            updateSpaceshipInfo();
         } catch (UnitConversionError ex) {
             showError(ex.toString());
         }
@@ -333,6 +341,15 @@ public class SimulationController extends BaseController{
 
         distanceToReference.setText("");
         velocityToReference.setText("");
+        remainingDeltaV.setText("");
+        maneuverDeltaV.setText("");
+
+        Spaceship ship = (Spaceship)focusObject;
+        remainingDeltaV.setText(ship.getDeltaV().toFittedString());
+
+        if (ship.isManeuvering()) {
+            maneuverDeltaV.setText(ship.getBurn().getLength().toFittedString());
+        }
 
         if (referenceObject == null) {
             return;
@@ -345,6 +362,8 @@ public class SimulationController extends BaseController{
         try {
             Scalar distance = focusObject.getDistance(referenceObject);
             distanceToReference.setText(distance.toFittedString());
+
+            velocityToReference.setText(focusObject.getVelocity().subtract(referenceObject.getVelocity()).getLength().toFittedString());
         } catch (UnitConversionError e) {
 
         }
@@ -363,10 +382,10 @@ public class SimulationController extends BaseController{
 
         if (ship.isManeuvering()) {
             try {
-                Vector burnVector = ship.getBurn().normalize(); // get -1.0 to 1.0 values of direction
+                Vector burnVector = ship.getBurn().divide(ship.getDeltaV()); // get -1.0 to 1.0 values of direction
 
-                double pointX = (burnCanvas.getWidth()/2) * burnVector.getX().getValue().doubleValue(); // calculate point on burn canvas
-                double pointY = (burnCanvas.getHeight()/2) * burnVector.getY().getValue().doubleValue();
+                double pointX = burnCanvas.getWidth()/2 + (burnCanvas.getWidth()/2) * burnVector.getX().getValue().doubleValue(); // calculate point on burn canvas
+                double pointY = burnCanvas.getHeight()/2 + (burnCanvas.getHeight()/2) * burnVector.getY().getValue().doubleValue();
 
                 burnContext.setStroke(Color.RED);
                 burnContext.strokeLine(burnCanvas.getWidth()/2, burnCanvas.getHeight()/2, pointX, pointY);
