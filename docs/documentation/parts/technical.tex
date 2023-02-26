@@ -26,6 +26,16 @@ Das BaseAstronomicalObject bietet die Basis für die Physikberechnung. Spezifisc
 
 Scalare und Vektoren verwenden die Quad-Klasse um exakte Werte zu speichern. Um die Dimensionsanalyse in den spezifischen Skalarimplementationen (nicht im Diagram aufgeführt) durchzuführen wird der Enum Unit verwendet.
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=12cm]{res/AstrodynamicMission.png}
+	\caption{Übersicht Missions-Klassen und -Interfaces}
+\end{figure}
+
+Eine Simulation besteht aus den dazugehörigen Planetoiden und Raumschiffen. Diese sind getrennt verwaltet für einfacheren Zugriff auf spezifische Funktionen, jedoch bietet die Simulation ebenfalls Methoden diese Objekte in einer Liste abzurufen, je nach Ziel und benötigtem Interface.\\
+Conditions in der Simulation manipulieren ihren Startzustand und können Abbruchbedingungen definieren und überprüfen.\\
+Die Mission stellt einen Wrapper dar welcher weitere Funktionalitäten zur Verfügung stellt welche in einem reinen Simulationskontext nicht benötigt werden.
+
 \subsection{Maven build}
 
 Um mittels Maven ein Build zu erzeugen kann der Befehl \textit{mvn clean package} verwendet werden.
