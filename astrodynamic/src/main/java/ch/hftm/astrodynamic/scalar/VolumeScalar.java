@@ -13,6 +13,10 @@ import ch.hftm.astrodynamic.utils.Unit;
 
 public class VolumeScalar extends BaseScalar {
 
+    public VolumeScalar() {
+        super(Unit.VOLUME);
+    }
+
     public VolumeScalar(Scalar scalar) {
         super(scalar, Unit.VOLUME);
     }

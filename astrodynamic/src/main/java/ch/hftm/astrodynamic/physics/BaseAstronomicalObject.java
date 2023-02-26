@@ -186,4 +186,33 @@ public abstract class BaseAstronomicalObject implements AstronomicalObject, Name
     public void applyVelocity(Scalar time) throws UnitConversionError {
         this.position = this.position.add(this.velocity.multiply(time));
     }
+
+    private Vector getDirectionWithRotation(AstronomicalObject partner) {
+        Vector direction = new BaseVector(Unit.UNITLESS);
+
+        try {
+            direction = this.getDirection(partner);
+
+            // TODO: negate??? order of operations???
+            direction = direction.rotateX((AngleScalar)this.getRotation().getX());
+            direction = direction.rotateY((AngleScalar)this.getRotation().getY());
+            direction = direction.rotateZ((AngleScalar)this.getRotation().getZ());
+        } catch (UnitConversionError e) {
+
+        }
+
+        return direction;
+    }
+
+    // returns -1.0 to 1.0 to denote the difference to the position and rotation
+    public double getGrundtrackFactorX(AstronomicalObject partner) {
+        Vector direction = getDirectionWithRotation(partner);
+        return direction.getX().getValue().doubleValue();
+    }
+
+    // returns -1.0 to 1.0 to denote the difference to the position and rotation
+    public double getGroundtrackFactorY(AstronomicalObject partner) {
+        Vector direction = getDirectionWithRotation(partner);
+        return direction.getY().getValue().doubleValue();
+    }
 }

@@ -14,6 +14,10 @@ import ch.hftm.astrodynamic.utils.UnitConversionError;
 
 public class AreaScalar extends BaseScalar {
 
+    public AreaScalar() {
+        super(Unit.AREA);
+    }
+
     public AreaScalar(Scalar scalar) {
         super(scalar, Unit.AREA);
     }

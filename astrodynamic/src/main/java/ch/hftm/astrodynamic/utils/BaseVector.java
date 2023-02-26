@@ -1,9 +1,3 @@
-/*
- *  Project Astrodynamic
- *  HFTM BBIN21.2a
- *  Rafael Stauffer, Marc Singer
- */
-
 package ch.hftm.astrodynamic.utils;
 
 import java.lang.Math;
@@ -11,6 +5,14 @@ import java.lang.Math;
 import ch.hftm.astrodynamic.scalar.AngleScalar;
 import ch.hftm.astrodynamic.scalar.ScalarFactory;
 
+/*
+ *  Project Astrodynamic
+ *  HFTM BBIN21.2a
+ *  Rafael Stauffer, Marc Singer
+ */
+
+
+//
 public class BaseVector implements Vector, Cloneable {
     private Quad x;
     private Quad y;

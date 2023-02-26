@@ -1,8 +1,7 @@
 # Style guide
 
-Writing style should be CamelCase like java default.
-
-Interfaces are named like a normal class without linting.
+* Writing style should be CamelCase like java default.
+* Interfaces are named like a normal class without linting.
 
 example: Loggable for a logging interface instead of ILoggable
 
@@ -11,6 +10,9 @@ example: Loggable for a logging interface instead of ILoggable
 Comments that are required for the whole project
 
 ## Header comment
+
+After the imports, but before the class header
+
 ``` java
 /*
  *  Project Astrodynamic

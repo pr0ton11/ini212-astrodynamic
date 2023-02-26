@@ -8,12 +8,18 @@ package ch.hftm.astrodynamic.model;
 
 import java.util.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import ch.hftm.astrodynamic.model.conditions.Condition;
 import ch.hftm.astrodynamic.physics.*;
+import ch.hftm.astrodynamic.scalar.ScalarFactory;
 import ch.hftm.astrodynamic.scalar.TimeScalar;
+import ch.hftm.astrodynamic.scalar.UnitlessScalar;
 import ch.hftm.astrodynamic.utils.*;
 
 public class Simulation {
+
+    static Scalar UPDATE_TIME_STEP = new TimeScalar(0.1); // we aim to update the simulation once each 0.1 seconds
 
     Scalar totalTime;
 
@@ -29,6 +35,27 @@ public class Simulation {
         conditions = new ArrayList<>();
         totalTime = new TimeScalar(new Quad());
     }
+
+    /*public void run() {
+        Scalar lastTime = ScalarFactory.createFromCurrentMillis();
+        Scalar currentTime = new TimeScalar(0);
+        while (!this.isInterrupted()) {
+            currentTime = ScalarFactory.createFromCurrentMillis();
+            try {
+                simulate(currentTime.subtract(lastTime));
+            } catch (Exception e) {
+                System.out.println(e.toString());
+            }
+            lastTime = currentTime;
+
+            try {
+                long sleeptime = Long.getLong(UPDATE_TIME_STEP.subtract(ScalarFactory.createFromCurrentMillis().subtract(currentTime)).multiply(new UnitlessScalar(1000000)).getValue().doubleValue().toString());
+                Thread.sleep(sleeptime);
+            } catch (Exception e) {
+                System.out.println(e.toString());
+            }
+        }
+    }*/
 
     // runs once at start of simulation to allow mission to setup
     private void setup() {
@@ -47,6 +74,12 @@ public class Simulation {
         if (deltaTime.getValue().le(Quad.ZERO)) {
             throw new SimulationRuntimeError("deltaTime must be greater than zero");
         }
+
+        for (Planetoid p: planetoids) {
+                
+        }
+
+
 
         totalTime = totalTime.add(deltaTime);
     }
@@ -93,6 +126,7 @@ public class Simulation {
         return false;
     }
 
+    @JsonIgnore
     public List<Named> getAllNamedAstronomicalObjects() {
         List<Named> namedObjects = new ArrayList<>();
         
@@ -135,5 +169,22 @@ public class Simulation {
     public void removeCondition(Condition condition) {
         if (conditions.remove(condition))
             condition.changeSimulationOnRemove(this);
+    }
+
+    // get the list to display in gui, not observable because we want to keep the model as gui agnostic as possible
+    public List<Condition> getConditions() {
+        return conditions;
+    }
+
+    // returns names of planetoids for the ground track gui
+    @JsonIgnore
+    public List<String> getPlanetoidNames() {
+        List<String> names = new ArrayList<>();
+
+        for (Planetoid p: planetoids) {
+            names.add(p.getName());
+        }
+
+        return names;
     }
 }

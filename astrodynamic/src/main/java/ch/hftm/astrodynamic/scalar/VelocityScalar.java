@@ -14,6 +14,10 @@ import ch.hftm.astrodynamic.utils.UnitConversionError;
 
 public class VelocityScalar extends BaseScalar {
 
+    public VelocityScalar() {
+        super(Unit.VELOCITY);
+    }
+
     public VelocityScalar(Scalar scalar) {
         super(scalar, Unit.VELOCITY);
     }

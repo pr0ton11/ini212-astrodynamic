@@ -13,6 +13,10 @@ import ch.hftm.astrodynamic.utils.Unit;
 
 public class AngularAccelerationScalar extends BaseScalar {
 
+    public AngularAccelerationScalar() {
+        super(Unit.ANGULAR_ACCELERATION);
+    }
+
     public AngularAccelerationScalar(Scalar scalar) {
         super(scalar, Unit.ANGULAR_ACCELERATION);
     }

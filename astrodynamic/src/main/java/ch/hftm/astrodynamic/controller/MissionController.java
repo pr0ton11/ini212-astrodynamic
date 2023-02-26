@@ -11,6 +11,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.stage.Stage;
@@ -20,6 +21,7 @@ import java.util.logging.Logger;
 
 import ch.hftm.astrodynamic.model.*;
 import ch.hftm.astrodynamic.utils.Log;
+import ch.hftm.astrodynamic.utils.MissionRepository;
 
 public class MissionController extends BaseController{
 
@@ -54,11 +56,6 @@ public class MissionController extends BaseController{
     }
 
     @Override
-    protected Stage getCurrentStage() {
-        return null;
-    }
-
-    @Override
     public void initialize(){
         missionList.setCellFactory(param -> new ListCell<Mission>() {
             @Override
@@ -75,19 +72,15 @@ public class MissionController extends BaseController{
 
         missionData.setVisible(false); // hide mission data if no mission is selected
 
-        initializeTestdata();
-    }
+        missions = MissionRepository.getObservableMissions();
 
-    // test data, missions would be stored on disk
-    private void initializeTestdata() {
-        missions = FXCollections.observableArrayList();
-        missions.add(new Mission("Driving Miss Daisy", "<h1>Driving Miss Daisy</h1><br>A bunch of scientists want to travel to the ISS.<br>You'll be the driver.<br><img src=\"https://www.nasa.gov/sites/default/files/styles/full_width/public/thumbnails/image/progress_1_29_tianzhou_4_depating_from_tiangong.jpg?itok=sqE2bAY_\" width=300px height=200px>"));
-        missions.add(new Mission("New Dawn", "<h1>New Dawn</h1><br>We picked a suitable landingspot on Ganymede.<br>Bring a flag.<br><img src=\"https://www.nasa.gov/sites/default/files/thumbnails/image/e1_-_pia24682_-_juno_ganymede_sru_-_darkside.png\" alt=\"Ganymede landing spot\" width=200px height=200px>"));
-        missions.add(new Mission("In the Well", "<h1>In the Well</h1><br>The jovian ammonia harvesting station lost its engines.<br>Evacuate the personel before it drifts into Jupiter.<br><img src=\"https://www.nasa.gov/sites/default/files/thumbnails/image/hotspot_cover_1280.jpg\" width=400px height=200px>"));
-        
+        if (missions.size() < 1) {
+            //showInfo("No missions found, added test missions to list.");
+            MissionRepository.addTestMissions();
+        }
+
         filteredMissions = new FilteredList<>(missions);
-
-        missionList.setItems(filteredMissions);
+        missionList.setItems(missions);
     }
 
     // user searches mission in top search bar
@@ -105,30 +98,61 @@ public class MissionController extends BaseController{
         missionList.setItems(filteredMissions);
     }
 
+    Mission getSelectedMission() {
+        return missionList.getSelectionModel().getSelectedItem();
+    }
+
     // 
     @FXML
     void missionSelected(MouseEvent e) {
-        missionData.setVisible(true);
-
-        Mission selectedMission = missionList.getSelectionModel().getSelectedItem();
-        missionDescription.getEngine().loadContent(selectedMission.getDescription());
+        Mission selectedMission = getSelectedMission();
+        if (selectedMission != null) {
+            missionData.setVisible(true);
+            missionDescription.getEngine().loadContent(selectedMission.getDescription());
+            MissionRepository.setActiveMission(selectedMission);
+        } else {
+            missionData.setVisible(false);
+        }
     }
 
     // user clicked edit button
     @FXML
     void startEditor(ActionEvent e) {
-        Mission selectedMission = missionList.getSelectionModel().getSelectedItem();
-
-        File f = new File("view/MissionEditView.fxml");
-        log.info(f.getAbsolutePath());
-
+        Mission selectedMission = getSelectedMission();
         showSceneOnNewStage("Mission Editor - " + selectedMission.getName(), true, "view/MissionEditView.fxml");
     }
 
     // user clicked simulate button
     @FXML
     void startSimulation(ActionEvent e) {
-        Mission selectedMission = missionList.getSelectionModel().getSelectedItem();
-        showError("Error starting simulation of mission " + selectedMission.getName() + ".\nNot implemented!");
+        Mission selectedMission = getSelectedMission();
+
+        showSceneOnNewStage("Simulation - " + selectedMission.getName(), true, "view/SimulationView.fxml");
+    }
+
+    @FXML
+    void deleteMission(ActionEvent e) {
+        Mission selectedMission = getSelectedMission();
+
+        if (selectedMission != null) {
+            if (askYesNo(String.format("Do you really want to delete mission '%s'?", selectedMission.getName()))) {
+                MissionRepository.deleteMission(selectedMission);
+                missionData.setVisible(false);
+            }
+        }
+    }
+
+    @FXML
+    void newMission(ActionEvent e) {
+        Mission newMission = new Mission("","");
+        MissionRepository.addMission(newMission);
+        MissionRepository.setActiveMission(newMission);
+        showSceneOnNewStage("Mission Editor - New mission", true, "view/MissionEditView.fxml");
+    }
+
+    // user clicked copy button
+    @FXML
+    void copyMission(ActionEvent e) {
+        showError("Error copy mission.\nNot implemented!");
     }
 }

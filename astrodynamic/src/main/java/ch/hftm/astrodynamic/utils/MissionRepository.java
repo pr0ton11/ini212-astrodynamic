@@ -3,8 +3,10 @@ package ch.hftm.astrodynamic.utils;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableSet;
+import javafx.collections.ObservableList;
 
 import ch.hftm.astrodynamic.model.Mission;
 
@@ -21,7 +23,7 @@ public final class MissionRepository {
 
     private MissionRepository() {}  // Constructor
 
-    private ObservableSet<Mission> missions = FXCollections.observableSet();  // List of missions
+    private ObservableList<Mission> missions = FXCollections.observableArrayList();  // List of missions
     private Mission activeMission;  // Current active mission
 
     // Retrieving and working with the singleton class, used primarly internally
@@ -34,7 +36,12 @@ public final class MissionRepository {
 
     // Adds a mission
     public static boolean addMission(Mission m) {
-        return getInstance().missions.add(m);
+        if (!getInstance().missions.contains(m)) {
+            getInstance().missions.add(m);
+            return true;
+        }
+
+        return false;
     }
 
     // Gets all missions as list
@@ -46,8 +53,15 @@ public final class MissionRepository {
         return missions;
     }
 
+    // Replace missions with ArrayList missions
+    public static void setMissions(ArrayList<Mission> missions) {
+        getInstance().missions.clear();
+        getInstance().missions.addAll(missions);
+    }
+
     // Gets all missions as observable list
-    public static ObservableSet<Mission> getObservableMissions() {
+    @JsonIgnore
+    public static ObservableList<Mission> getObservableMissions() {
         return getInstance().missions;
     }
 
@@ -87,6 +101,22 @@ public final class MissionRepository {
         throw new NoSuchElementException();
     }
 
+    // Clones the currently active mission to a new Mission
+    // Returns the reference to the new mission
+    public static Mission cloneMission() throws NoSuchElementException {
+        if (getInstance().activeMission != null) {
+            return Serializer.deserializeMission(Serializer.serializeMission(getActiveMission()));
+        }
+        throw new NoSuchElementException();
+    }
+
+    // Overrides the currently existing instance with a new mission repository
+    // This is used internally to deserialize from a file
+    public static void overrideInstance(MissionRepository source) {
+        MissionRepository.instance = source;  // Overrides the pointer with a new mission
+    }
+
+    // Add static test missions
     public static void addTestMissions() {
         addMission(new Mission("Driving Miss Daisy", "<h1>Driving Miss Daisy</h1><br>A bunch of scientists want to travel to the ISS.<br>You'll be the driver.<br><img src=\"https://www.nasa.gov/sites/default/files/styles/full_width/public/thumbnails/image/progress_1_29_tianzhou_4_depating_from_tiangong.jpg?itok=sqE2bAY_\" width=300px height=200px>"));
         addMission(new Mission("New Dawn", "<h1>New Dawn</h1><br>We picked a suitable landingspot on Ganymede.<br>Bring a flag.<br><img src=\"https://www.nasa.gov/sites/default/files/thumbnails/image/e1_-_pia24682_-_juno_ganymede_sru_-_darkside.png\" alt=\"Ganymede landing spot\" width=200px height=200px>"));

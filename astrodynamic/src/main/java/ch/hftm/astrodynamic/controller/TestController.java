@@ -12,11 +12,6 @@ public class TestController extends BaseController{
     }
 
     @Override
-    protected Stage getCurrentStage() {
-        return null;
-    }
-
-    @Override
     public void initialize(){
         showError("Test");
     }
