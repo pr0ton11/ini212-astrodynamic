@@ -247,6 +247,7 @@ public class SimulationController extends BaseController{
     // save mission to repository
     public void saveMission(ActionEvent e) {
         Serializer.save();
+        showInfo("Simulationszustand gespeichert");
     }
 
     // copy save mission to repository
