@@ -24,13 +24,12 @@ Must have from test standpoint
 - [X] Sorting
     - [ ] Scenario sorting by Name, Tags, Text in Description
 - [X] Serialization
-    - [ ] JSONB Scenarios with subobjects
     - [X] Save state
 - [X] Exception handling
 - [X] Log file
     - [X] With log levels
 - [X] Maven build
-- [ ] Executable
+- [X] Executable
 
 Must have from project standpoint
 - [X] Gravitational calculation
