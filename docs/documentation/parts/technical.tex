@@ -4,11 +4,19 @@
 
 \subsection{Diagramme}
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=12cm]{res/overview.png}
+	\caption{Übersicht Aufbau Astrodynamic}
+\end{figure}
+
 \subsection{Maven build}
 
 Um mittels Maven ein Build zu erzeugen kann der Befehl \textit{mvn clean package} verwendet werden.
 
 Dieser Befehl testet das gesamte Softwareprojekt und erzeugt anschliessend im Ordner \textit{target} ein neues Java Executable (JAR File).
+
+\subparagraph{Docker}
 
 Wir haben ebenfalls einen Docker Container vorbereitet, mit welchem das Build automatisiert werden kann.
 
@@ -29,7 +37,7 @@ Mit Docker können wir das Projekt überall mit wenig Aufwand und ohne grossen I
 
 \subsection{Unit Tests}
 
-Unsere Unit Tests befinden sich im Ordner \textit{"src/test/java/ch/hftm/astrodynamic"} und sind nach Anwendungskomponenten gegliedert:
+Unsere Unit Tests befinden sich im Ordner \textit{src/test/java/ch/hftm/astrodynamic} und sind nach Anwendungskomponenten gegliedert:
 
 \begin{itemize}
 	\item DAO (Data Access Object); Testet den Zugriff und die Fuktionalität des zentrale MissionRepositorys (in welchem alle Missionen und deren Kindobjekte gespeichert sind)
@@ -47,13 +55,14 @@ Wir haben uns primär dafür entschieden, die Business-Logik (primär die Simula
 \subparagraph{Unit Tests ausführen}
 
 Zunächst müssen wir uns ins \textit{astrodynamics} Verzeichnis bewegen in welchem ebenfalls die Datei \textit{pom.xml} gespeichert ist.
-Anschliessend können wir die Unit-Tests mit einem einfachen \textit{"mvn clean test"} ausführen.
+Anschliessend können wir die Unit-Tests mit einem einfachen \textit{mvn clean test} ausführen.
 
 \subsection{Enumeration}
 
 Unser wichtigster Einsatz von Enum (Enumeration) findet in der Klasse \textit{Unit} statt. Diese Klasse wird dazu genutzt, SI Einheiten, welche in unserem Projekt verwendet werden, darzustellen:
 
 \begin{lstlisting}
+	
 	// Contains all physical units as enum
 	public enum Unit {
 		TIME, // Seconds (s)
@@ -82,6 +91,7 @@ Unser wichtigster Einsatz von Enum (Enumeration) findet in der Klasse \textit{Un
 		// Unitless for scalars without unit
 		UNITLESS
 	}
+
 \end{lstlisting}
 
 Wir nutzen dieses Enum in allen Skalaren und in diversen Vektoren, um die Einheiten der Werte darzustellen. z.B nutzt die Klasse \textit{LengthScalar}, welche eine Länge speichert, den Wert \textit{LENGTH}.
@@ -97,7 +107,9 @@ Die Einheiten der jeweiligen Klassen werden in der Kind-Klasse innerhalb des Kon
 
 \section{Casting}
 
-Casting wird in einzelnen Fällen innerhalb der Controller verwendet, um z.B einen Double zu einem Integer zu Runden.
+Da wir für die Serialisierung einen eigenen Serializer / Deserializer innerhalb der Klasse \textit{MissionRepository} in \textit{ch.hftm.astrodynamic.utils} implementieren mussten (die Klasse \textit{ObservableList} ist nicht Serialisierbar), verwenden wir Casting in diesem Fall für die Konvertierung zwischen \textit{Object} und \textit{Mission}.
+
+Casting wird ausserdem in einzelnen Fällen innerhalb der Controller verwendet, um z.B einen Double zu einem Integer zu Runden.
 
 \section{Interfaces}
 
@@ -146,8 +158,21 @@ Serialisierung wird in unserem Projekt zur Speicherung der Klasse \textit{Missio
 Die Klasse \textit{Serializer} ist für die Serialisierung des \textit{MissionRepository} zuständig.
 Aktuell wird die Serialisierbarkeit unserer Klassen mittels dem Interface \textit{Serializable} gewährleistet.
 Dies ist insbesondere für die Komplexen Datentypen, welche für \textit{Quad} und \textit{ObservableList} verwendet werden, wichtig.
+Da \textit{ObservableList} das Interface \textit{Serializable} nicht implementiert, musste im \textit{MissionRepository} mittels der Funktionen \textit{WriteObject()} und \textit{ReadObject()} die Missionen in ein Array konvertiert werden. Dieses Array wird beim Deserialisieren wiederum in Missionen gecasted, welche dem \textit{MissionRepository} hinzugefügt werden.
 
 Ebenfalls wurde eine mögliche Serialisierung ins JSON-Format vorbereitet. Dazu verwenden wir die Bibliothek \textit{Jackson}, welche ebenfalls in diversen Java Web Bibliotheken verwendet wird und als performant gilt.
+
+\section{Speichern und Laden der Missionen}
+
+\subparagraph{Laden}
+Beim Start der Anwendung werden die gespeicherten Missionen aus einer Datei geladen.
+Der Pfad dieser Datei kann mittels der Konfiguration \textit{STATE FILE} angepasst werden.
+Der Standardname der Datei lautet: \textit{state.bin}.
+Diese Datei kann ebenfalls gelöscht werden, um den Ursprungszustand wiederherzustellen.
+
+\subparagraph{Speichern}
+Wenn Missionen geändert werden, werden diese automatisch in die (aktuell konfigurierte) Projektdatei geschrieben.
+
 
 \section{Exceptions}
 

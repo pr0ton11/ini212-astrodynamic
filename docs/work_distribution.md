@@ -20,7 +20,7 @@ While implementing a specific feature the corresponding unit tests and technical
   - [ ] ~~JSON~~
 - [X] Maven build / docker file
 - [X] Documentation
-  - [ ] Code / UML
+  - [X] Code / UML
   - [X] Solution description own points
 
 ### Rafael
